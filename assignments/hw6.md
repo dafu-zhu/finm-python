@@ -1,0 +1,193 @@
+# Assignment 6: Design Patterns in Financial Software Architecture
+
+**Due:** Sun Oct 26, 2025 11:59pm
+
+**100 Points Possible**
+
+- [config.json](../scripts/hw6/config.json)
+- [external_data_bloomberg.xml](../scripts/hw6/external_data_bloomberg.xml)
+- [external_data_yahoo.json](../scripts/hw6/external_data_yahoo.json)
+- [instruments.csv](../scripts/hw6/instruments.csv)
+- [market_data.csv](../scripts/hw6/market_data.csv)
+- [portfolio_structure.json](../scripts/hw6/portfolio_structure.json)
+- [strategy_params.json](../scripts/hw6/strategy_params.json)
+
+## Overview
+
+Design and implement a modular Python system for simulating a financial analytics and trading platform using key 
+object-oriented design patterns. You will apply creational, structural, and behavioral patterns to build reusable, 
+extensible components for data ingestion, strategy execution, analytics, and reporting.
+
+Each pattern is introduced through a realistic financial problem. You will demonstrate how these patterns improve 
+modularity, flexibility, and maintainability in a finance-focused software system.
+
+
+## Learning Objectives
+
+- Implement creational patterns to manage object instantiation and configuration
+- Apply structural patterns to enhance modularity, flexibility, and integration
+- Use behavioral patterns to encapsulate dynamic behavior and event-driven logic
+- Analyze tradeoffs between pattern complexity, maintainability, and performance
+- Integrate multiple patterns into a cohesive financial system
+- Generate signals, execute trades, and support undo/redo functionality
+- Extend instrument analytics using decorators without modifying core classes
+- Adapt external data formats into a unified internal structure
+
+
+
+## Task Specifications
+
+### 📦 Creational Patterns
+
+#### Factory Pattern
+
+**Problem:** Instantiate different instrument types (Stock, Bond, ETF) from raw data.
+
+**Expectations:**
+
+- Implement `InstrumentFactory.create_instrument(data: dict) -> Instrument`
+- Support at least three instrument types with appropriate attributes
+- Demonstrate instantiation from `instruments.csv`
+
+#### Singleton Pattern
+
+**Problem:** Centralize system configuration (e.g., logging level, strategy parameters).
+
+**Expectations:**
+
+- Implement a `Config` singleton class
+- Load settings from `config.json`
+- Ensure all modules access the same instance
+
+#### Builder Pattern
+
+**Problem:** Construct complex portfolios with nested positions and metadata.
+
+**Expectations:**
+
+- Implement `PortfolioBuilder` with fluent methods:
+  - `add_position(symbol, quantity, price)`
+  - `set_owner(name)`
+  - `add_subportfolio(name, builder)`
+  - `build() -> Portfolio`
+- Demonstrate building from `portfolio_structure.json`
+
+
+
+### 🏗️ Structural Patterns
+
+#### Decorator Pattern
+
+**Problem:** Add analytics (volatility, beta, drawdown) to instruments without modifying base class.
+
+**Expectations:**
+
+- Implement decorators:
+  - `VolatilityDecorator`
+  - `BetaDecorator`
+  - `DrawdownDecorator`
+- Each decorator overrides `.get_metrics()` and adds its own output
+- Demonstrate stacking:
+
+```python
+decorated = DrawdownDecorator(BetaDecorator(VolatilityDecorator(stock)))
+```
+
+#### Adapter Pattern
+
+**Problem:** Standardize external data formats into `MarketDataPoint` objects.
+
+**Expectations:**
+
+- Implement adapters:
+  - `YahooFinanceAdapter`
+  - `BloombergXMLAdapter`
+- Each exposes `.get_data(symbol: str) -> MarketDataPoint`
+- Demonstrate ingestion from `external_data_yahoo.json` and `external_data_bloomberg.xml`
+
+#### Composite Pattern
+
+**Problem:** Model portfolios as trees of positions and sub-portfolios.
+
+**Expectations:**
+
+- Define abstract `PortfolioComponent` with `.get_value()` and `.get_positions()`
+- Implement:
+  - `Position`: leaf node
+  - `PortfolioGroup`: composite node
+- Demonstrate recursive aggregation from `portfolio_structure.json`
+
+
+
+### 🎭 Behavioral Patterns
+
+#### Strategy Pattern
+
+**Problem:** Support interchangeable trading strategies.
+
+**Expectations:**
+
+- Create abstract `Strategy.generate_signals(tick: MarketDataPoint) -> list`
+- Implement:
+  - `MeanReversionStrategy`
+  - `BreakoutStrategy`
+- Each maintains internal state and uses parameters from `strategy_params.json`
+- Demonstrate strategy interchangeability and signal generation
+
+#### Observer Pattern
+
+**Problem:** Notify external modules when signals are generated.
+
+**Expectations:**
+
+- Implement `SignalPublisher` with `.attach(observer)` and `.notify(signal)`
+- Define `Observer.update(signal: dict)`
+- Implement:
+  - `LoggerObserver`: logs signals
+  - `AlertObserver`: alerts on large trades
+- Demonstrate dynamic observer registration and notification
+
+#### Command Pattern
+
+**Problem:** Encapsulate order execution and support undo/redo.
+
+**Expectations:**
+
+- Define `Command.execute()` and `Command.undo()`
+- Implement:
+  - `ExecuteOrderCommand`: executes trade
+  - `UndoOrderCommand`: reverses trade
+- Use `CommandInvoker` to manage command history
+- Demonstrate trade lifecycle: signal → execution → undo → redo
+
+
+
+## 🧪 Unit Tests
+
+- Validate Factory creates correct instrument types
+- Confirm Singleton behavior with shared config
+- Test Decorator-enhanced analytics output
+- Verify Observer notifications and Command execution/undo logic
+- Confirm strategy outputs match expectations for given inputs
+
+
+
+## 📦 Deliverables
+
+👉 **Please share your GitHub with your TAs:**
+
+- Jenn: jcolli5158
+- Hunter: hyoung3
+
+| File       | Description                                                 |
+|------------|-------------------------------------------------------------|
+| `data_loader.py` | Adapter-based ingestion from mock data sources              |
+| `models.py` | Instrument classes, decorators, and portfolio components    |
+| `patterns/` | Factory, Singleton, Builder, Strategy, Observer, Command    |
+| `analytics.py` | Volatility, beta, drawdown decorators                       |
+| `engine.py` | Strategy execution and signal dispatch                      |
+| `reporting.py` | Observer-based logging and analytics                        |
+| `main.py`  | Orchestrates configuration, ingestion, strategy execution   |
+| `tests/`   | Unit tests or notebook-based validation                     |
+| `design_report.md` | Summary of patterns used, rationale, and tradeoffs          |
+| `README.md` | Setup instructions and module descriptions                  |
