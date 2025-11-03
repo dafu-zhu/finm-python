@@ -4,12 +4,13 @@ import polars as pl
 
 def value_tbl(time: list, value: list) -> pl.LazyFrame:
     tb = pl.LazyFrame({'time': time, 'value': value})
-    tb = tb.with_columns(pl.col('time').cast(pl.Date), pl.col('value').cast(pl.Float64))
+    tb = tb.with_columns(
+        pl.col('time').cast(pl.Datetime), pl.col('value').cast(pl.Float64))
     return tb
 
 
-def total_return(values: list) -> float:
-    return values[-1] / values[0] - 1
+def total_return(value: list) -> float:
+    return value[-1] / value[0] - 1
 
 
 def period_returns(time: list, value: list) -> pl.LazyFrame:
@@ -20,7 +21,7 @@ def period_returns(time: list, value: list) -> pl.LazyFrame:
     return tb
 
 
-def sharpe(value: list, risk_free: float = 0):
+def calc_sharpe(value: list, risk_free: float = 0) -> float:
     s = pl.Series('value', value)
     pct_chg = s.pct_change().drop_nulls()
     excess_ret = pct_chg.mean() - risk_free
@@ -41,12 +42,13 @@ def calc_max_dd(time: list, value: list) -> dict:  # @save
         - peak: day that reaches peak of the max drawdown
         - bottom: day that reaches bottom of the max drawdown
         - recover: day recover, if no, then "nan"
-        - duration (pl.LazyFrame): time length to recover, if no then "nan"
+        - duration: time length to recover, if no, then "nan"
+        - drawdown (pl.LazyFrame): drawdown time series
     """
     # create new df, calculate cumulative return, peak, bottom
     tb = period_returns(time, value)
     tb = tb.with_columns(
-        (pl.col('value') + 1).cum_prod().alias('cum_return')
+        (pl.col('returns') + 1).cum_prod().alias('cum_return')
     ).with_columns(
         pl.col("cum_return").cum_max().alias("peak")
     ).with_columns(
@@ -56,7 +58,7 @@ def calc_max_dd(time: list, value: list) -> dict:  # @save
     # filter the period where max drawdown is realized
     dd_period = tb.filter(
         pl.col("drawdown").eq(pl.col("drawdown").min())
-    )
+    ).collect()
     max_dd = dd_period["drawdown"][0]
     peak_value = dd_period["peak"]
     bottom_day = dd_period['time'][0]
@@ -64,7 +66,7 @@ def calc_max_dd(time: list, value: list) -> dict:  # @save
     peak_day = tb.filter(
         (pl.col("cum_return").eq(peak_value)) &
         (pl.col('time').le(bottom_day))
-    )['time'][-1]  # Take the last occurrence before bottom
+    ).collect()['time'][-1]  # Take the last occurrence before bottom
 
     recover_df = tb.filter(
         pl.col("cum_return").ge(peak_value)

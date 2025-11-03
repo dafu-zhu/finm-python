@@ -2,6 +2,7 @@ from src.pyquant.hw1.engine import ExecutionEngine
 from src.pyquant.hw1.strategies import MACDStrategy, MomentumStrategy
 from src.pyquant.hw1.data_loader import data_ingestor
 from src.pyquant.utils import *
+from src.pyquant.hw1.reporting import *
 
 def main():
     # Configuration
@@ -44,9 +45,27 @@ def main():
     states = engine.run()
     names = states.keys()
 
+    # Generate report
     for name in names:
-        time, value = states[name].history
-
+        time, value = zip(*states[name].history)
+        max_dd = calc_max_dd(time, value)
+        report = {
+            'name': name,
+            'ttl_return': total_return(value),
+            'prd_return': period_returns(time, value),
+            'sharpe': calc_sharpe(value),
+            'max_dd': max_dd
+        }
+        print(report['name'])
+        print(report['ttl_return'])
+        print(report['prd_return'].collect())
+        print(report['sharpe'])
+        print(report['max_dd']['max_drawdown'])
+        print(report['max_dd']['peak'])
+        print(report['max_dd']['bottom'])
+        print(report['max_dd']['recover'])
+        print(report['max_dd']['duration'])
+        print(report['max_dd']['drawdown'].collect())
 
     # Now what?
     # 1. Load data
