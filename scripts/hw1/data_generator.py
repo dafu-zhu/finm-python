@@ -85,8 +85,8 @@ if __name__ == "__main__":
         symbol="AAPL",
         start_price=150.0,
         filename="../../data/raw/market_data.csv",
-        num_ticks=500,
-        volatility=0.02,
+        num_ticks=1500,
+        volatility=0.05,
         interval=0.01
     )
-    print("market_data.csv generated with 500 ticks.")
+    print("market_data.csv generated with 1500 ticks.")

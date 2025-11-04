@@ -59,7 +59,7 @@ class MACDStrategy(Strategy):
         self._prices = deque(maxlen=self._window)
 
     def __repr__(self):
-        return f"MACD(short={self._short_period}, long={self._long_period})"
+        return f"MACD_{self._short_period}_{self._long_period}"
 
     def generate_signals(self, tick: MarketDataPoint) -> list:
         symbol = tick.symbol
@@ -121,9 +121,7 @@ class MomentumStrategy(Strategy):
         self._prices = deque(maxlen=self._lookback)
 
     def __repr__(self):
-        return (f"Momentum(lookback={self._lookback}, "
-                f"buy_threshold={self._buy_threshold}, "
-                f"sell_threshold={self._sell_threshold})")
+        return f"Momentum_{self._lookback}_{self._buy_threshold}_{self._sell_threshold}"
 
     def generate_signals(self, tick: MarketDataPoint) -> list:
         symbol = tick.symbol
