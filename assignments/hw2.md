@@ -91,7 +91,7 @@ Implement four strategies, each in its own `.py` file, inheriting from a common 
 
 ## Submission Checklist
 
-- [ ] `PriceLoader.py`
+- [x] `PriceLoader.py`
 - [ ] `BenchmarkStrategy.py`
 - [ ] Four strategy `.py` files
 - [ ] `StrategyComparison.ipynb`
