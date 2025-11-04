@@ -84,11 +84,11 @@ class MACDStrategy(Strategy):
         # generate a signal
         # format: (action, symbol, qty, price)
         if short_ma > long_ma:
-            return ['Buy', symbol, 10, price]
+            return ['Buy', symbol, 100, price]
         elif short_ma < long_ma:
-            return ['Sell', symbol, 10, price]
+            return ['Sell', symbol, 100, price]
         else:
-            return ['Hold', symbol, 10, price]
+            return ['Hold', symbol, 100, price]
 
 
 class MomentumStrategy(Strategy):
@@ -140,11 +140,11 @@ class MomentumStrategy(Strategy):
         self._roc.append(roc)
 
         if roc > self._buy_threshold:
-            return ['Buy', symbol, 10, price]
+            return ['Buy', symbol, 100, price]
         elif roc < self._sell_threshold:
-            return ['Sell', symbol, 10, price]
+            return ['Sell', symbol, 100, price]
         else:
-            return ['Hold', symbol, 10, price]
+            return ['Hold', symbol, 100, price]
 
 
 

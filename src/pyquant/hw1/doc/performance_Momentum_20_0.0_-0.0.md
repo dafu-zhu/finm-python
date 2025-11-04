@@ -4,17 +4,17 @@
 
 | Metric | Value |
 |--------|-------|
-| **Total Return** | -7.97% |
-| **Sharpe Ratio** | -0.0218 |
-| **Maximum Drawdown** | -12.88% |
+| **Total Return** | -32.77% |
+| **Sharpe Ratio** | -0.0069 |
+| **Maximum Drawdown** | -54.48% |
 | **Recovery Status** | ❌ No Recovery |
 
 ## Performance Analysis
 
 ### Overall Performance
 
-The **Momentum_20_0.0_-0.0** strategy resulted in a loss of **-7.97%** over the backtesting period. 
-The negative Sharpe ratio of **-0.0218** indicates poor risk-adjusted performance, with returns not compensating for the risk taken. 
+The **Momentum_20_0.0_-0.0** strategy resulted in a loss of **-32.77%** over the backtesting period. 
+The negative Sharpe ratio of **-0.0069** indicates poor risk-adjusted performance, with returns not compensating for the risk taken. 
 
 ### Portfolio Value Over Time
 
@@ -31,11 +31,11 @@ The equity curve above shows the evolution of portfolio value throughout the bac
 | Event | Timestamp | Value |
 |-------|-----------|-------|
 | **Peak** | 2025-11-03 18:26:29 | 0.00% |
-| **Bottom** | 2025-11-03 18:26:38 | -12.88% |
+| **Bottom** | 2025-11-03 18:26:38 | -54.48% |
 | **Recovery** | - | ❌ Not Recovered |
 | **Duration** | - | N/A |
 
-⚠️ **Warning**: The strategy experienced a maximum drawdown of **-12.88%** 
+⚠️ **Warning**: The strategy experienced a maximum drawdown of **-54.48%** 
 and **has not recovered** by the end of the backtesting period. 
 The drawdown began at 18:26:29 
 and reached its lowest point at 18:26:38.
@@ -44,16 +44,16 @@ and reached its lowest point at 18:26:38.
 
 | Statistic | Value |
 |-----------|-------|
-| Number of Periods | 1231 |
+| Number of Periods | 1142 |
 | Starting Value | $1,000,000.00 |
-| Ending Value | $920,333.00 |
-| Total Return | -7.97% |
-| Sharpe Ratio | -0.0218 |
-| Maximum Drawdown | -12.88% |
+| Ending Value | $672,334.00 |
+| Total Return | -32.77% |
+| Sharpe Ratio | -0.0069 |
+| Maximum Drawdown | -54.48% |
 
 ## Conclusion
 
 The **Momentum_20_0.0_-0.0** strategy shows concerning performance metrics that warrant further investigation. 
 Traders should consider these metrics in the context of their risk tolerance and investment objectives before deployment.
 
-*Report generated on 2025-11-03 18:27:03*
+*Report generated on 2025-11-03 18:43:09*

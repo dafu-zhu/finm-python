@@ -7,7 +7,7 @@ class Order:
     symbol: str
     quantity: int
     price: float
-    status: str     # 'pending', 'filled', 'rejected'
+    status: str
 
     def __post_init__(self):
         # Handle order error
