@@ -19,8 +19,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
-import time
-
 
 
 class ExecutionEngine:
@@ -96,7 +94,7 @@ class ExecutionEngine:
                     name = strategy.__repr__()
                     state = self._states[name]
                     value = state.portfolio.get_value(self._last_known_prices)
-                    state.history.append((prev_time, round(value)))
+                    state.history.append((prev_time.date(), round(value, 2)))
 
                 # Update tracker
                 prev_time = current_time

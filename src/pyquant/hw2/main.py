@@ -28,7 +28,7 @@ def main():
     engine = ExecutionEngine(ticks, strategies, symbols, init_cash)
     states = engine.run()
     names = list(states.keys())
-    generate_report(names, states, Path('img'), Path('doc'))
+    generate_report(names, states, Path('img'), Path('doc'), time_period='long')
 
 
 

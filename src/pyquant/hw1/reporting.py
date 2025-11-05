@@ -98,12 +98,13 @@ def calc_max_dd(time: list, value: list) -> dict:  # @save
     return result
 
 
-def plot_portfolio_value(report: dict, output_path: Path):
+def plot_portfolio_value(report: dict, output_path: Path, time_period: str = 'short'):
     """
     Plot portfolio value over time showing the equity curve.
 
-    :param: report: Dictionary containing 'prd_return' LazyFrame with columns ['time', 'value']
-    :param: output_path: Path to save the plot
+    :param report: Dictionary containing 'prd_return' LazyFrame with columns ['time', 'value']
+    :param output_path: Path to save the plot
+    :param time_period: 'short' (intraday/days), 'medium' (weeks/months), or 'long' (years)
     """
     # Collect the data
     df = report['prd_return'].collect()
@@ -128,22 +129,35 @@ def plot_portfolio_value(report: dict, output_path: Path):
     ax.grid(True, alpha=0.3)
     ax.legend()
 
-    # Format x-axis
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-    plt.xticks(rotation=45)
+    # Format x-axis based on time period
+    if time_period == 'short':
+        # Intraday or few days - show time with seconds or hours
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+    elif time_period == 'medium':
+        # Weeks to months - show date and optionally time
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, len(df) // 10)))
+    elif time_period == 'long':
+        # Years - show year or year-month
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+        ax.xaxis.set_major_locator(mdates.YearLocator())
+        ax.xaxis.set_minor_locator(mdates.MonthLocator(interval=6))
 
+    plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
     plt.close()
 
 
-def plot_drawdown(report: dict, output_path: Path):
+def plot_drawdown(report: dict, output_path: Path, time_period: str = 'short'):
     """
     Plot drawdown over time with annotations for peak, bottom, and recovery.
 
     Args:
         report: Dictionary containing 'max_dd' with drawdown LazyFrame and key events
         output_path: Path to save the plot
+        time_period: 'short' (intraday/days), 'medium' (weeks/months), or 'long' (years)
     """
     # Collect the data
     df = report['max_dd']['drawdown'].collect()
@@ -164,9 +178,22 @@ def plot_drawdown(report: dict, output_path: Path):
     ax.grid(True, alpha=0.3)
     ax.legend(loc='upper left')
 
-    # Format x-axis
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
-    plt.xticks(rotation=45)
+    # Format x-axis based on time period
+    if time_period == 'short':
+        # Intraday or few days - show time with seconds or hours
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+    elif time_period == 'medium':
+        # Weeks to months - show date and optionally time
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, len(df) // 10)))
+    elif time_period == 'long':
+        # Years - show year or year-month
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+        ax.xaxis.set_major_locator(mdates.YearLocator())
+        ax.xaxis.set_minor_locator(mdates.MonthLocator(interval=6))
+
+    plt.xticks(rotation=45, ha='right')
 
     # Set y-axis limits to ensure 0 is at top
     y_min = df['drawdown'].min() * 100
@@ -177,7 +204,13 @@ def plot_drawdown(report: dict, output_path: Path):
     plt.close()
 
 
-def generate_report(names: List[str], states: Dict[str, StrategyState], img_dir: Path, doc_dir: Path):
+def generate_report(
+        names: List[str],
+        states: Dict[str, StrategyState],
+        img_dir: Path,
+        doc_dir: Path,
+        time_period: str = 'short'
+):
     for name in names:
         time, value = zip(*states[name].history)
         max_dd = calc_max_dd(time, value)
@@ -193,8 +226,8 @@ def generate_report(names: List[str], states: Dict[str, StrategyState], img_dir:
         drawdown_path = img_dir / f'drawdown_{name}.png'
 
         # Generate plots
-        plot_portfolio_value(report, output_path=pnl_path)
-        plot_drawdown(report, output_path=drawdown_path)
+        plot_portfolio_value(report, output_path=pnl_path, time_period=time_period)
+        plot_drawdown(report, output_path=drawdown_path, time_period=time_period)
         print(f"Plots saved to: {pnl_path}, {drawdown_path}")
 
         # Generate a Markdown report

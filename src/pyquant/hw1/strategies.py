@@ -24,7 +24,7 @@ class StrategyState:
     orders: List[Order]
     order_errors: List[str]
     execution_errors: List[str]
-    history: List[Tuple[datetime, float]]
+    history: List[Tuple[datetime.date, float]]
 
     def __post_init__(self):
         self.pending_order: Optional[Order] = None
