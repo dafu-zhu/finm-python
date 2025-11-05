@@ -5,6 +5,7 @@ from pyquant.hw2.engine import ExecutionEngine
 from pyquant.hw2.position_sizer import FixedShareSizer
 from pyquant.hw2.price_loader import PriceLoader
 from pyquant.hw1.reporting import generate_report
+from pyquant.hw2.strategies import MovingAverageStrategy, VolatilityBreakoutStrategy, MACDStrategy, RSIStrategy
 
 
 def main():
@@ -15,12 +16,20 @@ def main():
     ticks = loader.get_ticks()
     symbols = loader.tickers
 
-    # Benchmark config
+    # Configs
     bm_config = {'entry_day': loader.time_range[0]}
+    ma_config = {'short_ma': 20, 'long_ma': 50}
+    vb_config = {'lookback': 20}
+    macd_config = {'fast_period': 12, 'slow_period': 26, 'signal_period': 9}
+    rsi_config = {'period': 14, 'oversell_threshold': 30, 'overbuy_threshold': 70}
 
     # Configure strategy
     strategies = [
-        (BenchmarkStrategy(bm_config), FixedShareSizer(100))
+        (BenchmarkStrategy(bm_config), FixedShareSizer(100)),
+        (MovingAverageStrategy(ma_config), FixedShareSizer(1)),
+        (VolatilityBreakoutStrategy(vb_config), FixedShareSizer(1)),
+        (MACDStrategy(macd_config), FixedShareSizer(1)),
+        (RSIStrategy(rsi_config), FixedShareSizer(1)),
     ]
 
     # Run execution engine

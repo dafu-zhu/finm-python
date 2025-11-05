@@ -93,9 +93,9 @@ Implement four strategies, each in its own `.py` file, inheriting from a common 
 
 - [x] `PriceLoader.py`
 - [x] `BenchmarkStrategy.py`
-- [ ] Four strategy `.py` files
-- [ ] `StrategyComparison.ipynb`
-- [ ] All plots and final summary
+- [x] Four strategy `.py` files
+- [x] `StrategyComparison.ipynb`
+- [x] All plots and final summary
 
 ## Bonus Challenges (Optional)
 

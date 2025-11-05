@@ -1,5 +1,3 @@
-from typing import List
-
 from pyquant.hw1.data_loader import MarketDataPoint
 from src.pyquant.hw1.strategies import Strategy, StrategyState
 

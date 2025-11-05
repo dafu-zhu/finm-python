@@ -4,17 +4,17 @@
 
 | Metric | Value |
 |--------|-------|
-| **Total Return** | -46.12% |
-| **Sharpe Ratio** | -0.0098 |
-| **Maximum Drawdown** | -62.98% |
+| **Total Return** | -47.03% |
+| **Sharpe Ratio** | -0.0112 |
+| **Maximum Drawdown** | -63.25% |
 | **Recovery Status** | ❌ No Recovery |
 
 ## Performance Analysis
 
 ### Overall Performance
 
-The **MACD_12_26** strategy resulted in a loss of **-46.12%** over the backtesting period. 
-The negative Sharpe ratio of **-0.0098** indicates poor risk-adjusted performance, with returns not compensating for the risk taken. 
+The **MACD_12_26** strategy resulted in a loss of **-47.03%** over the backtesting period. 
+The negative Sharpe ratio of **-0.0112** indicates poor risk-adjusted performance, with returns not compensating for the risk taken. 
 
 ### Portfolio Value Over Time
 
@@ -31,11 +31,11 @@ The equity curve above shows the evolution of portfolio value throughout the bac
 | Event | Timestamp | Value |
 |-------|-----------|-------|
 | **Peak** | 2025-11-03 18:26:29 | 0.00% |
-| **Bottom** | 2025-11-03 18:26:38 | -62.98% |
+| **Bottom** | 2025-11-03 18:26:38 | -63.25% |
 | **Recovery** | - | ❌ Not Recovered |
 | **Duration** | - | N/A |
 
-⚠️ **Warning**: The strategy experienced a maximum drawdown of **-62.98%** 
+⚠️ **Warning**: The strategy experienced a maximum drawdown of **-63.25%** 
 and **has not recovered** by the end of the backtesting period. 
 The drawdown began at 18:26:29 
 and reached its lowest point at 18:26:38.
@@ -44,16 +44,16 @@ and reached its lowest point at 18:26:38.
 
 | Statistic | Value |
 |-----------|-------|
-| Number of Periods | 1178 |
+| Number of Periods | 1180 |
 | Starting Value | $1,000,802.00 |
-| Ending Value | $538,838.00 |
-| Total Return | -46.12% |
-| Sharpe Ratio | -0.0098 |
-| Maximum Drawdown | -62.98% |
+| Ending Value | $529,665.00 |
+| Total Return | -47.03% |
+| Sharpe Ratio | -0.0112 |
+| Maximum Drawdown | -63.25% |
 
 ## Conclusion
 
 The **MACD_12_26** strategy shows concerning performance metrics that warrant further investigation. 
 Traders should consider these metrics in the context of their risk tolerance and investment objectives before deployment.
 
-*Report generated on 2025-11-04 18:35:52*
+*Report generated on 2025-11-05 11:32:44*

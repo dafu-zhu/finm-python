@@ -204,6 +204,328 @@ def plot_drawdown(report: dict, output_path: Path, time_period: str = 'short'):
     plt.close()
 
 
+def plot_multi_strategy_pnl(
+        names: List[str],
+        states: Dict[str, StrategyState],
+        output_path: Path,
+        time_period: str = 'short'
+):
+    """
+    Plot all strategies' portfolio values on one chart for comparison.
+
+    Args:
+        names: List of strategy names
+        states: Dictionary mapping strategy names to StrategyState objects
+        output_path: Path to save the plot
+        time_period: 'short' (intraday/days), 'medium' (weeks/months), or 'long' (years)
+    """
+    # Create figure
+    fig, ax = plt.subplots(figsize=(14, 7))
+
+    # Color palette for different strategies
+    colors = ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#6A994E',
+              '#BC4B51', '#5E60CE', '#F72585', '#4361EE', '#06FFA5']
+
+    # Plot each strategy
+    for idx, name in enumerate(names):
+        time, value = zip(*states[name].history)
+        df = pl.DataFrame({'time': time, 'value': value})
+
+        # Normalize to start at 1.0
+        initial_value = df['value'][0]
+        normalized_values = df['value'] / initial_value
+
+        color = colors[idx % len(colors)]
+        ax.plot(df['time'], normalized_values, linewidth=2,
+                color=color, label=name, alpha=0.8)
+
+    # Add horizontal line at 1.0
+    ax.axhline(y=1.0, color='gray', linestyle='--', linewidth=1, alpha=0.5)
+
+    # Format
+    ax.set_xlabel('Time', fontsize=12)
+    ax.set_ylabel('Portfolio Value (Normalized)', fontsize=12)
+    ax.set_title('Multi-Strategy Performance Comparison', fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+    ax.legend(loc='best', fontsize=10)
+
+    # Format x-axis based on time period
+    if time_period == 'short':
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+    elif time_period == 'medium':
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        # Calculate appropriate interval based on data length
+        sample_time, _ = zip(*states[names[0]].history)
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, len(sample_time) // 10)))
+    elif time_period == 'long':
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+        ax.xaxis.set_major_locator(mdates.YearLocator())
+        ax.xaxis.set_minor_locator(mdates.MonthLocator(interval=6))
+
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def generate_comparison_report(
+        names: List[str],
+        states: Dict[str, StrategyState],
+        img_dir: Path,
+        doc_dir: Path,
+        time_period: str = 'short'
+):
+    """
+    Generate a comprehensive comparison report for all strategies.
+
+    Args:
+        names: List of strategy names to compare
+        states: Dictionary mapping strategy names to StrategyState objects
+        img_dir: Directory to save images
+        doc_dir: Directory to save the markdown report
+        time_period: Time period format for charts
+    """
+    # Calculate metrics for all strategies
+    all_reports = {}
+    for name in names:
+        time, value = zip(*states[name].history)
+        max_dd = calc_max_dd(time, value)
+        all_reports[name] = {
+            'name': name,
+            'ttl_return': total_return(value),
+            'sharpe': calc_sharpe(value),
+            'max_dd': max_dd,
+            'prd_return': period_returns(time, value),
+            'final_value': value[-1],
+            'initial_value': value[0]
+        }
+
+    # Generate multi-strategy comparison plot
+    comparison_path = img_dir / 'comparison_all_strategies.png'
+    plot_multi_strategy_pnl(names, states, output_path=comparison_path, time_period=time_period)
+    print(f"Comparison plot saved to: {comparison_path}")
+
+    # Generate markdown comparison report
+    md_path = doc_dir / 'strategy_comparison.md'
+    write_comparison_report(all_reports, comparison_path, md_path)
+    print(f"Comparison report saved to: {md_path}")
+
+
+def write_comparison_report(all_reports: Dict[str, dict], comparison_path: Path, output_path: Path):
+    """
+    Write a markdown comparison report for all strategies.
+
+    Args:
+        all_reports: Dictionary mapping strategy names to their report dictionaries
+        comparison_path: Path to the comparison chart image
+        output_path: Path to save the markdown report
+    """
+    # Adjust path for relative reference from doc directory
+    comparison_path = Path('..') / comparison_path.relative_to('.')
+    comparison_md = quote(comparison_path.as_posix())
+
+    lines = [
+        "# Strategy Comparison Report",
+        "",
+        "## Overview",
+        "",
+        f"This report compares the performance of **{len(all_reports)}** trading strategies "
+        f"across key metrics including total return, risk-adjusted performance, and drawdown characteristics.",
+        "",
+        "## Performance Comparison Chart",
+        "",
+        f"![Multi-Strategy Comparison]({comparison_md})",
+        "",
+        "The chart above shows normalized portfolio values (starting at 1.0) for all strategies, "
+        "allowing direct visual comparison of relative performance.",
+        "",
+        "## Summary Metrics",
+        "",
+        "| Strategy | Total Return | Sharpe Ratio | Max Drawdown | Recovery Status |",
+        "|----------|--------------|--------------|--------------|-----------------|"
+    ]
+
+    # Sort strategies by total return (descending)
+    sorted_strategies = sorted(all_reports.items(),
+                               key=lambda x: x[1]['ttl_return'],
+                               reverse=True)
+
+    # Add each strategy's metrics
+    for name, report in sorted_strategies:
+        ttl_return_pct = report['ttl_return'] * 100
+        sharpe = report['sharpe']
+        max_dd_pct = report['max_dd']['max_drawdown'] * 100
+        recovery = '✅ Recovered' if report['max_dd']['recover'] is not None else '❌ Not Recovered'
+
+        lines.append(f"| **{name}** | {ttl_return_pct:+.2f}% | {sharpe:.4f} | {max_dd_pct:.2f}% | {recovery} |")
+
+    lines.extend(["", "## Detailed Analysis", ""])
+
+    # Best and worst performers
+    best_strategy = sorted_strategies[0]
+    worst_strategy = sorted_strategies[-1]
+
+    lines.extend([
+        "### Best Performer",
+        "",
+        f"**{best_strategy[0]}** achieved the highest total return of "
+        f"**{best_strategy[1]['ttl_return'] * 100:+.2f}%** with a Sharpe ratio of "
+        f"**{best_strategy[1]['sharpe']:.4f}**.",
+        ""
+    ])
+
+    if len(sorted_strategies) > 1:
+        lines.extend([
+            "### Worst Performer",
+            "",
+            f"**{worst_strategy[0]}** had the lowest total return of "
+            f"**{worst_strategy[1]['ttl_return'] * 100:+.2f}%** with a Sharpe ratio of "
+            f"**{worst_strategy[1]['sharpe']:.4f}**.",
+            ""
+        ])
+
+    # Risk-adjusted performance ranking
+    sorted_by_sharpe = sorted(all_reports.items(),
+                              key=lambda x: x[1]['sharpe'],
+                              reverse=True)
+
+    lines.extend([
+        "### Risk-Adjusted Performance (Sharpe Ratio Ranking)",
+        "",
+        "| Rank | Strategy | Sharpe Ratio | Interpretation |",
+        "|------|----------|--------------|----------------|"
+    ])
+
+    for rank, (name, report) in enumerate(sorted_by_sharpe, 1):
+        sharpe = report['sharpe']
+        if sharpe > 2:
+            interpretation = "Excellent"
+        elif sharpe > 1:
+            interpretation = "Very Good"
+        elif sharpe > 0.5:
+            interpretation = "Good"
+        elif sharpe > 0:
+            interpretation = "Adequate"
+        else:
+            interpretation = "Poor"
+
+        lines.append(f"| {rank} | **{name}** | {sharpe:.4f} | {interpretation} |")
+
+    # Drawdown analysis
+    lines.extend([
+        "",
+        "### Drawdown Comparison",
+        "",
+        "| Strategy | Max Drawdown | Peak Date | Bottom Date | Recovery Duration |",
+        "|----------|--------------|-----------|-------------|-------------------|"
+    ])
+
+    sorted_by_dd = sorted(all_reports.items(),
+                          key=lambda x: x[1]['max_dd']['max_drawdown'])
+
+    for name, report in sorted_by_dd:
+        max_dd_pct = report['max_dd']['max_drawdown'] * 100
+        peak = report['max_dd']['peak'].strftime('%Y-%m-%d %H:%M')
+        bottom = report['max_dd']['bottom'].strftime('%Y-%m-%d %H:%M')
+        duration = str(report['max_dd']['duration']) if report['max_dd']['duration'] else 'N/A'
+
+        lines.append(f"| **{name}** | {max_dd_pct:.2f}% | {peak} | {bottom} | {duration} |")
+
+    # Statistical summary
+    lines.extend([
+        "",
+        "## Statistical Summary",
+        "",
+        "### Return Statistics",
+        "",
+    ])
+
+    returns = [r['ttl_return'] * 100 for r in all_reports.values()]
+    avg_return = sum(returns) / len(returns)
+    max_return = max(returns)
+    min_return = min(returns)
+
+    lines.extend([
+        "| Metric | Value |",
+        "|--------|-------|",
+        f"| Average Return | {avg_return:.2f}% |",
+        f"| Best Return | {max_return:+.2f}% |",
+        f"| Worst Return | {min_return:+.2f}% |",
+        f"| Return Spread | {max_return - min_return:.2f}% |",
+        ""
+    ])
+
+    # Sharpe ratio statistics
+    sharpes = [r['sharpe'] for r in all_reports.values()]
+    avg_sharpe = sum(sharpes) / len(sharpes)
+
+    lines.extend([
+        "### Risk-Adjusted Return Statistics",
+        "",
+        "| Metric | Value |",
+        "|--------|-------|",
+        f"| Average Sharpe Ratio | {avg_sharpe:.4f} |",
+        f"| Best Sharpe Ratio | {max(sharpes):.4f} |",
+        f"| Worst Sharpe Ratio | {min(sharpes):.4f} |",
+        ""
+    ])
+
+    # Recovery analysis
+    recovered_count = sum(1 for r in all_reports.values() if r['max_dd']['recover'] is not None)
+    recovery_rate = (recovered_count / len(all_reports)) * 100
+
+    lines.extend([
+        "### Recovery Analysis",
+        "",
+        f"**{recovered_count}** out of **{len(all_reports)}** strategies ({recovery_rate:.1f}%) "
+        f"recovered from their maximum drawdown during the backtesting period.",
+        ""
+    ])
+
+    # Recommendations
+    lines.extend([
+        "## Recommendations",
+        "",
+    ])
+
+    if best_strategy[1]['sharpe'] > 1 and best_strategy[1]['max_dd']['recover'] is not None:
+        lines.append(
+            f"- **{best_strategy[0]}** shows the most promising combination of returns and risk management, "
+            f"with strong recovery characteristics."
+        )
+
+    strategies_with_poor_sharpe = [name for name, r in all_reports.items() if r['sharpe'] < 0]
+    if strategies_with_poor_sharpe:
+        lines.append(
+            f"- The following strategies have negative Sharpe ratios and should be reconsidered: "
+            f"{', '.join(f'**{s}**' for s in strategies_with_poor_sharpe)}"
+        )
+
+    unrecovered = [name for name, r in all_reports.items() if r['max_dd']['recover'] is None]
+    if unrecovered:
+        lines.append(
+            f"- These strategies have not recovered from their maximum drawdown: "
+            f"{', '.join(f'**{s}**' for s in unrecovered)}. Consider risk mitigation measures."
+        )
+
+    lines.extend([
+        "",
+        "## Conclusion",
+        "",
+        f"This analysis compared {len(all_reports)} trading strategies across multiple performance dimensions. "
+        f"Investors should consider their risk tolerance, investment horizon, and diversification needs "
+        f"when selecting strategies for deployment. The best-performing strategy in terms of raw returns "
+        f"may not always offer the best risk-adjusted returns.",
+        "",
+        f"*Report generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*"
+    ])
+
+    # Write to file
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines))
+
+
 def generate_report(
         names: List[str],
         states: Dict[str, StrategyState],
@@ -234,6 +556,14 @@ def generate_report(
         md_path = doc_dir / f'performance_{name}.md'
         write_markdown_report(report, pnl_path, drawdown_path, md_path)
         print(f"Report saved to: {md_path}")
+
+    # Generate comprehensive comparison report if multiple strategies
+    if len(names) > 1:
+        print(f"\nGenerating comprehensive comparison report for {len(names)} strategies...")
+        generate_comparison_report(names, states, img_dir, doc_dir, time_period)
+        print("Comprehensive comparison report complete!")
+    else:
+        print("\nSkipping comparison report (only one strategy provided)")
 
 
 def write_markdown_report(report: dict, pnl_path: Path, drawdown_path: Path, output_path: Path):

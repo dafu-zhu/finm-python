@@ -105,6 +105,8 @@ class ExecutionEngine:
 
             for strategy, sizer in self._strategies:
                 signal = strategy.generate_signals(tick)
+                if not signal:
+                    continue
 
                 action, symbol, qty, price = signal
 
