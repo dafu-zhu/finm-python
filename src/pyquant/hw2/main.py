@@ -4,6 +4,7 @@ from pyquant.hw2.benchmark_strategy import BenchmarkStrategy
 from pyquant.hw2.engine import ExecutionEngine
 from pyquant.hw2.position_sizer import FixedShareSizer
 from pyquant.hw2.price_loader import PriceLoader
+from pyquant.hw1.reporting import generate_report
 
 
 def main():
@@ -26,7 +27,9 @@ def main():
     init_cash = 1_000_000
     engine = ExecutionEngine(ticks, strategies, symbols, init_cash)
     states = engine.run()
-    print(states)
+    names = list(states.keys())
+    generate_report(names, states, Path('img'), Path('doc'))
+
 
 
 if __name__ == '__main__':

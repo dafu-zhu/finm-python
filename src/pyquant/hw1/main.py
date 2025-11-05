@@ -45,7 +45,7 @@ def main():
     init_cash = config['init_cash']
     engine = ExecutionEngine(ticks, strategies, init_cash)
     states = engine.run()
-    names = states.keys()
+    names = list(states.keys())
 
     # Generate report
     img_dir = Path() / 'img'

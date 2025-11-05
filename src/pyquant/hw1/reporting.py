@@ -1,10 +1,12 @@
 from pathlib import Path
 from shlex import quote
-
+from typing import Dict, List
 import polars as pl
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
+
+from pyquant.hw1.strategies import StrategyState
 from src.pyquant.utils import root_dir
 
 
@@ -175,7 +177,7 @@ def plot_drawdown(report: dict, output_path: Path):
     plt.close()
 
 
-def generate_report(names, states, img_dir: Path, doc_dir: Path):
+def generate_report(names: List[str], states: Dict[str, StrategyState], img_dir: Path, doc_dir: Path):
     for name in names:
         time, value = zip(*states[name].history)
         max_dd = calc_max_dd(time, value)
