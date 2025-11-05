@@ -95,7 +95,7 @@ class ExecutionEngine:
                 for strategy, sizer in self._strategies:
                     name = strategy.__repr__()
                     state = self._states[name]
-                    value = self._calc_portfolio_value(state)
+                    value = state.portfolio.get_value(self._last_known_prices)
                     state.history.append((prev_time, round(value)))
 
                 # Update tracker

@@ -16,7 +16,6 @@ class Portfolio:
 
     def __init__(self, init_cash: float):
         self.cash = init_cash
-        self.init_cash = init_cash
         self.positions: Dict[str, Position] = {}  # Lazy creation
 
     def update_position(self, symbol: str, qty: int, price: float) -> None:
@@ -37,20 +36,12 @@ class Portfolio:
         position.quantity += qty    # Object Position is mutable
         self.cash -= qty * price
 
-    def get_value(self, price_dict: Dict[str, float]) -> float:
-        """Calculate total portfolio value given current prices"""
-        total_value = self.cash
-
-        for symbol, position in self.positions.items():
-            if position.quantity > 0:
-                price = price_dict.get(symbol, 0.0)
-                total_value += position.quantity * price
-
-        return total_value
-
-    def get_position_quantity(self, symbol: str) -> int:
-        """Get quantity for a symbol (0 if the position doesn't exist)"""
-        return self.positions.get(symbol, Position(symbol)).quantity
+    def get_value(self, prices: Dict[str, float]) -> float:
+        """Return the portfolio value (cash and total position value)"""
+        val = self.cash
+        for symbol in self.positions:
+            val += prices[symbol] * self.positions[symbol].quantity
+        return val
 
 
 @dataclass
