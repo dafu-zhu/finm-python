@@ -1,0 +1,77 @@
+2025-11-04 23:34:41,867 - ERROR - Symbol ['ABBV'] failed to load
+2025-11-04 23:34:41,868 - INFO - Batch 1: Loaded 9/10 tickers
+2025-11-04 23:34:42,172 - ERROR - Symbol ['VLTO', 'LYV'] failed to load
+2025-11-04 23:34:42,173 - INFO - Batch 2: Loaded 8/10 tickers
+2025-11-04 23:34:42,484 - ERROR - Symbol ['TSLA', 'BLDR', 'CDW', 'UAL'] failed to load
+2025-11-04 23:34:42,484 - INFO - Batch 3: Loaded 6/10 tickers
+2025-11-04 23:34:42,860 - ERROR - Symbol ['HII', 'IQV', 'GEHC', 'ALLE'] failed to load
+2025-11-04 23:34:42,860 - INFO - Batch 4: Loaded 6/10 tickers
+2025-11-04 23:34:43,128 - ERROR - Symbol ['DELL', 'PAYC', 'VICI'] failed to load
+2025-11-04 23:34:43,129 - INFO - Batch 5: Loaded 7/10 tickers
+2025-11-04 23:34:43,502 - ERROR - Symbol ['ICE', 'NWSA', 'HPE'] failed to load
+2025-11-04 23:34:43,502 - INFO - Batch 6: Loaded 7/10 tickers
+2025-11-04 23:34:43,814 - INFO - Batch 7: Loaded 10/10 tickers
+2025-11-04 23:34:44,169 - ERROR - Symbol ['MSCI', 'LYB', 'DAL', 'MPC'] failed to load
+2025-11-04 23:34:44,169 - INFO - Batch 8: Loaded 6/10 tickers
+2025-11-04 23:34:44,565 - ERROR - Symbol ['PSX', 'EXE', 'INVH'] failed to load
+2025-11-04 23:34:44,565 - INFO - Batch 9: Loaded 7/10 tickers
+2025-11-04 23:34:44,857 - INFO - Batch 10: Loaded 10/10 tickers
+2025-11-04 23:34:45,255 - ERROR - Symbol ['ANET', 'GM', 'SOLS', 'APTV'] failed to load
+2025-11-04 23:34:45,255 - INFO - Batch 11: Loaded 6/10 tickers
+2025-11-04 23:34:45,676 - ERROR - Symbol ['WDAY', 'ULTA', 'WBD', 'IBKR'] failed to load
+2025-11-04 23:34:45,676 - INFO - Batch 12: Loaded 6/10 tickers
+2025-11-04 23:34:46,063 - ERROR - Symbol ['FOX'] failed to load
+2025-11-04 23:34:46,063 - INFO - Batch 13: Loaded 9/10 tickers
+2025-11-04 23:34:46,437 - ERROR - Symbol ['PSKY', 'AWK', 'CFG', 'TRGP', 'XYL'] failed to load
+2025-11-04 23:34:46,437 - INFO - Batch 14: Loaded 5/10 tickers
+2025-11-04 23:34:46,815 - ERROR - Symbol ['NXPI', 'ABNB', 'NWS', 'VST'] failed to load
+2025-11-04 23:34:46,815 - INFO - Batch 15: Loaded 6/10 tickers
+2025-11-04 23:34:47,111 - INFO - Batch 16: Loaded 10/10 tickers
+2025-11-04 23:34:47,394 - INFO - Batch 17: Loaded 10/10 tickers
+2025-11-04 23:34:47,764 - ERROR - Symbol ['FANG', 'FTV', 'NCLH', 'CEG'] failed to load
+2025-11-04 23:34:47,765 - INFO - Batch 18: Loaded 6/10 tickers
+2025-11-04 23:34:48,238 - ERROR - Symbol ['MRNA'] failed to load
+2025-11-04 23:34:48,239 - INFO - Batch 19: Loaded 9/10 tickers
+2025-11-04 23:34:48,649 - ERROR - Symbol ['TTD', 'KVUE'] failed to load
+2025-11-04 23:34:48,649 - INFO - Batch 20: Loaded 8/10 tickers
+2025-11-04 23:34:48,912 - ERROR - Symbol ['META', 'SMCI', 'SW'] failed to load
+2025-11-04 23:34:48,912 - INFO - Batch 21: Loaded 7/10 tickers
+2025-11-04 23:34:49,221 - ERROR - Symbol ['DASH'] failed to load
+2025-11-04 23:34:49,222 - INFO - Batch 22: Loaded 9/10 tickers
+2025-11-04 23:34:49,489 - INFO - Batch 23: Loaded 10/10 tickers
+2025-11-04 23:34:49,797 - ERROR - Symbol ['PYPL'] failed to load
+2025-11-04 23:34:49,797 - INFO - Batch 24: Loaded 9/10 tickers
+2025-11-04 23:34:50,224 - ERROR - Symbol ['AMP'] failed to load
+2025-11-04 23:34:50,225 - INFO - Batch 25: Loaded 9/10 tickers
+2025-11-04 23:34:50,535 - ERROR - Symbol ['PLTR'] failed to load
+2025-11-04 23:34:50,535 - INFO - Batch 26: Loaded 9/10 tickers
+2025-11-04 23:34:50,938 - ERROR - Symbol ['EXPE', 'MA', 'APO'] failed to load
+2025-11-04 23:34:50,940 - INFO - Batch 27: Loaded 7/10 tickers
+2025-11-04 23:34:51,367 - ERROR - Symbol ['CBOE', 'UBER'] failed to load
+2025-11-04 23:34:51,367 - INFO - Batch 28: Loaded 8/10 tickers
+2025-11-04 23:34:51,709 - ERROR - Symbol ['CARR', 'DDOG', 'CHTR'] failed to load
+2025-11-04 23:34:51,709 - INFO - Batch 29: Loaded 7/10 tickers
+2025-11-04 23:34:52,057 - ERROR - Symbol ['KKR', 'HWM', 'VRSK'] failed to load
+2025-11-04 23:34:52,057 - INFO - Batch 30: Loaded 7/10 tickers
+2025-11-04 23:34:52,542 - ERROR - Symbol ['XYZ', 'KMI', 'DG'] failed to load
+2025-11-04 23:34:52,542 - INFO - Batch 31: Loaded 7/10 tickers
+2025-11-04 23:34:52,866 - ERROR - Symbol ['IR', 'CPAY', 'PODD', 'CF'] failed to load
+2025-11-04 23:34:52,866 - INFO - Batch 32: Loaded 6/10 tickers
+2025-11-04 23:34:53,335 - ERROR - Symbol ['PANW'] failed to load
+2025-11-04 23:34:53,335 - INFO - Batch 33: Loaded 9/10 tickers
+2025-11-04 23:34:53,784 - ERROR - Symbol ['DOW', 'HCA', 'ZTS', 'V'] failed to load
+2025-11-04 23:34:53,784 - INFO - Batch 34: Loaded 6/10 tickers
+2025-11-04 23:34:54,173 - ERROR - Symbol ['GNRC', 'SYF', 'CMG'] failed to load
+2025-11-04 23:34:54,173 - INFO - Batch 35: Loaded 7/10 tickers
+2025-11-04 23:34:54,535 - ERROR - Symbol ['GDDY', 'CTVA', 'AVGO', 'FOXA'] failed to load
+2025-11-04 23:34:54,535 - INFO - Batch 36: Loaded 6/10 tickers
+2025-11-04 23:34:55,069 - ERROR - Symbol ['LULU'] failed to load
+2025-11-04 23:34:55,070 - INFO - Batch 37: Loaded 9/10 tickers
+2025-11-04 23:34:55,377 - ERROR - Symbol ['SOLV', 'BR', 'APP', 'LW', 'BX'] failed to load
+2025-11-04 23:34:55,377 - INFO - Batch 38: Loaded 5/10 tickers
+2025-11-04 23:34:55,799 - ERROR - Symbol ['TMUS'] failed to load
+2025-11-04 23:34:55,799 - INFO - Batch 39: Loaded 9/10 tickers
+2025-11-04 23:34:56,088 - ERROR - Symbol ['CRWD'] failed to load
+2025-11-04 23:34:56,089 - INFO - Batch 40: Loaded 9/10 tickers
+2025-11-04 23:34:56,625 - ERROR - Symbol ['DAY', 'COIN'] failed to load
+2025-11-04 23:34:56,625 - INFO - Batch 41: Loaded 7/9 tickers

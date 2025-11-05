@@ -1,5 +1,3 @@
-from typing import Optional
-
 import yfinance as yf
 import polars as pl
 import pandas as pd
@@ -7,9 +5,11 @@ import logging
 from pathlib import Path
 from tqdm import tqdm
 
+from scripts.hw1.data_generator import MarketDataPoint
+
 logging.basicConfig(
     level=logging.INFO,
-    filename='data_loader.log',
+    filename='price_loader.log',
     filemode='w',
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -21,8 +21,17 @@ class PriceLoader:
     Load S&P 500 prices from Yahoo Finance
     """
     def __init__(self, tickers: list = None):
-        self.tickers = tickers
-        self.prices = None
+        self._tickers = tickers
+        self._prices = None
+        self._time = None
+
+    @property
+    def tickers(self):
+        return self._tickers
+
+    @property
+    def time_range(self):
+        return self._time
 
     def get_sp500_tickers(self):
         url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
@@ -31,21 +40,21 @@ class PriceLoader:
         }
         table = pd.read_html(url, header=0, storage_options=headers)[0]
         tickers = table['Symbol'].str.replace('.', '-')
-        self.tickers = tickers.to_list()
+        self._tickers = tickers.to_list()
 
-        return self.tickers
+        return self._tickers
 
     def get_prices(self, start_date: str, end_date: str, batch_size: int = 10) -> pl.DataFrame:
-        if not self.tickers:
+        if not self._tickers:
             self.get_sp500_tickers()
 
-        num_batch = len(self.tickers) // 10 + 1
+        num_batch = len(self._tickers) // 10 + 1
         result = None
         cnt = 0
 
         # Fetch data in batches
         for i in tqdm(range(num_batch), desc='Fetching', unit='batch'):
-            batch = self.tickers[i * batch_size : (i + 1) * batch_size]
+            batch = self._tickers[i * batch_size : (i + 1) * batch_size]
             pd_batch = yf.download(
                 batch, start=start_date, end=end_date,
                 auto_adjust=True, progress=False)['Close']
@@ -61,6 +70,7 @@ class PriceLoader:
             diff = list(set(batch) - set(tickers))
             if diff:
                 logging.error(f"Symbol {diff} failed to load")
+                self._tickers = list(set(self._tickers) - set(diff))
             logging.info(f"Batch {i + 1}: Loaded {len(tickers)}/{len(batch)} tickers")
 
             # Join based on the 'Date' column
@@ -70,21 +80,47 @@ class PriceLoader:
                 result = result.join(pl_prices, on="Date", how="full", coalesce=True)
 
         logging.info(f"Total {cnt} tickers loaded successfully")
-        self.prices = result.collect()
+        self._prices = result.collect()
 
-        return self.prices
+        return self._prices
 
     def write_parquet(self, path: Path):
-        self.prices.write_parquet(path)
+        self._prices.write_parquet(path)
 
     def load_parquet(self, path: Path):
-        self.prices = pl.read_parquet(path)
-        return self.prices
+        self._prices = pl.read_parquet(path)
+        self._time = self._prices.select('Date').to_series().to_list()
+        self._tickers = self._prices.select(pl.exclude('Date')).columns
+
+    def get_ticks(self):
+        """
+        Generator that yields MarketDataPoint objects.
+        Memory efficient - streams data instead of loading all at once.
+
+        Yields:
+            MarketDataPoint: One tick at a time
+        """
+        df_long = self._prices.unpivot(
+            index='Date',
+            variable_name='symbol',
+            value_name='price'
+        ).sort('Date', 'symbol')
+
+        for row in df_long.iter_rows(named=True):
+            if row['price']:
+                yield MarketDataPoint(
+                    timestamp=row['Date'],
+                    symbol=row['symbol'],
+                    price=row['price']
+                )
     
 
 
 if __name__ == "__main__":
     loader = PriceLoader()
-    prices = loader.get_prices('2005-01-01', '2025-01-01')
     parquet_path = Path('../../..') / 'data' / 'raw' / 'sp500.parquet'
-    loader.write_parquet(parquet_path)
+    # prices = loader.get_prices('2005-01-01', '2005-02-01')
+    # loader.write_parquet(parquet_path)
+    loader.load_parquet(parquet_path)
+    for tick in loader.get_ticks():
+        print(tick)

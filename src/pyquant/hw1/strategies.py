@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from dataclasses import dataclass
 from datetime import datetime
 from collections import deque
 from src.pyquant.hw1.data_loader import MarketDataPoint, data_ingestor
-from src.pyquant.hw1.models import ConfigError, Portfolio, Order
+from src.pyquant.hw1.models import ConfigError, Order
+from src.pyquant.hw2.models import Portfolio
 
 
 class Strategy(ABC):
@@ -24,6 +25,9 @@ class StrategyState:
     order_errors: List[str]
     execution_errors: List[str]
     history: List[Tuple[datetime, float]]
+
+    def __post_init__(self):
+        self.pending_order: Optional[Order] = None
 
 
 class MACDStrategy(Strategy):
