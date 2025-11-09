@@ -25,7 +25,7 @@ This assignment emphasizes computational efficiency, parallel architecture, and 
 
 ### 1. Data Ingestion
 
-**Input:** [`market_data-1.csv`](../data/raw/market_data-1.csv)
+**Input:** [`market_data-1.csv`](../src/trading_system/hw3/data/raw/market_data.csv)
 
 **Expectations:**
 

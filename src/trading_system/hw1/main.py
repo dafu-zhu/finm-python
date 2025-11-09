@@ -1,8 +1,8 @@
-from src.trading_system.hw1.engine import ExecutionEngine
-from src.trading_system.hw1.strategies import MACDStrategy, MomentumStrategy
-from src.trading_system.hw1.data_loader import data_ingestor
-from src.trading_system.hw1.reporting import generate_report
-from src.trading_system.utils import root_dir
+from trading_system.hw1 import ExecutionEngine
+from trading_system.hw1 import MACDStrategy, MomentumStrategy
+from trading_system.hw1 import data_ingestor
+from trading_system.hw1 import generate_report
+from trading_system.hw1 import root_dir
 
 from pathlib import Path
 

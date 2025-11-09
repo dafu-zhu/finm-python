@@ -1,14 +1,11 @@
 import random
-from collections import defaultdict
-from datetime import datetime, date
 from typing import Dict, List, Iterable, Tuple
 import polars as pl
 import logging
-from tqdm import tqdm
 
-from src.trading_system.hw1.data_loader import MarketDataPoint
-from src.trading_system.hw1.strategies import Strategy, StrategyState
-from src.trading_system.hw1.models import (Order, OrderError, ExecutionError)
+from trading_system.hw1.src.data_loader import MarketDataPoint
+from trading_system.hw1.src.strategies import Strategy, StrategyState
+from trading_system.hw1.src.models import (Order, OrderError, ExecutionError)
 from src.trading_system.hw2.models import Portfolio, Position
 from src.trading_system.hw2.position_sizer import PositionSizer
 

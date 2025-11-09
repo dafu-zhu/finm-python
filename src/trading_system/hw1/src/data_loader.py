@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 import csv
-from src.trading_system.utils import *
+from pathlib import Path
+from trading_system.hw1 import root_dir
 
 
 @dataclass(frozen=True)

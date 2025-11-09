@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
-from src.trading_system.hw1.strategies import StrategyState
-from src.trading_system.utils import root_dir
+from trading_system.hw1 import StrategyState
 
 
 def value_tbl(time: list, value: list) -> pl.LazyFrame:
@@ -322,7 +321,6 @@ def write_comparison_report(all_reports: Dict[str, dict], comparison_path: Path,
         output_path: Path to save the markdown report
     """
     # Adjust path for relative reference from doc directory
-    comparison_path = Path('..') / comparison_path.relative_to('.')
     comparison_md = quote(comparison_path.as_posix())
 
     lines = [
@@ -335,7 +333,7 @@ def write_comparison_report(all_reports: Dict[str, dict], comparison_path: Path,
         "",
         "## Performance Comparison Chart",
         "",
-        f"![Multi-Strategy Comparison]({comparison_md})",
+        f"![Multi-Strategy Comparison](../{comparison_md})",
         "",
         "The chart above shows normalized portfolio values (starting at 1.0) for all strategies, "
         "allowing direct visual comparison of relative performance.",
@@ -577,8 +575,6 @@ def write_markdown_report(report: dict, pnl_path: Path, drawdown_path: Path, out
     :param drawdown_path:
     """
     # Change base directory into doc
-    pnl_path = Path('..') / pnl_path.relative_to('.')
-    drawdown_path = Path('..') / drawdown_path.relative_to('.')
     pnl_md = quote(pnl_path.as_posix())
     drawdown_md = quote(drawdown_path.as_posix())
 
@@ -628,7 +624,7 @@ def write_markdown_report(report: dict, pnl_path: Path, drawdown_path: Path, out
     lines.append("")
     lines.append("### Portfolio Value Over Time")
     lines.append("")
-    lines.append(f"![Portfolio Value]({pnl_md})")
+    lines.append(f"![Portfolio Value](../{pnl_md})")
     lines.append("")
     lines.append("The equity curve above shows the evolution of portfolio value throughout the backtesting period.")
     lines.append("")
@@ -636,7 +632,7 @@ def write_markdown_report(report: dict, pnl_path: Path, drawdown_path: Path, out
     # Drawdown analysis
     lines.append("## Drawdown Analysis")
     lines.append("")
-    lines.append(f"![Drawdown Analysis]({drawdown_md})")
+    lines.append(f"![Drawdown Analysis](../{drawdown_md})")
     lines.append("")
 
     lines.append("### Maximum Drawdown Details")

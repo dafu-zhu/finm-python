@@ -1,10 +1,7 @@
-from src.trading_system.hw1.data_loader import MarketDataPoint
-from src.trading_system.hw1.strategies import Strategy, StrategyState
-from collections import deque
-from datetime import datetime, timedelta
+from trading_system.hw1.src.data_loader import MarketDataPoint
+from trading_system.hw1.src.strategies import Strategy
 
 from collections import deque
-from datetime import datetime, timedelta
 
 
 class MovingAverageStrategy(Strategy):

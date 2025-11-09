@@ -1,7 +1,3 @@
-"""
-Helper functions for pyquant
-"""
-
 from pathlib import Path
 
 def root_dir(start_path: Path=None):
@@ -13,4 +9,3 @@ def root_dir(start_path: Path=None):
             return current
         current = current.parent
     raise FileNotFoundError("No pyproject.toml found")
-
