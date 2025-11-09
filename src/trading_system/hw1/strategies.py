@@ -3,9 +3,9 @@ from typing import List, Tuple, Optional
 from dataclasses import dataclass
 from datetime import datetime
 from collections import deque
-from src.pyquant.hw1.data_loader import MarketDataPoint, data_ingestor
-from src.pyquant.hw1.models import ConfigError, Order
-from src.pyquant.hw2.models import Portfolio
+from src.trading_system.hw1.data_loader import MarketDataPoint, data_ingestor
+from src.trading_system.hw1.models import ConfigError, Order
+from src.trading_system.hw2.models import Portfolio
 
 
 class Strategy(ABC):

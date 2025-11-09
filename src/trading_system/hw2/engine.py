@@ -6,11 +6,11 @@ import polars as pl
 import logging
 from tqdm import tqdm
 
-from src.pyquant.hw1.data_loader import MarketDataPoint
-from src.pyquant.hw1.strategies import Strategy, StrategyState
-from src.pyquant.hw1.models import (Order, OrderError, ExecutionError)
-from src.pyquant.hw2.models import Portfolio, Position
-from src.pyquant.hw2.position_sizer import PositionSizer
+from src.trading_system.hw1.data_loader import MarketDataPoint
+from src.trading_system.hw1.strategies import Strategy, StrategyState
+from src.trading_system.hw1.models import (Order, OrderError, ExecutionError)
+from src.trading_system.hw2.models import Portfolio, Position
+from src.trading_system.hw2.position_sizer import PositionSizer
 
 logging.basicConfig(
     level=logging.INFO,

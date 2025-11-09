@@ -1,5 +1,5 @@
-from pyquant.hw1.data_loader import MarketDataPoint
-from src.pyquant.hw1.strategies import Strategy, StrategyState
+from trading_system.hw1.data_loader import MarketDataPoint
+from src.trading_system.hw1.strategies import Strategy, StrategyState
 
 
 class BenchmarkStrategy(Strategy):

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
-from pyquant.hw1.strategies import StrategyState
-from src.pyquant.utils import root_dir
+from src.trading_system.hw1.strategies import StrategyState
+from src.trading_system.utils import root_dir
 
 
 def value_tbl(time: list, value: list) -> pl.LazyFrame:

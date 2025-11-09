@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.pyquant.hw2.models import Portfolio
+from src.trading_system.hw2.models import Portfolio
 
 
 class PositionSizer(ABC):
