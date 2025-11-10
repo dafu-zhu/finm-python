@@ -124,7 +124,7 @@ Upload to GitHub with the following structure:
 - [x] Strategy Interface & Implementations (1h)
 - [x] Complexity Annotation (0)
 - [x] Profiling & Benchmarking (1h)
-- [ ] Optimization Challenge
+- [x] Optimization Challenge
 - [x] Reporting (0.5h)
 
 ## Things learned
