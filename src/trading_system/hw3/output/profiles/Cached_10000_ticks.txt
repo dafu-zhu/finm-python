@@ -1,0 +1,23 @@
+cProfile Results: Cached with 10,000 ticks
+Generated: 2025-11-10 10:13:35
+================================================================================
+
+         299495 function calls in 0.147 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003    0.147    0.147 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/profiler.py:57(run_strategy)
+    10000    0.051    0.000    0.144    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:397(generate_signals)
+   199620    0.077    0.000    0.077    0.000 {built-in method builtins.round}
+    19962    0.007    0.000    0.013    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:389(cached_mean)
+    19962    0.004    0.000    0.004    0.000 {built-in method builtins.sum}
+    29962    0.003    0.000    0.003    0.000 {built-in method builtins.len}
+     9981    0.001    0.000    0.001    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:30(ma_logic)
+    10000    0.001    0.000    0.001    0.000 {method 'append' of 'collections.deque' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        2    0.000    0.000    0.000    0.000 <frozen abc>:117(__instancecheck__)
+        2    0.000    0.000    0.000    0.000 {built-in method _abc._abc_instancecheck}
+
+

@@ -171,6 +171,18 @@ def generate_complexity_report(results: Dict, plot_filename: str, output_dir: Pa
     md.append("## Performance Comparison\n\n")
     md.append(f"![Optimization Comparison](plots/{plot_filename})\n\n")
 
+    # cProfile Results
+    strategies = results['strategies']
+    md.append("## cProfile Results\n\n")
+    for name in strategies:
+        if results['data'][name]['profile_logs']:
+            md.append(f"### {name} Strategy\n")
+            md.append("\n```\n")
+            # Include first 20 lines of profile
+            profile_lines = results['data'][name]['profile_logs'].split('\n')[:20]
+            md.append('\n'.join(profile_lines))
+            md.append("\n```\n\n")
+
     # Detailed Results Table
     md.append("## Detailed Performance Results\n\n")
     md.append("### Execution Time (seconds)\n\n")

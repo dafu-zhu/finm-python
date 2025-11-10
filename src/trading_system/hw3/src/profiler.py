@@ -17,6 +17,9 @@ import tracemalloc
 from pathlib import Path
 from typing import List, Dict, Iterator
 from datetime import datetime, timedelta
+import cProfile
+import io
+import pstats
 import numpy as np
 # Import optimized strategies
 import sys
@@ -98,6 +101,23 @@ def benchmark_strategy(strategy_class, n_ticks: int, params: dict) -> Dict:
     }
 
 
+def benchmark_cprofile(strategy_class, n_ticks: int, params: dict, profile_dir: Path) -> tuple:
+    """Benchmark a single strategy using cProfile."""
+    data = generate_market_data(n_ticks)
+    strategy = strategy_class(params)
+    profile = cProfile.Profile()
+    profile.enable()
+    run_strategy(strategy, data)
+    profile.disable()
+    s = io.StringIO()
+    sortby = 'cumulative'
+    ps = pstats.Stats(profile, stream=s).sort_stats(sortby)
+    ps.print_stats(20)
+    profile_text = s.getvalue()
+
+    return ps, profile_text
+
+
 def run_comprehensive_benchmark():
 
     strategies = [
@@ -154,6 +174,26 @@ def run_comprehensive_benchmark():
                 results['data'][name]['memory_current'].append(result['memory_current'])
                 results['data'][name]['memory_peak'].append(result['memory_peak'])
                 results['data'][name]['cache_info'].append(result['cache_info'])
+
+                if n_ticks == 10_000:
+                    profile_dir = Path("./output/profiles/")
+                    stats, profile_text = benchmark_cprofile(
+                        strategy_class,
+                        n_ticks,
+                        params,
+                        profile_dir
+                    )
+
+                    # Save to file
+                    profile_filename = profile_dir / f"{name}_{n_ticks}_ticks.txt"
+                    with open(profile_filename, 'w') as f:
+                        f.write(f"cProfile Results: {name} with {n_ticks:,} ticks\n")
+                        f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                        f.write("=" * 80 + "\n\n")
+                        f.write(profile_text)
+
+                    results['data'][name]['profile_logs'] = profile_text
+                    results['data'][name]['profile_files'] = f"profiles/{name}_{n_ticks}_ticks.txt"
 
                 print(f"    ✓ Time: {result['time']:.4f}s ({result['time_per_tick']:.2f} µs/tick)")
                 print(f"    ✓ Memory: {result['memory_peak']:.4f} MB peak")
