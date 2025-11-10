@@ -15,10 +15,9 @@ Generates comprehensive comparison report.
 import timeit
 import tracemalloc
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Iterator
 from datetime import datetime, timedelta
 import numpy as np
-
 # Import optimized strategies
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
@@ -30,9 +29,8 @@ WindowedMovingAverageStrategy,
 VectorizedMovingAverageStrategy,
 CachedMovingAverageStrategy,
 StreamingMovingAverageStrategy,
-HybridOptimizedStrategy,
+HybridOptimizedStrategy, Strategy,
 )
-
 
 def generate_market_data(n_ticks: int, seed: int = 42) -> List[MarketDataPoint]:
     """Generate synthetic market data."""
@@ -53,6 +51,16 @@ def generate_market_data(n_ticks: int, seed: int = 42) -> List[MarketDataPoint]:
     return result
 
 
+def run_strategy(strat: Strategy, data: List[MarketDataPoint]) -> None:
+    if isinstance(strat, VectorizedMovingAverageStrategy):
+        strat.process_batch(data)
+    elif isinstance(strat, StreamingMovingAverageStrategy):
+        for signal in strat.stream_signals(iter(data)):
+            pass  # consume generator
+    else:
+        for tick in data:
+            strat.generate_signals(tick)
+
 def benchmark_strategy(strategy_class, n_ticks: int, params: dict) -> Dict:
     """Benchmark a single strategy."""
     # Generate data
@@ -62,8 +70,7 @@ def benchmark_strategy(strategy_class, n_ticks: int, params: dict) -> Dict:
     strategy = strategy_class(params)
 
     start_time = timeit.default_timer()
-    for tick in data:
-        strategy.generate_signals(tick)
+    run_strategy(strategy, data)
     end_time = timeit.default_timer()
 
     execution_time = end_time - start_time
@@ -72,8 +79,7 @@ def benchmark_strategy(strategy_class, n_ticks: int, params: dict) -> Dict:
     strategy = strategy_class(params)
     tracemalloc.start()
 
-    for tick in data:
-        strategy.generate_signals(tick)
+    run_strategy(strategy, data)
 
     current, peak = tracemalloc.get_traced_memory()
     tracemalloc.stop()

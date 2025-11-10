@@ -2,7 +2,7 @@
 Part 1: Trading strategy implementations with complexity analysis.
 
 Classes:
-- NaiveMovingAverageStrategy: O(n) time, O(n) space - recomputes from scratch
+- NaiveMovingAverageStrategy: O(n) time, O(k) space - recomputes from scratch
 - WindowedMovingAverageStrategy: O(1) time, O(k) space - incremental updates
 
 Part 2: Optimization Challenge - Multiple approaches to improving NaiveMovingAverageStrategy
@@ -22,8 +22,9 @@ Each strategy includes:
 from collections import deque
 from typing import List, Iterator
 import numpy as np
-from functools import lru_cache
-from trading_system.hw3.src.models import Strategy, MarketDataPoint
+from functools import lru_cache, wraps
+from trading_system.hw3 import Strategy, MarketDataPoint
+import cProfile, pstats, io
 
 
 def ma_logic(short_ma, long_ma, tick: MarketDataPoint):
@@ -78,6 +79,7 @@ class NaiveMovingAverageStrategy(Strategy):
         # Track the number of ticks processed (for debugging)
         self.tick_count = 0
 
+    
     def generate_signals(self, tick: MarketDataPoint) -> List:
         """
         Generate trading signal based on moving average crossover.
@@ -122,15 +124,8 @@ class NaiveMovingAverageStrategy(Strategy):
         long_ma = np.mean(price_list[-long:])
 
         # O(1): Simple comparison and signal generation
-        if short_ma > long_ma:
-            # Golden cross: short MA crosses above long MA (bullish)
-            return ['Buy', tick.symbol, 100, tick.price]
-        elif short_ma < long_ma:
-            # Death cross: short MA crosses below long MA (bearish)
-            return ['Sell', tick.symbol, 100, tick.price]
-        else:
-            # MAs are equal (rare but possible)
-            return ['Hold', tick.symbol, 0, tick.price]
+        result = ma_logic(short_ma, long_ma, tick)
+        return result
 
 
 class WindowedMovingAverageStrategy(Strategy):
@@ -185,6 +180,7 @@ class WindowedMovingAverageStrategy(Strategy):
         # Track tick count
         self.tick_count = 0
 
+    
     def generate_signals(self, tick: MarketDataPoint) -> List:
         """
         Generate signal using incremental moving average updates.
@@ -244,6 +240,7 @@ class WindowedMovingAverageStrategy(Strategy):
         # O(1): Generate signal
         signal = ma_logic(short_ma, long_ma, tick)
         return signal
+
 
 # ============================================================================
 # OPTIMIZATION 1: NumPy Vectorized (Batch Processing)
@@ -310,6 +307,7 @@ class VectorizedMovingAverageStrategy(Strategy):
         else:
             return ['Hold', tick.symbol, 0, tick.price]
 
+    
     def process_batch(self, ticks: List[MarketDataPoint]) -> List[List]:
         """
         Batch processing interface (more efficient).
@@ -395,6 +393,7 @@ class CachedMovingAverageStrategy(Strategy):
 
         self._cached_mean = cached_mean
 
+    
     def generate_signals(self, tick: MarketDataPoint) -> List:
         short = self.params['short']
         long = self.params['long']
@@ -488,13 +487,9 @@ class StreamingMovingAverageStrategy(Strategy):
         short_ma = self.short_sum / len(self.short_window)
         long_ma = self.long_sum / len(self.long_window)
 
-        if short_ma > long_ma:
-            return ['Buy', tick.symbol, 100, tick.price]
-        elif short_ma < long_ma:
-            return ['Sell', tick.symbol, 100, tick.price]
-        else:
-            return ['Hold', tick.symbol, 0, tick.price]
-
+        result = ma_logic(short_ma, long_ma, tick)
+        return result
+    
     def stream_signals(self, tick_stream: Iterator[MarketDataPoint]) -> Iterator[List]:
         """
         Generator-based signal stream.
@@ -594,7 +589,6 @@ class HybridOptimizedStrategy(Strategy):
         # Generate signal
         signal = ma_logic(short_ma, long_ma, tick)
         return signal
-
 
 # ============================================================================
 # Complexity Comparison Table
