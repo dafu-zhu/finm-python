@@ -117,3 +117,18 @@ Upload to GitHub with the following structure:
 | `tests/` | Unit tests or notebook-based validation |
 | `complexity_report.md` | Summary of findings |
 | `README.md` | Setup instructions and module descriptions |
+
+## Checklist
+
+- [x] Data Ingestion & Immutable Types (0)
+- [x] Strategy Interface & Implementations (1h)
+- [x] Complexity Annotation (0)
+- [x] Profiling & Benchmarking (1h)
+- [ ] Optimization Challenge
+- [x] Reporting (0.5h)
+
+## Things learned
+
+- timeit
+- cProfile, pstats, io.StringIO
+- tracemalloc

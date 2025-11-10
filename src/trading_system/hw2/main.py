@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from trading_system.hw2.benchmark_strategy import BenchmarkStrategy
-from trading_system.hw2.engine import ExecutionEngine
-from trading_system.hw2.position_sizer import FixedShareSizer
-from trading_system.hw2.price_loader import PriceLoader
+from trading_system.hw2 import BenchmarkStrategy
+from trading_system.hw2 import ExecutionEngine
+from trading_system.hw2 import FixedShareSizer
+from trading_system.hw2 import PriceLoader
 from trading_system.hw1.src.reporting import generate_report
-from trading_system.hw2.strategies import MovingAverageStrategy, VolatilityBreakoutStrategy, MACDStrategy, RSIStrategy
+from trading_system.hw2 import MovingAverageStrategy, VolatilityBreakoutStrategy, MACDStrategy, RSIStrategy
 
 
 def main():

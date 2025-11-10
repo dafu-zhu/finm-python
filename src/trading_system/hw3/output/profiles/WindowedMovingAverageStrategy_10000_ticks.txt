@@ -1,0 +1,15 @@
+cProfile Results: WindowedMovingAverageStrategy with 10,000 ticks
+Generated: 2025-11-09 20:14:26
+================================================================================
+
+         79963 function calls in 0.021 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+    10000    0.014    0.000    0.021    0.000 strategies.py:165(generate_signals)
+    49962    0.004    0.000    0.004    0.000 {built-in method builtins.len}
+    20000    0.002    0.000    0.002    0.000 {method 'append' of 'collections.deque' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+

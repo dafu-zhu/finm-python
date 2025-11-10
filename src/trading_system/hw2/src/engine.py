@@ -6,12 +6,12 @@ import logging
 from trading_system.hw1.src.data_loader import MarketDataPoint
 from trading_system.hw1.src.strategies import Strategy, StrategyState
 from trading_system.hw1.src.models import (Order, OrderError, ExecutionError)
-from src.trading_system.hw2.models import Portfolio, Position
-from src.trading_system.hw2.position_sizer import PositionSizer
+from trading_system.hw2 import Portfolio, Position
+from trading_system.hw2 import PositionSizer
 
 logging.basicConfig(
     level=logging.INFO,
-    filename='engine.log',
+    filename='../engine.log',
     filemode='w',
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )

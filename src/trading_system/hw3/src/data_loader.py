@@ -14,7 +14,7 @@ from datetime import datetime
 from typing import List
 from pathlib import Path
 import csv
-from trading_system.hw3.src.models import MarketDataPoint
+from trading_system.hw3 import MarketDataPoint
 
 
 def data_ingestor(filepath: Path) -> List[MarketDataPoint]:

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.trading_system.hw2.models import Portfolio
+from trading_system.hw2 import Portfolio
 
 
 class PositionSizer(ABC):

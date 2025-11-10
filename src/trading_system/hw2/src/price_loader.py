@@ -9,7 +9,7 @@ from scripts.hw1.data_generator import MarketDataPoint
 
 logging.basicConfig(
     level=logging.INFO,
-    filename='price_loader.log',
+    filename='../price_loader.log',
     filemode='w',
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -118,7 +118,7 @@ class PriceLoader:
 
 if __name__ == "__main__":
     loader = PriceLoader()
-    parquet_path = Path('../../..') / 'data' / 'raw' / 'sp500.parquet'
+    parquet_path = Path('../../../..') / 'data' / 'raw' / 'sp500.parquet'
     # prices = loader.get_prices('2005-01-01', '2005-02-01')
     # loader.write_parquet(parquet_path)
     loader.load_parquet(parquet_path)

@@ -5,7 +5,7 @@ from datetime import datetime
 from collections import deque
 from trading_system.hw1 import MarketDataPoint
 from trading_system.hw1 import ConfigError, Order
-from trading_system.hw2.models import Portfolio
+from trading_system.hw2.src.models import Portfolio
 
 
 class Strategy(ABC):
