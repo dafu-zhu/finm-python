@@ -1,6 +1,6 @@
 # Optimization Challenge - Comprehensive Results
 
-**Generated:** 2025-11-10 10:13:32
+**Generated:** 2025-11-10 17:32:10
 **Parameters:** Short=5, Long=20
 
 ---
@@ -25,18 +25,18 @@
 ### Naive Strategy
 
 ```
-         259571 function calls in 0.170 seconds
+         259571 function calls in 0.174 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.004    0.004    0.170    0.170 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/profiler.py:57(run_strategy)
-    10000    0.024    0.000    0.166    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:83(generate_signals)
-    19962    0.024    0.000    0.135    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:3735(mean)
-    19962    0.036    0.000    0.111    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:117(_mean)
-    19962    0.024    0.000    0.024    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+        1    0.004    0.004    0.174    0.174 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/profiler.py:57(run_strategy)
+    10000    0.025    0.000    0.170    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:83(generate_signals)
+    19962    0.024    0.000    0.138    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:3735(mean)
+    19962    0.037    0.000    0.114    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:117(_mean)
+    19962    0.025    0.000    0.025    0.000 {method 'reduce' of 'numpy.ufunc' objects}
     19962    0.020    0.000    0.023    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:75(_count_reduce_items)
-    19962    0.017    0.000    0.017    0.000 {built-in method numpy.asanyarray}
+    19962    0.018    0.000    0.018    0.000 {built-in method numpy.asanyarray}
     39924    0.005    0.000    0.005    0.000 {built-in method builtins.issubclass}
     19962    0.003    0.000    0.003    0.000 {built-in method builtins.hasattr}
     19964    0.003    0.000    0.003    0.000 {built-in method builtins.isinstance}
@@ -78,18 +78,18 @@
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
         1    0.000    0.000    0.166    0.166 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/profiler.py:57(run_strategy)
-        1    0.050    0.050    0.166    0.166 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:311(process_batch)
-    19962    0.013    0.000    0.109    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:3735(mean)
-    19962    0.036    0.000    0.096    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:117(_mean)
+        1    0.048    0.048    0.166    0.166 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:311(process_batch)
+    19962    0.013    0.000    0.111    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:3735(mean)
+    19962    0.036    0.000    0.098    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:117(_mean)
     19962    0.024    0.000    0.024    0.000 {method 'reduce' of 'numpy.ufunc' objects}
-    19962    0.020    0.000    0.023    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:75(_count_reduce_items)
+    19962    0.021    0.000    0.023    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/_methods.py:75(_count_reduce_items)
     39924    0.005    0.000    0.005    0.000 {built-in method builtins.issubclass}
     19962    0.003    0.000    0.003    0.000 {built-in method builtins.hasattr}
     19963    0.003    0.000    0.003    0.000 {built-in method builtins.isinstance}
+    10000    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
     19962    0.003    0.000    0.003    0.000 {built-in method builtins.max}
-    19962    0.002    0.000    0.002    0.000 {built-in method numpy.lib.array_utils.normalize_axis_index}
-    10000    0.002    0.000    0.002    0.000 {method 'append' of 'list' objects}
     19962    0.002    0.000    0.002    0.000 {built-in method numpy.asanyarray}
+    19962    0.002    0.000    0.002    0.000 {built-in method numpy.lib.array_utils.normalize_axis_index}
     19962    0.002    0.000    0.002    0.000 /Users/zdf/Documents/GitHub/trading-system/.venv/lib/python3.13/site-packages/numpy/_core/fromnumeric.py:3730(_mean_dispatcher)
         1    0.000    0.000    0.000    0.000 {built-in method numpy.array}
 ```
@@ -97,13 +97,13 @@
 ### Cached Strategy
 
 ```
-         299495 function calls in 0.147 seconds
+         299495 function calls in 0.146 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.003    0.003    0.147    0.147 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/profiler.py:57(run_strategy)
-    10000    0.051    0.000    0.144    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:397(generate_signals)
+        1    0.003    0.003    0.146    0.146 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/profiler.py:57(run_strategy)
+    10000    0.050    0.000    0.143    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:397(generate_signals)
    199620    0.077    0.000    0.077    0.000 {built-in method builtins.round}
     19962    0.007    0.000    0.013    0.000 /Users/zdf/Documents/GitHub/trading-system/src/trading_system/hw3/src/strategies.py:389(cached_mean)
     19962    0.004    0.000    0.004    0.000 {built-in method builtins.sum}
@@ -169,23 +169,23 @@
 
 | Strategy | 1,000 ticks | 10,000 ticks | 100,000 ticks |
 |----------|-------------|--------------|---------------|
-| Naive | 0.0093 | 0.0953 | 0.9209 | 
-| Windowed | 0.0006 | 0.0058 | 0.0580 | 
-| Vectorized | 0.0067 | 0.0665 | 0.6927 | 
-| Cached | 0.0080 | 0.0813 | 0.8801 | 
-| Streaming | 0.0006 | 0.0059 | 0.0584 | 
-| Hybrid | 0.0009 | 0.0091 | 0.0905 | 
+| Naive | 0.0108 | 0.0973 | 0.9722 | 
+| Windowed | 0.0006 | 0.0058 | 0.0588 | 
+| Vectorized | 0.0066 | 0.0696 | 0.6985 | 
+| Cached | 0.0081 | 0.0818 | 0.8903 | 
+| Streaming | 0.0006 | 0.0059 | 0.0583 | 
+| Hybrid | 0.0009 | 0.0091 | 0.0924 | 
 
 ### Time per Tick (microseconds)
 
 | Strategy | 1,000 ticks | 10,000 ticks | 100,000 ticks |
 |----------|-------------|--------------|---------------|
-| Naive | 9.33 | 9.53 | 9.21 | 
-| Windowed | 0.59 | 0.58 | 0.58 | 
-| Vectorized | 6.66 | 6.65 | 6.93 | 
-| Cached | 8.05 | 8.13 | 8.80 | 
+| Naive | 10.79 | 9.73 | 9.72 | 
+| Windowed | 0.60 | 0.58 | 0.59 | 
+| Vectorized | 6.57 | 6.96 | 6.98 | 
+| Cached | 8.12 | 8.18 | 8.90 | 
 | Streaming | 0.59 | 0.59 | 0.58 | 
-| Hybrid | 0.92 | 0.91 | 0.90 | 
+| Hybrid | 0.95 | 0.91 | 0.92 | 
 
 ### Peak Memory Usage (MB)
 
@@ -203,21 +203,21 @@
 | Strategy | 1,000 ticks | 10,000 ticks | 100,000 ticks |
 |----------|-------------|--------------|---------------|
 | Naive | 1.00x | 1.00x | 1.00x |
-| Windowed | **15.78x** | **16.47x** | **15.87x** | 
-| Vectorized | **1.40x** | **1.43x** | **1.33x** | 
-| Cached | **1.16x** | **1.17x** | **1.05x** | 
-| Streaming | **15.86x** | **16.16x** | **15.78x** | 
-| Hybrid | **10.10x** | **10.43x** | **10.18x** | 
+| Windowed | **18.13x** | **16.72x** | **16.53x** | 
+| Vectorized | **1.64x** | **1.40x** | **1.39x** | 
+| Cached | **1.33x** | **1.19x** | **1.09x** | 
+| Streaming | **18.15x** | **16.52x** | **16.66x** | 
+| Hybrid | **11.42x** | **10.69x** | **10.53x** | 
 
 ## Performance Rankings (100,000 ticks)
 
 ### Fastest Execution
-1. **Windowed**: 0.0580s
-2. **Streaming**: 0.0584s
-3. **Hybrid**: 0.0905s
-4. **Vectorized**: 0.6927s
-5. **Cached**: 0.8801s
-6. **Naive**: 0.9209s
+1. **Streaming**: 0.0583s
+2. **Windowed**: 0.0588s
+3. **Hybrid**: 0.0924s
+4. **Vectorized**: 0.6985s
+5. **Cached**: 0.8903s
+6. **Naive**: 0.9722s
 
 ### Most Memory Efficient
 1. **Hybrid**: 0.0002 MB
@@ -229,7 +229,7 @@
 
 ## Key Findings
 
-1. **Fastest Strategy**: Windowed achieves 15.9x speedup
+1. **Fastest Strategy**: Streaming achieves 16.7x speedup
 2. **Most Memory Efficient**: Hybrid uses only 0.0002 MB
 3. **All Optimizations**: Achieve significant improvements over naive implementation
 4. **Complexity Verified**: O(1) strategies scale better than O(n) baseline

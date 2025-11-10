@@ -15,7 +15,7 @@ Generates comprehensive comparison report.
 import timeit
 import tracemalloc
 from pathlib import Path
-from typing import List, Dict, Iterator
+from typing import List, Dict, Any
 from datetime import datetime, timedelta
 import cProfile
 import io
@@ -132,7 +132,7 @@ def run_comprehensive_benchmark():
     tick_sizes = [1_000, 10_000, 100_000]
     params = {'short': 5, 'long': 20}
 
-    results = {
+    results: Dict[str, Any] = {
         'strategies': [name for name, _, _ in strategies],
         'descriptions': [desc for _, _, desc in strategies],
         'tick_sizes': tick_sizes,

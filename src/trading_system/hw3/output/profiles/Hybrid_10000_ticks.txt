@@ -1,5 +1,5 @@
 cProfile Results: Hybrid with 10,000 ticks
-Generated: 2025-11-10 10:13:35
+Generated: 2025-11-10 17:32:13
 ================================================================================
 
          19989 function calls in 0.013 seconds

@@ -244,7 +244,7 @@ def generate_complexity_report(results: Dict, plot_filename: str, output_dir: Pa
         else:
             md.append(f"| {strategy} | ")
             times = results['data'][strategy]['times']
-            for i, (naive_t, t) in enumerate(zip(naive_times, times)):
+            for naive_t, t in zip(naive_times, times):
                 if naive_t and t:
                     speedup = naive_t / t
                     md.append(f"**{speedup:.2f}x** | ")

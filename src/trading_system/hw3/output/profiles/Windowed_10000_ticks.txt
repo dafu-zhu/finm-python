@@ -1,5 +1,5 @@
 cProfile Results: Windowed with 10,000 ticks
-Generated: 2025-11-10 10:13:33
+Generated: 2025-11-10 17:32:11
 ================================================================================
 
          89951 function calls in 0.026 seconds
