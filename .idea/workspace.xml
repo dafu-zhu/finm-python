@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/trading-system.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/trading-system.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/uv.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignments/hw1.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw1.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignments/hw2.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw2.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignments/hw3.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw3.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignments/hw5.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw5.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignments/hw6.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw6.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignments/hw7.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw7.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +63,7 @@
       <workItem from="1762842305505" duration="59000" />
       <workItem from="1762842399671" duration="53000" />
       <workItem from="1762842469048" duration="224000" />
+      <workItem from="1762842699303" duration="330000" />
     </task>
     <servers />
   </component>
