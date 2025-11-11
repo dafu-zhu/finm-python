@@ -3,11 +3,11 @@ from typing import Dict, List, Iterable, Tuple
 import polars as pl
 import logging
 
-from trading_system.hw1.src.data_loader import MarketDataPoint
-from trading_system.hw1.src.strategies import Strategy, StrategyState
-from trading_system.hw1.src.models import (Order, OrderError, ExecutionError)
-from trading_system.hw2 import Portfolio, Position
-from trading_system.hw2 import PositionSizer
+from finm_python.hw1.src.data_loader import MarketDataPoint
+from finm_python.hw1.src.strategies import Strategy, StrategyState
+from finm_python.hw1.src.models import (Order, OrderError, ExecutionError)
+from finm_python.hw2 import Portfolio, Position
+from finm_python.hw2 import PositionSizer
 
 logging.basicConfig(
     level=logging.INFO,
