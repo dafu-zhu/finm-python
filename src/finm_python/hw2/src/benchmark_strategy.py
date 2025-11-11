@@ -1,5 +1,5 @@
-from trading_system.hw1.src.data_loader import MarketDataPoint
-from trading_system.hw1.src.strategies import Strategy
+from finm_python.hw1.src.data_loader import MarketDataPoint
+from finm_python.hw1.src.strategies import Strategy
 
 
 class BenchmarkStrategy(Strategy):

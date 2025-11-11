@@ -1,8 +1,8 @@
 import random
 from typing import List, Dict
-from trading_system.hw1 import MarketDataPoint
-from trading_system.hw1.src.strategies import Strategy, StrategyState
-from trading_system.hw1.src.models import OrderError, Order, ExecutionError, Portfolio, Position
+from finm_python.hw1 import MarketDataPoint
+from finm_python.hw1.src.strategies import Strategy, StrategyState
+from finm_python.hw1.src.models import OrderError, Order, ExecutionError, Portfolio, Position
 
 
 class ExecutionEngine:

@@ -23,7 +23,7 @@ from collections import deque
 from typing import List, Iterator
 import numpy as np
 from functools import lru_cache, wraps
-from trading_system.hw3 import Strategy, MarketDataPoint
+from finm_python.hw3 import Strategy, MarketDataPoint
 import cProfile, pstats, io
 
 

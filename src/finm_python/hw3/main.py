@@ -8,7 +8,7 @@ Workflow:
 4. Generate visualizations
 5. Create complexity_report.md
 """
-from trading_system.hw3 import (
+from finm_python.hw3 import (
     run_comprehensive_benchmark,
     generate_plots,
     generate_complexity_report

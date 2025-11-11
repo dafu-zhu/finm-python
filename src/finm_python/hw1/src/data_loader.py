@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 import csv
 from pathlib import Path
-from trading_system.hw1 import root_dir
+from finm_python.hw1 import root_dir
 
 
 @dataclass(frozen=True)

@@ -25,7 +25,7 @@ import numpy as np
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
-from trading_system.hw3 import (
+from finm_python.hw3 import (
 MarketDataPoint,
 NaiveMovingAverageStrategy,
 WindowedMovingAverageStrategy,

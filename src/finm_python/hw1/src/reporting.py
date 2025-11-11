@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
-from trading_system.hw1 import StrategyState
+from finm_python.hw1 import StrategyState
 
 
 def value_tbl(time: list, value: list) -> pl.LazyFrame:

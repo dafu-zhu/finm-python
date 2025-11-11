@@ -1,8 +1,8 @@
-from trading_system.hw1 import ExecutionEngine
-from trading_system.hw1 import MACDStrategy, MomentumStrategy
-from trading_system.hw1 import data_ingestor
-from trading_system.hw1 import generate_report
-from trading_system.hw1 import root_dir
+from finm_python.hw1 import ExecutionEngine
+from finm_python.hw1 import MACDStrategy, MomentumStrategy
+from finm_python.hw1 import data_ingestor
+from finm_python.hw1 import generate_report
+from finm_python.hw1 import root_dir
 
 from pathlib import Path
 

@@ -3,9 +3,9 @@ from typing import List, Tuple, Optional
 from dataclasses import dataclass
 from datetime import datetime
 from collections import deque
-from trading_system.hw1 import MarketDataPoint
-from trading_system.hw1 import ConfigError, Order
-from trading_system.hw2.src.models import Portfolio
+from finm_python.hw1 import MarketDataPoint
+from finm_python.hw1 import ConfigError, Order
+from finm_python.hw2.src.models import Portfolio
 
 
 class Strategy(ABC):
