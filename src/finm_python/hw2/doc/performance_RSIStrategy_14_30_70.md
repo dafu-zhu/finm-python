@@ -4,8 +4,8 @@
 
 | Metric | Value |
 |--------|-------|
-| **Total Return** | +130.70% |
-| **Sharpe Ratio** | 0.0342 |
+| **Total Return** | +130.76% |
+| **Sharpe Ratio** | 0.0343 |
 | **Maximum Drawdown** | -18.89% |
 | **Recovery Status** | Recovered |
 
@@ -13,8 +13,8 @@
 
 ### Overall Performance
 
-The **RSIStrategy_14_30_70** strategy generated a positive return of **130.70%** over the backtesting period. 
-The Sharpe ratio of **0.0342** indicates modest risk-adjusted performance. 
+The **RSIStrategy_14_30_70** strategy generated a positive return of **130.76%** over the backtesting period. 
+The Sharpe ratio of **0.0343** indicates modest risk-adjusted performance. 
 
 ### Portfolio Value Over Time
 
@@ -46,9 +46,9 @@ returning to its previous peak at 00:00:00.
 |-----------|-------|
 | Number of Periods | 5031 |
 | Starting Value | $999,999.59 |
-| Ending Value | $2,306,967.41 |
-| Total Return | +130.70% |
-| Sharpe Ratio | 0.0342 |
+| Ending Value | $2,307,613.71 |
+| Total Return | +130.76% |
+| Sharpe Ratio | 0.0343 |
 | Maximum Drawdown | -18.89% |
 
 ## Conclusion
@@ -56,4 +56,4 @@ returning to its previous peak at 00:00:00.
 The **RSIStrategy_14_30_70** strategy demonstrates positive performance with acceptable risk characteristics. 
 Traders should consider these metrics in the context of their risk tolerance and investment objectives before deployment.
 
-*Report generated on 2025-11-09 18:52:31*
+*Report generated on 2025-11-13 12:22:02*
