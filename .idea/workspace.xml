@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/.github/workflows/ci.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/backtester/broker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/backtester/engine.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/backtester/strategy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,7 +73,7 @@
       <workItem from="1762842469048" duration="224000" />
       <workItem from="1762842699303" duration="330000" />
       <workItem from="1762843085883" duration="1323000" />
-      <workItem from="1763057373554" duration="10576000" />
+      <workItem from="1763057373554" duration="11211000" />
     </task>
     <servers />
   </component>
