@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_strategy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +44,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/zdf/Documents/GitHub/finm-python/src/finm_python/hw5/tests",
     "node.js.detected.package.eslint": "true",
@@ -82,7 +82,7 @@
       <workItem from="1762842469048" duration="224000" />
       <workItem from="1762842699303" duration="330000" />
       <workItem from="1762843085883" duration="1323000" />
-      <workItem from="1763057373554" duration="20020000" />
+      <workItem from="1763057373554" duration="22709000" />
     </task>
     <servers />
   </component>
