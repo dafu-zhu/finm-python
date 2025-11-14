@@ -221,10 +221,10 @@ Commit the HTML report (optional) or attach screenshots in the README.
 
 ## Deliverables (Checklist)
 
-- [ ] Code for `PriceLoader`, `Strategy`, `Broker`, `Backtester` (minimal but clean)
-- [ ] `tests/` with comprehensive unit tests and fixtures
+- [x] Code for `PriceLoader`, `Strategy`, `Broker`, `Backtester` (minimal but clean)
+- [x] `tests/` with comprehensive unit tests and fixtures
 - [ ] Passing GitHub Actions run (link/screenshot)
-- [ ] Coverage report showing ≥ 90%
+- [x] Coverage report showing ≥ 90%
 - [ ] `README.md` with design notes, how to run tests, CI status, coverage summary
 
 ## Grading Rubric (100 pts)

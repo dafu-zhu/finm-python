@@ -11,7 +11,7 @@ from finm_python.hw2 import PositionSizer
 
 logging.basicConfig(
     level=logging.INFO,
-    filename='../engine.log',
+    filename='./engine.log',
     filemode='w',
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )

@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/finm_python/hw5/backtester/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/hw5.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw5.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_broker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_broker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_engine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5/tests/test_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/uv.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +31,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/src/finm_python/hw5" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -46,7 +56,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/zdf/Documents/GitHub/finm-python/src/finm_python/hw5/tests",
+    "last_opened_file_path": "/Users/zdf/Documents/GitHub/finm-python/src/finm_python/hw5",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,6 +68,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/finm_python/hw5" />
+      <recent name="$PROJECT_DIR$/src/finm_python/hw5/img" />
       <recent name="$PROJECT_DIR$/src/finm_python/hw5/tests" />
     </key>
   </component>
@@ -82,7 +94,8 @@
       <workItem from="1762842469048" duration="224000" />
       <workItem from="1762842699303" duration="330000" />
       <workItem from="1762843085883" duration="1323000" />
-      <workItem from="1763057373554" duration="22709000" />
+      <workItem from="1763057373554" duration="23021000" />
+      <workItem from="1763095532487" duration="1827000" />
     </task>
     <servers />
   </component>
@@ -103,7 +116,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/finm_python$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1763057767519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python" />
     <SUITE FILE_PATH="coverage/finm_python$strategy.coverage" NAME="strategy Coverage Results" MODIFIED="1763075555500" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python/hw5/backtester" />
-    <SUITE FILE_PATH="coverage/finm_python$conftest.coverage" NAME="conftest Coverage Results" MODIFIED="1763089300183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python/hw5/tests" />
+    <SUITE FILE_PATH="coverage/finm_python$conftest.coverage" NAME="conftest Coverage Results" MODIFIED="1763097308171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python/hw5/tests" />
     <SUITE FILE_PATH="coverage/finm_python$main.coverage" NAME="main Coverage Results" MODIFIED="1763058067217" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python/hw2" />
   </component>
 </project>
