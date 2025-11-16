@@ -84,7 +84,7 @@ if __name__ == "__main__":
     generate_market_csv(
         symbol="AAPL",
         start_price=150.0,
-        filename="../../data/raw/market_data.csv",
+        filename="../../../../data/raw/market_data.csv",
         num_ticks=1500,
         volatility=0.05,
         interval=0.01

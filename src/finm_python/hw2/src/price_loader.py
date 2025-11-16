@@ -5,7 +5,7 @@ import logging
 from pathlib import Path
 from tqdm import tqdm
 
-from scripts.hw1.data_generator import MarketDataPoint
+from finm_python.scripts.hw1.data_generator import MarketDataPoint
 
 logging.basicConfig(
     level=logging.INFO,

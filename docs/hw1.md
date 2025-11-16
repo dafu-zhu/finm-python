@@ -112,4 +112,4 @@ Upload all these files into a GitHub repo (username: `sdonadio`):
 
 **PS: you will find the data generator.**
 
-[data_generator.py ↓](../scripts/hw1/data_generator.py)
+[data_generator.py ↓](../src/finm_python/scripts/hw1/data_generator.py)

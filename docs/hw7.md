@@ -74,7 +74,7 @@ This assignment emphasizes computational efficiency, parallel architecture, and 
 
 ### 4. Portfolio Aggregation
 
-**Input:** [`portfolio_structure-1.json`](../scripts/hw7/portfolio_structure-1.json)
+**Input:** [`portfolio_structure-1.json`](../src/finm_python/scripts/hw7/portfolio_structure-1.json)
 
 **Task:** For each position, compute:
 

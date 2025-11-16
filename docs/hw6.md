@@ -4,13 +4,13 @@
 
 **100 Points Possible**
 
-- [config.json](../scripts/hw6/config.json)
-- [external_data_bloomberg.xml](../scripts/hw6/external_data_bloomberg.xml)
-- [external_data_yahoo.json](../scripts/hw6/external_data_yahoo.json)
-- [instruments.csv](../scripts/hw6/instruments.csv)
-- [market_data.csv](../scripts/hw6/market_data.csv)
-- [portfolio_structure.json](../scripts/hw6/portfolio_structure.json)
-- [strategy_params.json](../scripts/hw6/strategy_params.json)
+- [config.json](../src/finm_python/scripts/hw6/config.json)
+- [external_data_bloomberg.xml](../src/finm_python/scripts/hw6/external_data_bloomberg.xml)
+- [external_data_yahoo.json](../src/finm_python/scripts/hw6/external_data_yahoo.json)
+- [instruments.csv](../src/finm_python/scripts/hw6/instruments.csv)
+- [market_data.csv](../src/finm_python/scripts/hw6/market_data.csv)
+- [portfolio_structure.json](../src/finm_python/scripts/hw6/portfolio_structure.json)
+- [strategy_params.json](../src/finm_python/scripts/hw6/strategy_params.json)
 
 ## Overview
 
