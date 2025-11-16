@@ -1,0 +1,387 @@
+"""
+Shared Memory Utilities for Trading System
+
+This module provides helper classes for managing shared memory access between
+processes in the trading system. Uses multiprocessing.shared_memory and numpy
+for efficient inter-process data sharing.
+
+Key Concepts:
+- SharedMemory: OS-level memory that persists across processes
+- Lock synchronization: Prevents race conditions during updates
+- Structured arrays: Efficient storage for symbol-price pairs
+
+Learning Objectives:
+- Understand shared memory management in Python
+- Implement thread-safe data structures for IPC
+- Use numpy structured arrays for efficient memory layout
+
+Usage:
+    # In OrderBook process (writer)
+    price_book = SharedPriceBook(symbols=["AAPL", "MSFT", "GOOGL"])
+    price_book.update("AAPL", 175.50)
+
+    # In Strategy process (reader)
+    price_book = SharedPriceBook(symbols=["AAPL", "MSFT", "GOOGL"],
+                                  name=price_book.name)
+    price = price_book.read("AAPL")
+
+TODO: Implement the SharedPriceBook class and any helper functions.
+"""
+
+from multiprocessing import Lock
+from multiprocessing.shared_memory import SharedMemory
+from typing import List, Optional
+import numpy as np
+
+
+# Global constants for the trading system
+MESSAGE_DELIMITER = b"*"
+DEFAULT_BUFFER_SIZE = 4096
+DEFAULT_PORT_GATEWAY_PRICE = 5001
+DEFAULT_PORT_GATEWAY_NEWS = 5002
+DEFAULT_PORT_ORDER_MANAGER = 5003
+
+
+class SharedPriceBook:
+    """
+    A shared memory wrapper for maintaining real-time price data across processes.
+
+    This class provides a thread-safe interface for reading and writing price data
+    to shared memory, allowing multiple processes to access the same price information
+    without copying data.
+
+    Attributes:
+        symbols (List[str]): List of trading symbols to track
+        shm (SharedMemory): The shared memory block
+        lock (Lock): Multiprocessing lock for synchronization
+        array (np.ndarray): NumPy array view of shared memory
+
+    Example:
+        # Creator process (OrderBook)
+        book = SharedPriceBook(["AAPL", "MSFT", "GOOGL"])
+        book.update("AAPL", 150.25)
+        print(f"Shared memory name: {book.name}")
+
+        # Reader process (Strategy)
+        book = SharedPriceBook(["AAPL", "MSFT", "GOOGL"], name="existing_shm_name")
+        price = book.read("AAPL")  # Returns 150.25
+    """
+
+    def __init__(self, symbols: List[str], name: Optional[str] = None,
+                 lock: Optional[Lock] = None):
+        """
+        Initialize the SharedPriceBook.
+
+        Args:
+            symbols: List of symbol names to track (e.g., ["AAPL", "MSFT"])
+            name: Optional name of existing shared memory block to attach to.
+                  If None, creates new shared memory.
+            lock: Optional multiprocessing Lock for synchronization.
+                  If None, creates a new Lock.
+
+        Implementation Steps:
+            1. Store the symbols list and create symbol-to-index mapping
+            2. Calculate required memory size based on number of symbols
+            3. If name is None:
+               - Create new SharedMemory with calculated size
+               - Initialize numpy array with zeros
+            4. If name is provided:
+               - Attach to existing SharedMemory by name
+               - Create numpy array view of existing memory
+            5. Store or create the synchronization lock
+
+        Hints:
+            - Use np.float64 dtype for price storage (8 bytes per price)
+            - Total bytes = len(symbols) * 8
+            - Create array with: np.ndarray((len(symbols),), dtype=np.float64,
+                                            buffer=self.shm.buf)
+            - SharedMemory(create=True, size=...) for new memory
+            - SharedMemory(name=...) for attaching to existing
+        """
+        # TODO: Implement initialization
+        # self.symbols = symbols
+        # self._symbol_to_index = {sym: i for i, sym in enumerate(symbols)}
+        #
+        # # Calculate memory size needed
+        # nbytes = len(symbols) * np.dtype(np.float64).itemsize
+        #
+        # if name is None:
+        #     # Create new shared memory
+        #     self.shm = SharedMemory(create=True, size=nbytes)
+        #     # Initialize array view
+        #     self.array = np.ndarray(...)
+        #     # Initialize with zeros
+        #     self.array[:] = 0.0
+        # else:
+        #     # Attach to existing shared memory
+        #     self.shm = SharedMemory(name=name)
+        #     self.array = np.ndarray(...)
+        #
+        # self.lock = lock if lock is not None else Lock()
+
+        raise NotImplementedError("Implement SharedPriceBook initialization")
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the shared memory block.
+
+        Returns:
+            String name that can be used to attach to this shared memory
+            from another process.
+
+        Note:
+            This name is automatically generated by SharedMemory and is
+            unique across the system.
+        """
+        # TODO: Return the shared memory name
+        raise NotImplementedError("Implement name property")
+
+    def update(self, symbol: str, price: float) -> None:
+        """
+        Update the price for a given symbol in shared memory.
+
+        Args:
+            symbol: The trading symbol (e.g., "AAPL")
+            price: The new price value
+
+        Raises:
+            KeyError: If symbol is not in the tracked symbols list
+
+        Implementation Steps:
+            1. Acquire the lock for thread safety
+            2. Get the index for the symbol
+            3. Update the array at that index
+            4. Release the lock
+
+        Hints:
+            - Use context manager: with self.lock:
+            - Direct array assignment: self.array[index] = price
+            - Raises KeyError automatically if symbol not in mapping
+        """
+        # TODO: Implement price update
+        # with self.lock:
+        #     index = self._symbol_to_index[symbol]
+        #     self.array[index] = price
+        raise NotImplementedError("Implement update method")
+
+    def read(self, symbol: str) -> float:
+        """
+        Read the current price for a given symbol from shared memory.
+
+        Args:
+            symbol: The trading symbol (e.g., "AAPL")
+
+        Returns:
+            Current price as float
+
+        Raises:
+            KeyError: If symbol is not in the tracked symbols list
+
+        Implementation Steps:
+            1. Acquire the lock for thread safety
+            2. Get the index for the symbol
+            3. Read and return the value from array
+            4. Release the lock
+        """
+        # TODO: Implement price reading
+        # with self.lock:
+        #     index = self._symbol_to_index[symbol]
+        #     return float(self.array[index])
+        raise NotImplementedError("Implement read method")
+
+    def read_all(self) -> dict:
+        """
+        Read all prices from shared memory.
+
+        Returns:
+            Dictionary mapping symbol names to current prices
+            Example: {"AAPL": 150.25, "MSFT": 320.50, "GOOGL": 140.75}
+
+        Implementation Steps:
+            1. Acquire the lock
+            2. Build dictionary from symbols and array values
+            3. Return the dictionary
+        """
+        # TODO: Implement bulk read
+        # with self.lock:
+        #     return {sym: float(self.array[i])
+        #             for sym, i in self._symbol_to_index.items()}
+        raise NotImplementedError("Implement read_all method")
+
+    def close(self) -> None:
+        """
+        Close the shared memory access.
+
+        Call this when the process is done using the shared memory.
+        This does NOT destroy the shared memory block.
+
+        Implementation Steps:
+            1. Close the shared memory connection
+        """
+        # TODO: Implement close
+        # self.shm.close()
+        raise NotImplementedError("Implement close method")
+
+    def unlink(self) -> None:
+        """
+        Destroy the shared memory block.
+
+        WARNING: Only call this from the process that created the shared memory,
+        and only after all other processes have closed their connections.
+        This permanently removes the shared memory from the system.
+
+        Implementation Steps:
+            1. Unlink (destroy) the shared memory block
+        """
+        # TODO: Implement unlink
+        # self.shm.unlink()
+        raise NotImplementedError("Implement unlink method")
+
+    def __enter__(self):
+        """Context manager entry."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - closes shared memory."""
+        self.close()
+        return False
+
+
+def create_order_message(order_id: int, action: str, quantity: int,
+                         symbol: str, price: float) -> bytes:
+    """
+    Create a serialized order message for transmission.
+
+    Args:
+        order_id: Unique identifier for the order
+        action: "BUY" or "SELL"
+        quantity: Number of shares
+        symbol: Trading symbol
+        price: Execution price
+
+    Returns:
+        Serialized bytes representation of the order
+
+    Example:
+        msg = create_order_message(1, "BUY", 10, "AAPL", 150.25)
+        # Could return: b'{"id":1,"action":"BUY","qty":10,"sym":"AAPL","price":150.25}*'
+
+    Hints:
+        - Use JSON serialization for simplicity
+        - Remember to append MESSAGE_DELIMITER
+        - Encode string to bytes with .encode('utf-8')
+    """
+    # TODO: Implement order message creation
+    # import json
+    # order = {
+    #     "id": order_id,
+    #     "action": action,
+    #     "quantity": quantity,
+    #     "symbol": symbol,
+    #     "price": price
+    # }
+    # return json.dumps(order).encode('utf-8') + MESSAGE_DELIMITER
+    raise NotImplementedError("Implement order message creation")
+
+
+def parse_order_message(message: bytes) -> dict:
+    """
+    Parse a serialized order message.
+
+    Args:
+        message: Bytes representation of order (without delimiter)
+
+    Returns:
+        Dictionary with order details:
+        {
+            "id": int,
+            "action": str,
+            "quantity": int,
+            "symbol": str,
+            "price": float
+        }
+
+    Hints:
+        - Decode bytes to string with .decode('utf-8')
+        - Use json.loads() to parse
+    """
+    # TODO: Implement order message parsing
+    # import json
+    # return json.loads(message.decode('utf-8'))
+    raise NotImplementedError("Implement order message parsing")
+
+
+def create_price_message(symbol: str, price: float) -> bytes:
+    """
+    Create a price update message for transmission.
+
+    Args:
+        symbol: Trading symbol (e.g., "AAPL")
+        price: Current price
+
+    Returns:
+        Serialized bytes in format: b"SYMBOL,PRICE*"
+
+    Example:
+        msg = create_price_message("AAPL", 172.53)
+        # Returns: b"AAPL,172.53*"
+    """
+    # TODO: Implement price message creation
+    # return f"{symbol},{price:.2f}".encode('utf-8') + MESSAGE_DELIMITER
+    raise NotImplementedError("Implement price message creation")
+
+
+def parse_price_message(message: bytes) -> tuple:
+    """
+    Parse a price update message.
+
+    Args:
+        message: Bytes in format b"SYMBOL,PRICE" (without delimiter)
+
+    Returns:
+        Tuple of (symbol: str, price: float)
+
+    Example:
+        sym, price = parse_price_message(b"AAPL,172.53")
+        # Returns: ("AAPL", 172.53)
+    """
+    # TODO: Implement price message parsing
+    # parts = message.decode('utf-8').split(',')
+    # return (parts[0], float(parts[1]))
+    raise NotImplementedError("Implement price message parsing")
+
+
+def create_sentiment_message(sentiment: int) -> bytes:
+    """
+    Create a news sentiment message for transmission.
+
+    Args:
+        sentiment: Integer value 0-100 representing market sentiment
+                   0-49: Bearish, 50: Neutral, 51-100: Bullish
+
+    Returns:
+        Serialized bytes representation
+
+    Example:
+        msg = create_sentiment_message(75)
+        # Returns: b"75*"
+    """
+    # TODO: Implement sentiment message creation
+    # return str(sentiment).encode('utf-8') + MESSAGE_DELIMITER
+    raise NotImplementedError("Implement sentiment message creation")
+
+
+def parse_sentiment_message(message: bytes) -> int:
+    """
+    Parse a sentiment message.
+
+    Args:
+        message: Bytes representation (without delimiter)
+
+    Returns:
+        Integer sentiment value 0-100
+    """
+    # TODO: Implement sentiment message parsing
+    # return int(message.decode('utf-8'))
+    raise NotImplementedError("Implement sentiment message parsing")
