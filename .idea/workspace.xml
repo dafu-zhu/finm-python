@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/finm_python/scripts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw1/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/hw1.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw1.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/hw6.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw6.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/hw7.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/hw7.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw1/data_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw1/data_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/external_data_bloomberg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/external_data_bloomberg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/external_data_yahoo.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/external_data_yahoo.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/instruments.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/instruments.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/market_data.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/market_data.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/portfolio_structure.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/portfolio_structure.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw6/strategy_params.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/strategy_params.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/hw7/portfolio_structure-1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw7/portfolio_structure-1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw2/src/price_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw2/src/price_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw5" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw5" afterDir="false" />
-    </list>
+    <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -111,6 +94,7 @@
       <workItem from="1763231304136" duration="3406000" />
       <workItem from="1763260147241" duration="7969000" />
       <workItem from="1763268193387" duration="335000" />
+      <workItem from="1763273283697" duration="491000" />
     </task>
     <servers />
   </component>
