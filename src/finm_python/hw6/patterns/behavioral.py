@@ -74,55 +74,19 @@ class MeanReversionStrategy(Strategy):
         Returns:
             List of signals (empty if no action needed).
         """
-        signals = []
-
-        # Track symbol
-        if self.symbol is None:
-            self.symbol = tick.symbol
-        elif self.symbol != tick.symbol:
-            # New symbol, reset
-            self.reset()
-            self.symbol = tick.symbol
-
-        # Add current price to history
-        self.price_history.append(tick.price)
-
-        # Need enough history for moving average
-        if len(self.price_history) < self.lookback_window:
-            return signals
-
-        # Calculate moving average
-        window = self.price_history[-self.lookback_window:]
-        moving_avg = sum(window) / len(window)
-
-        # Calculate deviation
-        deviation = (tick.price - moving_avg) / moving_avg
-
-        # Generate signals based on threshold
-        if deviation < -self.threshold:
-            signals.append({
-                "type": "BUY",
-                "symbol": tick.symbol,
-                "price": tick.price,
-                "timestamp": tick.timestamp,
-                "reason": f"Price {deviation:.2%} below MA({self.lookback_window})",
-                "strategy": "MeanReversion"
-            })
-        elif deviation > self.threshold:
-            signals.append({
-                "type": "SELL",
-                "symbol": tick.symbol,
-                "price": tick.price,
-                "timestamp": tick.timestamp,
-                "reason": f"Price {deviation:.2%} above MA({self.lookback_window})",
-                "strategy": "MeanReversion"
-            })
-
-        # Keep history bounded
-        if len(self.price_history) > self.lookback_window * 2:
-            self.price_history = self.price_history[-self.lookback_window:]
-
-        return signals
+        # TODO: Implement mean reversion signal generation
+        # 1. Track symbol - if new symbol, reset state
+        # 2. Add current price to price_history
+        # 3. Return empty list if not enough history (< lookback_window)
+        # 4. Calculate moving average of last lookback_window prices
+        # 5. Calculate deviation: (current_price - ma) / ma
+        # 6. Generate signals:
+        #    - If deviation < -threshold: BUY signal
+        #    - If deviation > threshold: SELL signal
+        # 7. Keep history bounded (max 2 * lookback_window)
+        # 8. Return list of signal dicts with keys:
+        #    type, symbol, price, timestamp, reason, strategy
+        raise NotImplementedError("TODO: Implement generate_signals for MeanReversionStrategy")
 
     def reset(self) -> None:
         """Reset strategy state."""
@@ -160,49 +124,17 @@ class BreakoutStrategy(Strategy):
         Returns:
             List of signals (empty if no breakout detected).
         """
-        signals = []
-
-        # Track symbol
-        if self.symbol is None:
-            self.symbol = tick.symbol
-        elif self.symbol != tick.symbol:
-            self.reset()
-            self.symbol = tick.symbol
-
-        # Need history to establish range
-        if len(self.price_history) >= self.lookback_window:
-            window = self.price_history[-self.lookback_window:]
-            high = max(window)
-            low = min(window)
-
-            # Check for breakout
-            if tick.price > high * (1 + self.threshold):
-                signals.append({
-                    "type": "BUY",
-                    "symbol": tick.symbol,
-                    "price": tick.price,
-                    "timestamp": tick.timestamp,
-                    "reason": f"Breakout above {high:.2f} (threshold {self.threshold:.2%})",
-                    "strategy": "Breakout"
-                })
-            elif tick.price < low * (1 - self.threshold):
-                signals.append({
-                    "type": "SELL",
-                    "symbol": tick.symbol,
-                    "price": tick.price,
-                    "timestamp": tick.timestamp,
-                    "reason": f"Breakdown below {low:.2f} (threshold {self.threshold:.2%})",
-                    "strategy": "Breakout"
-                })
-
-        # Add to history after check
-        self.price_history.append(tick.price)
-
-        # Keep history bounded
-        if len(self.price_history) > self.lookback_window * 2:
-            self.price_history = self.price_history[-self.lookback_window:]
-
-        return signals
+        # TODO: Implement breakout signal generation
+        # 1. Track symbol - if new symbol, reset state
+        # 2. If enough history (>= lookback_window):
+        #    a. Find high and low of last lookback_window prices
+        #    b. Check for breakout:
+        #       - If price > high * (1 + threshold): BUY signal
+        #       - If price < low * (1 - threshold): SELL signal
+        # 3. Add current price to history AFTER checking for breakout
+        # 4. Keep history bounded
+        # 5. Return list of signal dicts
+        raise NotImplementedError("TODO: Implement generate_signals for BreakoutStrategy")
 
     def reset(self) -> None:
         """Reset strategy state."""
@@ -252,23 +184,12 @@ class LoggerObserver(Observer):
         Args:
             signal: Signal dictionary.
         """
-        timestamp = signal.get("timestamp", datetime.now())
-        if isinstance(timestamp, datetime):
-            timestamp = timestamp.isoformat()
-
-        log_entry = (
-            f"[{timestamp}] SIGNAL: {signal.get('type')} "
-            f"{signal.get('symbol')} @ {signal.get('price'):.2f} - "
-            f"{signal.get('reason', 'N/A')}"
-        )
-
-        self.logs.append(log_entry)
-
-        if self.log_file:
-            with open(self.log_file, "a") as f:
-                f.write(log_entry + "\n")
-        else:
-            print(log_entry)
+        # TODO: Implement signal logging
+        # 1. Extract timestamp from signal (default to datetime.now())
+        # 2. Format log entry string with timestamp, signal type, symbol, price, reason
+        # 3. Append to self.logs
+        # 4. If log_file is set, write to file; otherwise print to stdout
+        raise NotImplementedError("TODO: Implement LoggerObserver.update")
 
 
 class AlertObserver(Observer):
@@ -293,16 +214,13 @@ class AlertObserver(Observer):
         Args:
             signal: Signal dictionary.
         """
-        price = signal.get("price", 0)
-        if price >= self.price_threshold:
-            alert = {
-                "timestamp": signal.get("timestamp", datetime.now()),
-                "type": "HIGH_VALUE_TRADE",
-                "signal": signal,
-                "message": f"High value trade alert: {signal.get('type')} {signal.get('symbol')} @ {price:.2f}"
-            }
-            self.alerts.append(alert)
-            print(f"ALERT: {alert['message']}")
+        # TODO: Implement alert generation
+        # 1. Extract price from signal
+        # 2. If price >= price_threshold:
+        #    a. Create alert dict with timestamp, type, signal, message
+        #    b. Append to self.alerts
+        #    c. Print alert message
+        raise NotImplementedError("TODO: Implement AlertObserver.update")
 
 
 class SignalPublisher:
@@ -323,8 +241,8 @@ class SignalPublisher:
         Args:
             observer: Observer to add.
         """
-        if observer not in self._observers:
-            self._observers.append(observer)
+        # TODO: Add observer to list if not already present
+        raise NotImplementedError("TODO: Implement attach")
 
     def detach(self, observer: Observer) -> None:
         """
@@ -333,8 +251,8 @@ class SignalPublisher:
         Args:
             observer: Observer to remove.
         """
-        if observer in self._observers:
-            self._observers.remove(observer)
+        # TODO: Remove observer from list if present
+        raise NotImplementedError("TODO: Implement detach")
 
     def notify(self, signal: dict) -> None:
         """
@@ -343,8 +261,8 @@ class SignalPublisher:
         Args:
             signal: Signal dictionary to broadcast.
         """
-        for observer in self._observers:
-            observer.update(signal)
+        # TODO: Call update() on each observer
+        raise NotImplementedError("TODO: Implement notify")
 
 
 # ============================================================================
@@ -421,11 +339,13 @@ class ExecuteOrderCommand(Command):
         Returns:
             The executed order.
         """
-        self._previous_status = self.order.status
-        self.order.status = "EXECUTED"
-        self.order.executed_at = datetime.now()
-        print(f"Executed: {self.order}")
-        return self.order
+        # TODO: Implement order execution
+        # 1. Save current status to _previous_status
+        # 2. Set order.status to "EXECUTED"
+        # 3. Set order.executed_at to current datetime
+        # 4. Print execution message
+        # 5. Return the order
+        raise NotImplementedError("TODO: Implement ExecuteOrderCommand.execute")
 
     def undo(self) -> Order:
         """
@@ -434,11 +354,12 @@ class ExecuteOrderCommand(Command):
         Returns:
             The reverted order.
         """
-        if self._previous_status:
-            self.order.status = self._previous_status
-            self.order.executed_at = None
-            print(f"Undone: {self.order}")
-        return self.order
+        # TODO: Implement undo
+        # 1. If _previous_status exists, restore it
+        # 2. Clear executed_at
+        # 3. Print undo message
+        # 4. Return the order
+        raise NotImplementedError("TODO: Implement ExecuteOrderCommand.undo")
 
 
 class CancelOrderCommand(Command):
@@ -463,10 +384,12 @@ class CancelOrderCommand(Command):
         Returns:
             The cancelled order.
         """
-        self._previous_status = self.order.status
-        self.order.status = "CANCELLED"
-        print(f"Cancelled: {self.order}")
-        return self.order
+        # TODO: Implement order cancellation
+        # 1. Save current status
+        # 2. Set status to "CANCELLED"
+        # 3. Print cancellation message
+        # 4. Return the order
+        raise NotImplementedError("TODO: Implement CancelOrderCommand.execute")
 
     def undo(self) -> Order:
         """
@@ -475,10 +398,11 @@ class CancelOrderCommand(Command):
         Returns:
             The restored order.
         """
-        if self._previous_status:
-            self.order.status = self._previous_status
-            print(f"Restore cancelled: {self.order}")
-        return self.order
+        # TODO: Implement undo of cancellation
+        # 1. Restore previous status if available
+        # 2. Print restoration message
+        # 3. Return the order
+        raise NotImplementedError("TODO: Implement CancelOrderCommand.undo")
 
 
 class CommandInvoker:
@@ -503,11 +427,12 @@ class CommandInvoker:
         Returns:
             Result of command execution.
         """
-        result = command.execute()
-        self._history.append(command)
-        # Clear redo stack when new command is executed
-        self._redo_stack.clear()
-        return result
+        # TODO: Implement execute with history tracking
+        # 1. Call command.execute()
+        # 2. Append command to history
+        # 3. Clear redo stack (new command invalidates redo)
+        # 4. Return result
+        raise NotImplementedError("TODO: Implement CommandInvoker.execute")
 
     def undo(self) -> Optional[Any]:
         """
@@ -516,14 +441,13 @@ class CommandInvoker:
         Returns:
             Result of undo operation, or None if no history.
         """
-        if not self._history:
-            print("Nothing to undo")
-            return None
-
-        command = self._history.pop()
-        result = command.undo()
-        self._redo_stack.append(command)
-        return result
+        # TODO: Implement undo
+        # 1. If history is empty, print message and return None
+        # 2. Pop command from history
+        # 3. Call command.undo()
+        # 4. Push command to redo stack
+        # 5. Return result
+        raise NotImplementedError("TODO: Implement CommandInvoker.undo")
 
     def redo(self) -> Optional[Any]:
         """
@@ -532,14 +456,13 @@ class CommandInvoker:
         Returns:
             Result of redo operation, or None if no redo available.
         """
-        if not self._redo_stack:
-            print("Nothing to redo")
-            return None
-
-        command = self._redo_stack.pop()
-        result = command.execute()
-        self._history.append(command)
-        return result
+        # TODO: Implement redo
+        # 1. If redo stack is empty, print message and return None
+        # 2. Pop command from redo stack
+        # 3. Call command.execute()
+        # 4. Append command to history
+        # 5. Return result
+        raise NotImplementedError("TODO: Implement CommandInvoker.redo")
 
     def get_history(self) -> list[Command]:
         """Get command history."""

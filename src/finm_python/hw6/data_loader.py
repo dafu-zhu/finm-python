@@ -5,6 +5,8 @@ Provides unified interface for loading data from various sources:
 - CSV files
 - JSON files (Yahoo Finance format)
 - XML files (Bloomberg format)
+
+These functions demonstrate how to use the patterns you implement.
 """
 
 import csv
@@ -25,14 +27,19 @@ def load_instruments_from_csv(filepath: str | Path) -> list[Instrument]:
 
     Returns:
         List of Instrument instances.
+
+    Example:
+        instruments = load_instruments_from_csv("instruments.csv")
+        for inst in instruments:
+            print(inst.get_type(), inst.symbol, inst.price)
     """
     instruments = []
-    factory = InstrumentFactory()
 
     with open(filepath, "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            instrument = factory.create_instrument(row)
+            # Uses the Factory pattern you implemented
+            instrument = InstrumentFactory.create_instrument(row)
             instruments.append(instrument)
 
     return instruments
@@ -49,16 +56,19 @@ def load_market_data_from_csv(filepath: str | Path) -> Iterator[MarketDataPoint]
 
     Yields:
         MarketDataPoint instances.
+
+    Example:
+        for tick in load_market_data_from_csv("market_data.csv"):
+            print(tick.symbol, tick.price, tick.timestamp)
     """
     from datetime import datetime
 
     with open(filepath, "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # Assume CSV has: symbol, timestamp, open, high, low, close, volume
+            # Parse timestamp
             timestamp_str = row.get("timestamp", row.get("date", ""))
             if timestamp_str:
-                # Try different timestamp formats
                 try:
                     timestamp = datetime.fromisoformat(timestamp_str)
                 except ValueError:
@@ -86,12 +96,18 @@ def load_yahoo_data(filepath: str | Path, symbol: str) -> MarketDataPoint:
     """
     Load market data from Yahoo Finance JSON format.
 
+    Uses the Adapter pattern to convert Yahoo's format to our standard format.
+
     Args:
         filepath: Path to JSON file.
         symbol: Symbol to load.
 
     Returns:
         MarketDataPoint instance.
+
+    Example:
+        data = load_yahoo_data("external_data_yahoo.json", "AAPL")
+        print(data.symbol, data.price, data.timestamp)
     """
     adapter = YahooFinanceAdapter(filepath)
     return adapter.get_data(symbol)
@@ -101,12 +117,18 @@ def load_bloomberg_data(filepath: str | Path, symbol: str) -> MarketDataPoint:
     """
     Load market data from Bloomberg XML format.
 
+    Uses the Adapter pattern to convert Bloomberg's format to our standard format.
+
     Args:
         filepath: Path to XML file.
         symbol: Symbol to load.
 
     Returns:
         MarketDataPoint instance.
+
+    Example:
+        data = load_bloomberg_data("external_data_bloomberg.xml", "AAPL")
+        print(data.symbol, data.price, data.timestamp)
     """
     adapter = BloombergXMLAdapter(filepath)
     return adapter.get_data(symbol)
@@ -115,6 +137,17 @@ def load_bloomberg_data(filepath: str | Path, symbol: str) -> MarketDataPoint:
 class DataLoader:
     """
     Unified data loader that manages multiple data sources.
+
+    Example usage:
+        loader = DataLoader()
+        loader.load_instruments("instruments.csv")
+
+        # Get cached instrument
+        aapl = loader.get_instrument("AAPL")
+
+        # Register and use adapters
+        loader.register_adapter("yahoo", YahooFinanceAdapter("yahoo.json"))
+        data = loader.get_data("yahoo", "AAPL")
     """
 
     def __init__(self):

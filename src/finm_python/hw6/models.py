@@ -68,13 +68,13 @@ class Stock(Instrument):
         self.issuer = issuer
 
     def get_type(self) -> str:
-        return "Stock"
+        # TODO: Return the instrument type string
+        raise NotImplementedError("TODO: Implement get_type for Stock")
 
     def get_metrics(self) -> dict:
-        metrics = super().get_metrics()
-        metrics["sector"] = self.sector
-        metrics["issuer"] = self.issuer
-        return metrics
+        # TODO: Return metrics dict including base metrics plus sector and issuer
+        # Hint: Call super().get_metrics() first, then add Stock-specific fields
+        raise NotImplementedError("TODO: Implement get_metrics for Stock")
 
 
 class Bond(Instrument):
@@ -88,14 +88,12 @@ class Bond(Instrument):
         self.coupon = coupon
 
     def get_type(self) -> str:
-        return "Bond"
+        # TODO: Return the instrument type string
+        raise NotImplementedError("TODO: Implement get_type for Bond")
 
     def get_metrics(self) -> dict:
-        metrics = super().get_metrics()
-        metrics["issuer"] = self.issuer
-        metrics["maturity"] = self.maturity
-        metrics["coupon"] = self.coupon
-        return metrics
+        # TODO: Return metrics dict including base metrics plus issuer, maturity, coupon
+        raise NotImplementedError("TODO: Implement get_metrics for Bond")
 
 
 class ETF(Instrument):
@@ -109,14 +107,12 @@ class ETF(Instrument):
         self.expense_ratio = expense_ratio
 
     def get_type(self) -> str:
-        return "ETF"
+        # TODO: Return the instrument type string
+        raise NotImplementedError("TODO: Implement get_type for ETF")
 
     def get_metrics(self) -> dict:
-        metrics = super().get_metrics()
-        metrics["sector"] = self.sector
-        metrics["issuer"] = self.issuer
-        metrics["expense_ratio"] = self.expense_ratio
-        return metrics
+        # TODO: Return metrics dict including base metrics plus sector, issuer, expense_ratio
+        raise NotImplementedError("TODO: Implement get_metrics for ETF")
 
 
 # ============================================================================
@@ -151,16 +147,13 @@ class Position(PortfolioComponent):
 
     def get_value(self) -> float:
         """Return position value (quantity * price)."""
-        return self.quantity * self.price
+        # TODO: Calculate and return the position value
+        raise NotImplementedError("TODO: Implement get_value for Position")
 
     def get_positions(self) -> list[dict]:
         """Return this position as a single-item list."""
-        return [{
-            "symbol": self.symbol,
-            "quantity": self.quantity,
-            "price": self.price,
-            "value": self.get_value()
-        }]
+        # TODO: Return a list with one dict containing symbol, quantity, price, and value
+        raise NotImplementedError("TODO: Implement get_positions for Position")
 
     def __repr__(self) -> str:
         return f"Position({self.symbol}, qty={self.quantity}, price={self.price})"
@@ -183,14 +176,13 @@ class PortfolioGroup(PortfolioComponent):
 
     def get_value(self) -> float:
         """Recursively calculate total value of all components."""
-        return sum(component.get_value() for component in self.components)
+        # TODO: Sum the values of all child components
+        raise NotImplementedError("TODO: Implement get_value for PortfolioGroup")
 
     def get_positions(self) -> list[dict]:
         """Recursively collect all positions from child components."""
-        positions = []
-        for component in self.components:
-            positions.extend(component.get_positions())
-        return positions
+        # TODO: Collect and return all positions from child components
+        raise NotImplementedError("TODO: Implement get_positions for PortfolioGroup")
 
     def __repr__(self) -> str:
         return f"PortfolioGroup({self.name}, components={len(self.components)})"
