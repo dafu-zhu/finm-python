@@ -107,7 +107,7 @@ class TestFactoryPattern:
     def test_factory_unknown_type(self):
         """Factory raises error for unknown instrument type."""
         data = {"symbol": "XXX", "type": "Unknown", "price": 100.0}
-        with pytest.raises(ValueError, match="Unknown instrument type"):
+        with pytest.raises(ValueError, match="Unknown instrument type: unknown"):
             InstrumentFactory.create_instrument(data)
 
 

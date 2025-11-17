@@ -59,16 +59,24 @@ class InstrumentFactory:
                 sector = data.get("sector", ""),
                 issuer = data.get("issuer", "")
             )
-        
-        # TODO: Implement factory logic
-        # 1. Extract instrument_type from data (convert to lowercase)
-        # 2. Extract symbol and price from data
-        # 3. Based on instrument_type, create and return appropriate instance:
-        #    - "stock": return Stock with symbol, price, sector, issuer
-        #    - "bond": return Bond with symbol, price, issuer, maturity, coupon
-        #    - "etf": return ETF with symbol, price, sector, issuer, expense_ratio
-        # 4. Raise ValueError for unknown types
-        raise NotImplementedError("TODO: Implement create_instrument")
+        elif instrument_type == "bond":
+            return Bond(
+                symbol = symbol,
+                price = price,
+                issuer = data.get("issuer", ""),
+                maturity = data.get("maturity", ""),
+                coupon = data.get("coupon", 0.0)
+            )
+        elif instrument_type == "etf":
+            return ETF(
+                symbol = symbol,
+                price = price,
+                sector = data.get("sector", ""),
+                issuer = data.get("issuer", ""),
+                expense_ratio = data.get("expense_ratio", 0.0)
+            )
+        else:
+            raise ValueError(f"Unknown instrument type: {instrument_type}")
 
 
 # ============================================================================
@@ -195,8 +203,8 @@ class PortfolioBuilder:
         Returns:
             Self for method chaining.
         """
-        # TODO: Set owner and return self for chaining
-        raise NotImplementedError("TODO: Implement set_owner")
+        self.owner = name
+        return self
 
     def add_position(self, symbol: str, quantity: int, price: float) -> "PortfolioBuilder":
         """
@@ -210,8 +218,9 @@ class PortfolioBuilder:
         Returns:
             Self for method chaining.
         """
-        # TODO: Create Position and add to root, return self
-        raise NotImplementedError("TODO: Implement add_position")
+        position = Position(symbol, quantity, price)
+        self.root.add(position)
+        return self
 
     def add_subportfolio(self, name: str, builder: "PortfolioBuilder") -> "PortfolioBuilder":
         """
@@ -224,9 +233,11 @@ class PortfolioBuilder:
         Returns:
             Self for method chaining.
         """
-        # TODO: Create PortfolioGroup from builder and add to root
-        # Hint: Create new PortfolioGroup with name, transfer components from builder.root
-        raise NotImplementedError("TODO: Implement add_subportfolio")
+        sub_portfolio = PortfolioGroup(name)
+        for component in builder.root.components:
+            sub_portfolio.add(component)
+        self.root.add(sub_portfolio)
+        return self
 
     def build(self) -> Portfolio:
         """
@@ -235,13 +246,16 @@ class PortfolioBuilder:
         Returns:
             Completed Portfolio instance.
         """
-        # TODO: Return Portfolio with name, owner, and root
-        raise NotImplementedError("TODO: Implement build")
+        return Portfolio(
+            name = self.name,
+            owner = self.owner,
+            root = self.root
+        )
 
     @staticmethod
     def from_dict(data: dict) -> "PortfolioBuilder":
         """
-        Create a PortfolioBuilder from dictionary structure.
+        Create a PortfolioBuilder from a dictionary structure.
 
         Args:
             data: Dictionary with portfolio structure (from JSON).
@@ -249,9 +263,22 @@ class PortfolioBuilder:
         Returns:
             Configured PortfolioBuilder.
         """
-        # TODO: Recursively build portfolio from dictionary
-        # 1. Create builder with name from data
-        # 2. Set owner from data
-        # 3. Add positions from data["positions"] list
-        # 4. Recursively add sub-portfolios from data["sub_portfolios"]
-        raise NotImplementedError("TODO: Implement from_dict")
+        name = data.get("name", "Portfolio")
+        owner = data.get("owner", "")
+        builder = PortfolioBuilder(name).set_owner(owner)
+
+        # add positions
+        for pos_data in data.get("positions", []):
+            builder.add_position(
+                symbol = pos_data["symbol"],
+                price = pos_data["price"],
+                quantity = pos_data["quantity"]
+            )
+
+        # recursively add sub portfolios
+        for sub_data in data.get("sub_portfolios", []):
+            sub_builder = PortfolioBuilder.from_dict(sub_data)
+            name = sub_data.get("name", "Portfolio")
+            builder.add_subportfolio(name, sub_builder)
+
+        return builder
