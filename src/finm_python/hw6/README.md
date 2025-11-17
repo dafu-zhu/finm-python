@@ -182,10 +182,10 @@ Sample data files are provided in `scripts/hw6/`:
 
 Complete these tasks in order:
 
-- [ ] **1. Read assignment spec** - Review `docs/hw6.md` for full requirements
-- [ ] **2. Composite Pattern** - Implement `Position.get_value()`, `Position.get_positions()`, `PortfolioGroup.get_value()`, `PortfolioGroup.get_positions()` in `models.py`
-- [ ] **3. Factory Pattern** - Implement `InstrumentFactory.create_instrument()` in `patterns/creational.py`
-- [ ] **4. Singleton Pattern** - Implement `Config.__new__()`, `Config.load()`, `Config.get()`, `Config.set()` in `patterns/creational.py`
+- [x] **1. Read assignment spec** - Review `docs/hw6.md` for full requirements
+- [x] **2. Composite Pattern** - Implement `Position.get_value()`, `Position.get_positions()`, `PortfolioGroup.get_value()`, `PortfolioGroup.get_positions()` in `models.py`
+- [x] **3. Factory Pattern** - Implement `InstrumentFactory.create_instrument()` in `patterns/creational.py`
+- [x] **4. Singleton Pattern** - Implement `Config.__new__()`, `Config.load()`, `Config.get()`, `Config.set()` in `patterns/creational.py`
 - [ ] **5. Builder Pattern** - Implement `PortfolioBuilder` methods and `from_dict()` in `patterns/creational.py`
 - [ ] **6. Decorator Pattern** - Implement volatility, beta, and max drawdown calculations in `patterns/structural.py`
 - [ ] **7. Adapter Pattern** - Implement `YahooFinanceAdapter.get_data()` and `BloombergXMLAdapter.get_data()` in `patterns/structural.py`
