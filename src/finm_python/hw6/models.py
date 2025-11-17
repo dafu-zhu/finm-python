@@ -68,13 +68,13 @@ class Stock(Instrument):
         self.issuer = issuer
 
     def get_type(self) -> str:
-        # TODO: Return the instrument type string
-        raise NotImplementedError("TODO: Implement get_type for Stock")
+        return "Stock"
 
     def get_metrics(self) -> dict:
-        # TODO: Return metrics dict including base metrics plus sector and issuer
-        # Hint: Call super().get_metrics() first, then add Stock-specific fields
-        raise NotImplementedError("TODO: Implement get_metrics for Stock")
+        metrics = super().get_metrics()
+        metrics["sector"] = self.sector
+        metrics["issuer"] = self.issuer
+        return metrics
 
 
 class Bond(Instrument):
@@ -88,12 +88,14 @@ class Bond(Instrument):
         self.coupon = coupon
 
     def get_type(self) -> str:
-        # TODO: Return the instrument type string
-        raise NotImplementedError("TODO: Implement get_type for Bond")
+        return "Bond"
 
     def get_metrics(self) -> dict:
-        # TODO: Return metrics dict including base metrics plus issuer, maturity, coupon
-        raise NotImplementedError("TODO: Implement get_metrics for Bond")
+        metrics = super().get_metrics()
+        metrics["issuer"] = self.issuer
+        metrics["maturity"] = self.maturity
+        metrics["coupon"] = self.coupon
+        return metrics
 
 
 class ETF(Instrument):
@@ -107,12 +109,14 @@ class ETF(Instrument):
         self.expense_ratio = expense_ratio
 
     def get_type(self) -> str:
-        # TODO: Return the instrument type string
-        raise NotImplementedError("TODO: Implement get_type for ETF")
+        return "ETF"
 
     def get_metrics(self) -> dict:
-        # TODO: Return metrics dict including base metrics plus sector, issuer, expense_ratio
-        raise NotImplementedError("TODO: Implement get_metrics for ETF")
+        metrics = super().get_metrics()
+        metrics["sector"] = self.sector
+        metrics["issuer"] = self.issuer
+        metrics["expense_ratio"] = self.expense_ratio
+        return metrics
 
 
 # ============================================================================

@@ -49,6 +49,17 @@ class InstrumentFactory:
         Raises:
             ValueError: If instrument type is unknown.
         """
+        instrument_type = data["type"].lower()
+        symbol = data["symbol"]
+        price = data["price"]
+        if instrument_type == "stock":
+            return Stock(
+                symbol = symbol,
+                price = price,
+                sector = data.get("sector", ""),
+                issuer = data.get("issuer", "")
+            )
+        
         # TODO: Implement factory logic
         # 1. Extract instrument_type from data (convert to lowercase)
         # 2. Extract symbol and price from data
@@ -81,14 +92,13 @@ class Config:
 
     def __new__(cls) -> "Config":
         """Ensure only one instance exists."""
-        # TODO: Implement singleton pattern
-        # Check if _instance is None, if so create new instance using super().__new__(cls)
-        # Return the singleton instance
-        raise NotImplementedError("TODO: Implement __new__ for Singleton")
+        _instance = None
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 
     def __init__(self):
         """Initialize configuration data (only once)."""
-        # TODO: Initialize _data dict only if not already initialized
         # Use Config._initialized flag to track this
         if not Config._initialized:
             self._data: dict = {}
@@ -106,8 +116,8 @@ class Config:
         Args:
             filepath: Path to JSON configuration file.
         """
-        # TODO: Load JSON file and store in self._data
-        raise NotImplementedError("TODO: Implement load")
+        with open(filepath) as json_file:
+            self._data = json.load(json_file)
 
     def get(self, key: str, default: Any = None) -> Any:
         """
@@ -120,8 +130,7 @@ class Config:
         Returns:
             Configuration value or default.
         """
-        # TODO: Return value from _data dict, or default if not found
-        raise NotImplementedError("TODO: Implement get")
+        return self._data.get(key, default)
 
     def set(self, key: str, value: Any) -> None:
         """
@@ -131,8 +140,7 @@ class Config:
             key: Configuration key.
             value: Value to set.
         """
-        # TODO: Set key-value in _data dict
-        raise NotImplementedError("TODO: Implement set")
+        self._data[key] = value
 
     def get_all(self) -> dict:
         """Get all configuration data."""
