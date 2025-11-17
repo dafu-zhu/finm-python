@@ -2,7 +2,16 @@
 """
 Main orchestration module for HW6: Design Patterns in Financial Software.
 
-This module demonstrates the integration of multiple design patterns:
+This module demonstrates how to use the design patterns once implemented.
+
+IMPORTANT: This code will not run until you implement the TODO sections
+in the pattern modules. Each demo function shows how the patterns should
+be used once completed.
+
+Usage:
+    python -m finm_python.hw6.main
+
+Patterns demonstrated:
 - Factory: Creating instruments
 - Singleton: Configuration management
 - Builder: Portfolio construction
@@ -12,13 +21,11 @@ This module demonstrates the integration of multiple design patterns:
 - Strategy: Trading signal generation
 - Observer: Event notification
 - Command: Order execution with undo/redo
-
-Usage:
-    python -m finm_python.hw6.main
 """
 
 import json
 from pathlib import Path
+from datetime import datetime, timedelta
 
 # Import all pattern implementations
 from .models import Stock, Bond, ETF, MarketDataPoint, Position, PortfolioGroup
@@ -34,120 +41,135 @@ from .patterns.behavioral import (
     MeanReversionStrategy,
     BreakoutStrategy,
     SignalPublisher,
+    LoggerObserver,
+    AlertObserver,
     ExecuteOrderCommand,
-    CancelOrderCommand,
     CommandInvoker,
     Order
 )
-from .data_loader import load_instruments_from_csv, load_market_data_from_csv
-from .engine import StrategyEngine
-from .reporting import LoggerObserver, AlertObserver, StatisticsObserver, ReportGenerator
-from .analytics import add_full_analytics, calculate_returns
+from .data_loader import load_instruments_from_csv
+from .analytics import calculate_returns
 
 
 def get_data_path() -> Path:
     """Get the path to data files."""
-    # Check for scripts/hw6 directory
-    base_path = Path(__file__).parent.parent.parent.parent / "scripts" / "hw6"
+    base_path = Path(__file__).parent.parent / "scripts" / "hw6"
     if base_path.exists():
         return base_path
-    # Fallback to current directory
     return Path(".")
 
 
 def demo_factory_pattern():
-    """Demonstrate Factory Pattern: Creating instruments from raw data."""
+    """
+    Demonstrate Factory Pattern: Creating instruments from raw data.
+
+    The Factory Pattern centralizes object creation logic, allowing
+    you to create different instrument types based on input data.
+    """
     print("\n" + "=" * 60)
     print("FACTORY PATTERN: Creating Instruments")
     print("=" * 60)
 
-    data_path = get_data_path()
-    instruments_file = data_path / "instruments.csv"
+    # Example usage of Factory pattern
+    sample_data = [
+        {
+            "symbol": "AAPL",
+            "type": "Stock",
+            "price": 172.35,
+            "sector": "Technology",
+            "issuer": "Apple Inc."
+        },
+        {
+            "symbol": "US10Y",
+            "type": "Bond",
+            "price": 100.0,
+            "issuer": "US Treasury",
+            "maturity": "2035-10-01",
+            "coupon": 0.045
+        },
+        {
+            "symbol": "SPY",
+            "type": "ETF",
+            "price": 430.50,
+            "sector": "Index",
+            "issuer": "State Street",
+            "expense_ratio": 0.0009
+        }
+    ]
 
-    if instruments_file.exists():
-        instruments = load_instruments_from_csv(instruments_file)
-        for inst in instruments:
-            print(f"Created: {inst}")
-            print(f"  Metrics: {inst.get_metrics()}")
-    else:
-        # Demo with hardcoded data
-        factory = InstrumentFactory()
-        sample_data = [
-            {"symbol": "AAPL", "type": "Stock", "price": 172.35, "sector": "Technology", "issuer": "Apple Inc."},
-            {"symbol": "US10Y", "type": "Bond", "price": 100.0, "issuer": "US Treasury", "maturity": "2035-10-01"},
-            {"symbol": "SPY", "type": "ETF", "price": 430.50, "sector": "Index", "issuer": "State Street"}
-        ]
-        for data in sample_data:
-            inst = factory.create_instrument(data)
-            print(f"Created: {inst}")
-            print(f"  Metrics: {inst.get_metrics()}")
+    print("Creating instruments using Factory pattern:")
+    for data in sample_data:
+        # TODO: Once you implement InstrumentFactory.create_instrument(),
+        # this will create the appropriate instrument type
+        inst = InstrumentFactory.create_instrument(data)
+        print(f"  Created: {inst}")
+        print(f"  Metrics: {inst.get_metrics()}\n")
 
 
 def demo_singleton_pattern():
-    """Demonstrate Singleton Pattern: Centralized configuration."""
+    """
+    Demonstrate Singleton Pattern: Centralized configuration.
+
+    The Singleton Pattern ensures only one instance of Config exists,
+    so all parts of the application share the same settings.
+    """
     print("\n" + "=" * 60)
     print("SINGLETON PATTERN: Centralized Configuration")
     print("=" * 60)
 
-    # Reset singleton for demo
+    # Reset for demo
     Config.reset()
 
-    data_path = get_data_path()
-    config_file = data_path / "config.json"
-
+    # Get instance - should always return the same object
     config1 = Config.get_instance()
     config2 = Config.get_instance()
 
     print(f"config1 is config2: {config1 is config2}")
 
-    if config_file.exists():
-        config1.load(config_file)
-    else:
-        config1.set("log_level", "INFO")
-        config1.set("data_path", "./data/")
-        config1.set("default_strategy", "MeanReversionStrategy")
+    # Set some configuration
+    config1.set("log_level", "INFO")
+    config1.set("default_strategy", "MeanReversionStrategy")
 
+    # Access via different reference - should see same values
     print(f"Config via config1: {config1.get_all()}")
     print(f"Config via config2: {config2.get_all()}")
-    print(f"Same instance confirmed: {config1.get_all() == config2.get_all()}")
+    print(f"Log level from config2: {config2.get('log_level')}")
 
 
 def demo_builder_pattern():
-    """Demonstrate Builder Pattern: Complex portfolio construction."""
+    """
+    Demonstrate Builder Pattern: Complex portfolio construction.
+
+    The Builder Pattern allows step-by-step construction of complex
+    objects with a fluent interface.
+    """
     print("\n" + "=" * 60)
     print("BUILDER PATTERN: Portfolio Construction")
     print("=" * 60)
 
-    data_path = get_data_path()
-    portfolio_file = data_path / "portfolio_structure.json"
-
-    if portfolio_file.exists():
-        with open(portfolio_file, "r") as f:
-            portfolio_data = json.load(f)
-        builder = PortfolioBuilder.from_dict(portfolio_data)
-    else:
-        # Build manually
-        builder = (PortfolioBuilder("Main Portfolio")
-                   .set_owner("jdoe")
-                   .add_position("AAPL", 100, 172.35)
-                   .add_position("MSFT", 50, 328.10)
-                   .add_subportfolio("ETF Holdings",
-                                     PortfolioBuilder("ETFs")
-                                     .add_position("SPY", 20, 430.50)))
-
-    portfolio = builder.build()
+    # Build a portfolio with fluent interface
+    portfolio = (PortfolioBuilder("Main Portfolio")
+                 .set_owner("jdoe")
+                 .add_position("AAPL", 100, 172.35)
+                 .add_position("MSFT", 50, 328.10)
+                 .add_subportfolio("ETF Holdings",
+                                   PortfolioBuilder("ETFs")
+                                   .add_position("SPY", 20, 430.50)
+                                   .add_position("QQQ", 15, 380.25))
+                 .build())
 
     print(f"Built: {portfolio}")
-    print(f"Positions: {portfolio.get_positions()}")
     print(f"Total Value: ${portfolio.get_value():,.2f}")
-
-    # Generate portfolio report
-    report = ReportGenerator.generate_portfolio_report(portfolio)
-    print("\n" + report)
+    print(f"All Positions: {portfolio.get_positions()}")
 
 
 def demo_decorator_pattern():
-    """Demonstrate Decorator Pattern: Adding analytics to instruments."""
+    """
+    Demonstrate Decorator Pattern: Adding analytics to instruments.
+
+    Decorators add functionality without modifying the base class.
+    You can stack multiple decorators to add multiple capabilities.
+    """
     print("\n" + "=" * 60)
     print("DECORATOR PATTERN: Instrument Analytics")
     print("=" * 60)
@@ -157,13 +179,14 @@ def demo_decorator_pattern():
     print(f"Base instrument: {stock}")
     print(f"Base metrics: {stock.get_metrics()}")
 
-    # Sample data for calculations
+    # Sample data for analytics
     price_history = [170.0, 172.0, 168.0, 175.0, 173.0, 172.35]
     historical_returns = calculate_returns(price_history)
-    market_returns = [0.005, -0.01, 0.02, -0.005, 0.003]  # Sample market returns
+    market_returns = [0.005, -0.01, 0.02, -0.005, 0.003]
 
-    # Stack decorators
+    # Stack decorators one by one
     print("\nStacking decorators:")
+
     decorated = VolatilityDecorator(stock, historical_returns)
     print(f"After VolatilityDecorator: {decorated.get_metrics()}")
 
@@ -173,146 +196,145 @@ def demo_decorator_pattern():
     decorated = DrawdownDecorator(decorated, price_history)
     print(f"After DrawdownDecorator: {decorated.get_metrics()}")
 
-    print(f"\nFinal decorated instrument type: {decorated.get_type()}")
+    print(f"\nFinal decorated type: {decorated.get_type()}")
 
 
 def demo_adapter_pattern():
-    """Demonstrate Adapter Pattern: External data integration."""
+    """
+    Demonstrate Adapter Pattern: External data integration.
+
+    Adapters convert external data formats into our standardized
+    MarketDataPoint format.
+    """
     print("\n" + "=" * 60)
     print("ADAPTER PATTERN: External Data Integration")
     print("=" * 60)
 
-    data_path = get_data_path()
-    yahoo_file = data_path / "external_data_yahoo.json"
-    bloomberg_file = data_path / "external_data_bloomberg.xml"
+    # Yahoo Finance JSON format
+    yahoo_data = {
+        "ticker": "AAPL",
+        "last_price": 172.35,
+        "timestamp": "2025-10-01T09:30:00Z",
+        "volume": 1000000
+    }
 
-    if yahoo_file.exists():
-        yahoo_adapter = YahooFinanceAdapter(yahoo_file)
-        yahoo_data = yahoo_adapter.get_data("AAPL")
-        print(f"Yahoo Finance Data: {yahoo_data}")
-    else:
-        print("Yahoo data file not found, using sample data")
-        yahoo_adapter = YahooFinanceAdapter({
-            "ticker": "AAPL",
-            "last_price": 172.35,
-            "timestamp": "2025-10-01T09:30:00Z"
-        })
-        print(f"Yahoo Finance Data: {yahoo_adapter.get_data('AAPL')}")
-
-    if bloomberg_file.exists():
-        bloomberg_adapter = BloombergXMLAdapter(bloomberg_file)
-        bloomberg_data = bloomberg_adapter.get_data("MSFT")
-        print(f"Bloomberg XML Data: {bloomberg_data}")
-    else:
-        print("Bloomberg data file not found")
+    yahoo_adapter = YahooFinanceAdapter(yahoo_data)
+    market_point = yahoo_adapter.get_data("AAPL")
+    print(f"Yahoo Finance Data: {market_point}")
+    print(f"  Symbol: {market_point.symbol}")
+    print(f"  Price: {market_point.price}")
+    print(f"  Timestamp: {market_point.timestamp}")
+    print(f"  Metadata: {market_point.metadata}")
 
 
 def demo_composite_pattern():
-    """Demonstrate Composite Pattern: Portfolio hierarchy."""
+    """
+    Demonstrate Composite Pattern: Portfolio hierarchy.
+
+    The Composite Pattern allows treating individual positions and
+    groups of positions uniformly, enabling recursive calculations.
+    """
     print("\n" + "=" * 60)
     print("COMPOSITE PATTERN: Portfolio Hierarchy")
     print("=" * 60)
 
-    # Build a hierarchical portfolio
+    # Build hierarchical portfolio
     main_portfolio = PortfolioGroup("Main Portfolio")
 
-    # Add direct positions
+    # Add individual positions (leaf nodes)
     main_portfolio.add(Position("AAPL", 100, 172.35))
     main_portfolio.add(Position("MSFT", 50, 328.10))
 
-    # Add a sub-portfolio
+    # Add sub-portfolio (composite node)
     tech_subportfolio = PortfolioGroup("Tech Holdings")
     tech_subportfolio.add(Position("GOOGL", 25, 141.50))
     tech_subportfolio.add(Position("META", 30, 345.20))
-
     main_portfolio.add(tech_subportfolio)
 
-    # Add another sub-portfolio
-    etf_subportfolio = PortfolioGroup("ETF Holdings")
-    etf_subportfolio.add(Position("SPY", 20, 430.50))
-    etf_subportfolio.add(Position("QQQ", 15, 380.25))
-
-    main_portfolio.add(etf_subportfolio)
-
-    print(f"Main Portfolio: {main_portfolio}")
+    print(f"Portfolio: {main_portfolio}")
     print(f"Total Value (recursive): ${main_portfolio.get_value():,.2f}")
     print(f"All Positions (flattened): {main_portfolio.get_positions()}")
 
 
 def demo_strategy_pattern():
-    """Demonstrate Strategy Pattern: Interchangeable trading strategies."""
+    """
+    Demonstrate Strategy Pattern: Interchangeable trading strategies.
+
+    The Strategy Pattern allows swapping algorithms at runtime.
+    Each strategy implements the same interface but different logic.
+    """
     print("\n" + "=" * 60)
     print("STRATEGY PATTERN: Trading Strategies")
     print("=" * 60)
 
-    data_path = get_data_path()
-    strategy_params_file = data_path / "strategy_params.json"
+    # Create strategies with different parameters
+    mean_rev = MeanReversionStrategy(lookback_window=5, threshold=0.02)
+    breakout = BreakoutStrategy(lookback_window=5, threshold=0.03)
 
-    if strategy_params_file.exists():
-        with open(strategy_params_file, "r") as f:
-            params = json.load(f)
-    else:
-        params = {
-            "MeanReversionStrategy": {"lookback_window": 20, "threshold": 0.02},
-            "BreakoutStrategy": {"lookback_window": 15, "threshold": 0.03}
-        }
-
-    # Create strategies
-    mean_rev = MeanReversionStrategy(**params["MeanReversionStrategy"])
-    breakout = BreakoutStrategy(**params["BreakoutStrategy"])
-
-    # Sample market data ticks
-    from datetime import datetime
+    # Sample market ticks
     ticks = [
-        MarketDataPoint("AAPL", 170.0, datetime(2025, 10, 1, 9, 30)),
-        MarketDataPoint("AAPL", 172.0, datetime(2025, 10, 1, 9, 31)),
-        MarketDataPoint("AAPL", 168.0, datetime(2025, 10, 1, 9, 32)),
-        MarketDataPoint("AAPL", 175.0, datetime(2025, 10, 1, 9, 33)),
-        MarketDataPoint("AAPL", 180.0, datetime(2025, 10, 1, 9, 34)),  # Breakout
-        MarketDataPoint("AAPL", 160.0, datetime(2025, 10, 1, 9, 35)),  # Mean reversion
+        MarketDataPoint("AAPL", 100.0, datetime(2025, 10, 1, 9, 30)),
+        MarketDataPoint("AAPL", 102.0, datetime(2025, 10, 1, 9, 31)),
+        MarketDataPoint("AAPL", 98.0, datetime(2025, 10, 1, 9, 32)),
+        MarketDataPoint("AAPL", 105.0, datetime(2025, 10, 1, 9, 33)),
+        MarketDataPoint("AAPL", 95.0, datetime(2025, 10, 1, 9, 34)),
+        MarketDataPoint("AAPL", 110.0, datetime(2025, 10, 1, 9, 35)),
     ]
 
-    print("Testing Mean Reversion Strategy:")
+    print("Mean Reversion Strategy signals:")
     for tick in ticks:
         signals = mean_rev.generate_signals(tick)
         if signals:
-            print(f"  Tick {tick.price}: {signals}")
+            print(f"  ${tick.price:.2f}: {signals[0]['type']} - {signals[0]['reason']}")
 
-    mean_rev.reset()
+    print("\nBreakout Strategy signals:")
     breakout.reset()
-
-    print("\nTesting Breakout Strategy:")
     for tick in ticks:
         signals = breakout.generate_signals(tick)
         if signals:
-            print(f"  Tick {tick.price}: {signals}")
+            print(f"  ${tick.price:.2f}: {signals[0]['type']} - {signals[0]['reason']}")
 
 
 def demo_observer_pattern():
-    """Demonstrate Observer Pattern: Signal notifications."""
+    """
+    Demonstrate Observer Pattern: Signal notifications.
+
+    The Observer Pattern decouples signal generation from signal handling.
+    Multiple observers can react to the same signals independently.
+    """
     print("\n" + "=" * 60)
     print("OBSERVER PATTERN: Signal Notifications")
     print("=" * 60)
 
-    # Create publisher and observers
+    # Create publisher (subject)
     publisher = SignalPublisher()
-    logger = LoggerObserver(verbose=False)
-    stats = StatisticsObserver()
-    alerter = AlertObserver(price_threshold=200.0)
+
+    # Create observers
+    logger = LoggerObserver()
+    alerter = AlertObserver(price_threshold=300.0)
 
     # Attach observers
     publisher.attach(logger)
-    publisher.attach(stats)
     publisher.attach(alerter)
 
-    print("Attached observers: LoggerObserver, StatisticsObserver, AlertObserver")
+    print("Attached: LoggerObserver, AlertObserver (threshold=$300)")
 
-    # Generate sample signals
-    from datetime import datetime
+    # Generate signals
     signals = [
-        {"type": "BUY", "symbol": "AAPL", "price": 172.35, "timestamp": datetime.now(), "reason": "Test signal 1", "strategy": "MeanReversion"},
-        {"type": "SELL", "symbol": "MSFT", "price": 328.10, "timestamp": datetime.now(), "reason": "Test signal 2", "strategy": "Breakout"},
-        {"type": "BUY", "symbol": "SPY", "price": 430.50, "timestamp": datetime.now(), "reason": "Test signal 3", "strategy": "MeanReversion"},
+        {
+            "type": "BUY",
+            "symbol": "AAPL",
+            "price": 172.35,
+            "timestamp": datetime.now(),
+            "reason": "Below moving average"
+        },
+        {
+            "type": "SELL",
+            "symbol": "MSFT",
+            "price": 328.10,
+            "timestamp": datetime.now(),
+            "reason": "Above moving average"
+        },
     ]
 
     print("\nNotifying observers:")
@@ -320,123 +342,80 @@ def demo_observer_pattern():
         publisher.notify(signal)
 
     print(f"\nLogger recorded {len(logger.logs)} signals")
-    for log in logger.logs:
-        print(f"  {log}")
-
-    print(f"\nAlerts generated: {len(alerter.alerts)}")
-    for alert in alerter.alerts:
-        print(f"  {alert['message']}")
-
-    print(f"\nStatistics summary: {stats.get_summary()}")
+    print(f"Alerter generated {len(alerter.alerts)} alerts")
 
 
 def demo_command_pattern():
-    """Demonstrate Command Pattern: Order execution with undo/redo."""
+    """
+    Demonstrate Command Pattern: Order execution with undo/redo.
+
+    The Command Pattern encapsulates operations as objects,
+    enabling undo/redo functionality.
+    """
     print("\n" + "=" * 60)
     print("COMMAND PATTERN: Order Execution with Undo/Redo")
     print("=" * 60)
 
-    # Create command invoker
+    # Create invoker (manages command history)
     invoker = CommandInvoker()
 
     # Create orders
     order1 = Order("ORD001", "AAPL", "BUY", 100, 172.35)
     order2 = Order("ORD002", "MSFT", "SELL", 50, 328.10)
 
-    print(f"Created orders:")
+    print(f"Initial orders:")
     print(f"  {order1}")
     print(f"  {order2}")
 
-    # Execute orders
+    # Execute orders through invoker
     print("\nExecuting orders:")
-    cmd1 = ExecuteOrderCommand(order1)
-    cmd2 = ExecuteOrderCommand(order2)
+    invoker.execute(ExecuteOrderCommand(order1))
+    invoker.execute(ExecuteOrderCommand(order2))
 
-    invoker.execute(cmd1)
-    invoker.execute(cmd2)
-
-    print(f"\nOrder states after execution:")
-    print(f"  {order1}")
-    print(f"  {order2}")
-
-    # Undo last order
-    print("\nUndoing last order:")
+    # Undo last
+    print("\nUndo last order:")
     invoker.undo()
-    print(f"  {order2}")
+    print(f"  Order2 status: {order2.status}")
 
     # Redo
-    print("\nRedoing undone order:")
+    print("\nRedo undone order:")
     invoker.redo()
-    print(f"  {order2}")
+    print(f"  Order2 status: {order2.status}")
 
-    # Show history
-    print(f"\nCommand history: {len(invoker.get_history())} commands")
-
-
-def demo_full_integration():
-    """Demonstrate full system integration."""
-    print("\n" + "=" * 60)
-    print("FULL INTEGRATION: Strategy Engine Demo")
-    print("=" * 60)
-
-    # Create engine
-    engine = StrategyEngine()
-
-    # Register strategies
-    engine.register_strategy("MeanReversion", MeanReversionStrategy(lookback_window=5, threshold=0.02))
-    engine.register_strategy("Breakout", BreakoutStrategy(lookback_window=5, threshold=0.03))
-    engine.set_active_strategy("MeanReversion")
-
-    # Attach observers
-    logger = LoggerObserver(verbose=False)
-    stats = StatisticsObserver()
-    engine.attach_observer(logger)
-    engine.attach_observer(stats)
-
-    print("Engine configured with MeanReversion strategy")
-    print("Attached LoggerObserver and StatisticsObserver")
-
-    # Process ticks
-    from datetime import datetime, timedelta
-    base_time = datetime(2025, 10, 1, 9, 30)
-    prices = [100.0, 102.0, 98.0, 105.0, 95.0, 110.0, 85.0]  # Volatile prices
-
-    print("\nProcessing market ticks:")
-    for i, price in enumerate(prices):
-        tick = MarketDataPoint("TEST", price, base_time + timedelta(minutes=i))
-        signals = engine.process_tick(tick)
-        if signals:
-            print(f"  Tick {i + 1} (${price:.2f}): {len(signals)} signal(s) generated")
-
-    # Report
-    print(f"\nSignal History: {len(engine.get_signal_history())} total signals")
-    print(f"Statistics: {stats.get_summary()}")
-
-    # Generate report
-    report = ReportGenerator.generate_signal_report(engine.get_signal_history())
-    print(f"\nGenerated Signal Report:\n{report}")
+    print(f"\nCommand history size: {len(invoker.get_history())}")
 
 
 def main():
-    """Main entry point - run all pattern demonstrations."""
+    """
+    Main entry point - run all pattern demonstrations.
+
+    NOTE: This will raise NotImplementedError until you implement
+    the TODO sections in each pattern module.
+    """
     print("=" * 60)
     print("HW6: Design Patterns in Financial Software Architecture")
     print("=" * 60)
+    print("\nNOTE: Complete the TODO implementations before running demos.")
+    print("Each demo will fail with NotImplementedError until implemented.\n")
 
-    # Run all demonstrations
-    demo_factory_pattern()
-    demo_singleton_pattern()
-    demo_builder_pattern()
-    demo_decorator_pattern()
-    demo_adapter_pattern()
-    demo_composite_pattern()
-    demo_strategy_pattern()
-    demo_observer_pattern()
-    demo_command_pattern()
-    demo_full_integration()
+    try:
+        # Uncomment demos as you implement them
+        demo_factory_pattern()
+        # demo_singleton_pattern()
+        # demo_builder_pattern()
+        # demo_decorator_pattern()
+        # demo_adapter_pattern()
+        # demo_composite_pattern()
+        # demo_strategy_pattern()
+        # demo_observer_pattern()
+        # demo_command_pattern()
+
+    except NotImplementedError as e:
+        print(f"\n*** Implementation needed: {e} ***")
+        print("Complete the TODO section and try again.")
 
     print("\n" + "=" * 60)
-    print("All pattern demonstrations completed!")
+    print("Demo complete! Implement remaining patterns to see all features.")
     print("=" * 60)
 
 

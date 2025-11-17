@@ -72,14 +72,13 @@ class VolatilityDecorator(InstrumentDecorator):
         Returns:
             Annualized volatility (assuming 252 trading days).
         """
-        if not self._historical_returns or len(self._historical_returns) < 2:
-            return 0.0
-
-        mean = sum(self._historical_returns) / len(self._historical_returns)
-        variance = sum((r - mean) ** 2 for r in self._historical_returns) / (len(self._historical_returns) - 1)
-        daily_vol = variance ** 0.5
-        annualized_vol = daily_vol * (252 ** 0.5)
-        return annualized_vol
+        # TODO: Implement volatility calculation
+        # 1. Return 0.0 if less than 2 returns
+        # 2. Calculate mean of returns
+        # 3. Calculate sample variance: sum((r - mean)^2) / (n - 1)
+        # 4. Calculate daily volatility as sqrt(variance)
+        # 5. Annualize by multiplying by sqrt(252)
+        raise NotImplementedError("TODO: Implement calculate_volatility")
 
     def get_metrics(self) -> dict:
         """Add volatility metric to base metrics."""
@@ -117,29 +116,16 @@ class BetaDecorator(InstrumentDecorator):
         Returns:
             Beta value (covariance / market variance).
         """
-        if (not self._instrument_returns or not self._market_returns
-                or len(self._instrument_returns) != len(self._market_returns)
-                or len(self._instrument_returns) < 2):
-            return 1.0  # Default beta
-
-        n = len(self._instrument_returns)
-        mean_inst = sum(self._instrument_returns) / n
-        mean_mkt = sum(self._market_returns) / n
-
-        covariance = sum(
-            (self._instrument_returns[i] - mean_inst) * (self._market_returns[i] - mean_mkt)
-            for i in range(n)
-        ) / (n - 1)
-
-        market_variance = sum(
-            (self._market_returns[i] - mean_mkt) ** 2
-            for i in range(n)
-        ) / (n - 1)
-
-        if market_variance == 0:
-            return 1.0
-
-        return covariance / market_variance
+        # TODO: Implement beta calculation
+        # 1. Return 1.0 (default beta) if:
+        #    - Either list is empty
+        #    - Lists have different lengths
+        #    - Less than 2 data points
+        # 2. Calculate mean of instrument returns and market returns
+        # 3. Calculate covariance: sum((inst_r - mean_inst) * (mkt_r - mean_mkt)) / (n - 1)
+        # 4. Calculate market variance: sum((mkt_r - mean_mkt)^2) / (n - 1)
+        # 5. Return covariance / market_variance (return 1.0 if variance is 0)
+        raise NotImplementedError("TODO: Implement calculate_beta")
 
     def get_metrics(self) -> dict:
         """Add beta metric to base metrics."""
@@ -173,20 +159,15 @@ class DrawdownDecorator(InstrumentDecorator):
         Returns:
             Maximum drawdown as a negative percentage.
         """
-        if not self._price_history or len(self._price_history) < 2:
-            return 0.0
-
-        peak = self._price_history[0]
-        max_drawdown = 0.0
-
-        for price in self._price_history:
-            if price > peak:
-                peak = price
-            drawdown = (price - peak) / peak
-            if drawdown < max_drawdown:
-                max_drawdown = drawdown
-
-        return max_drawdown
+        # TODO: Implement maximum drawdown calculation
+        # 1. Return 0.0 if less than 2 prices
+        # 2. Track the peak price (start with first price)
+        # 3. For each price:
+        #    - Update peak if current price is higher
+        #    - Calculate drawdown: (current_price - peak) / peak
+        #    - Track the minimum (most negative) drawdown
+        # 4. Return the maximum drawdown (will be negative or zero)
+        raise NotImplementedError("TODO: Implement calculate_max_drawdown")
 
     def get_metrics(self) -> dict:
         """Add maximum drawdown metric to base metrics."""
@@ -222,6 +203,14 @@ class YahooFinanceAdapter(MarketDataAdapter):
     Adapter for Yahoo Finance JSON format.
 
     Converts Yahoo Finance JSON structure to MarketDataPoint.
+
+    Expected JSON format (single or list):
+    {
+        "ticker": "AAPL",
+        "last_price": 172.35,
+        "timestamp": "2024-01-15T10:30:00Z",
+        "volume": 1000000
+    }
     """
 
     def __init__(self, data_source: str | Path | dict):
@@ -250,26 +239,19 @@ class YahooFinanceAdapter(MarketDataAdapter):
         Raises:
             ValueError: If symbol doesn't match data.
         """
-        # Handle both single ticker and list of tickers
-        if isinstance(self._data, list):
-            # Find matching ticker in list
-            data_item = next((d for d in self._data if d.get("ticker") == symbol), None)
-            if not data_item:
-                raise ValueError(f"Symbol {symbol} not found in Yahoo data")
-        else:
-            data_item = self._data
-            if data_item.get("ticker") != symbol:
-                raise ValueError(f"Symbol mismatch: expected {symbol}, got {data_item.get('ticker')}")
-
-        timestamp = datetime.fromisoformat(data_item["timestamp"].replace("Z", "+00:00"))
-
-        return MarketDataPoint(
-            symbol=data_item["ticker"],
-            price=float(data_item["last_price"]),
-            timestamp=timestamp,
-            volume=data_item.get("volume"),
-            metadata={"source": "yahoo_finance"}
-        )
+        # TODO: Implement Yahoo Finance data conversion
+        # 1. Handle both single ticker dict and list of tickers
+        #    - If list, find matching ticker
+        #    - If dict, verify ticker matches symbol
+        # 2. Extract timestamp and convert to datetime
+        #    (use datetime.fromisoformat, replace "Z" with "+00:00")
+        # 3. Return MarketDataPoint with:
+        #    - symbol from "ticker" field
+        #    - price from "last_price" field
+        #    - timestamp
+        #    - volume from "volume" field (optional)
+        #    - metadata with source="yahoo_finance"
+        raise NotImplementedError("TODO: Implement YahooFinanceAdapter.get_data")
 
 
 class BloombergXMLAdapter(MarketDataAdapter):
@@ -277,6 +259,19 @@ class BloombergXMLAdapter(MarketDataAdapter):
     Adapter for Bloomberg XML format.
 
     Converts Bloomberg XML structure to MarketDataPoint.
+
+    Expected XML format:
+    <instrument>
+        <symbol>AAPL</symbol>
+        <price>172.35</price>
+        <timestamp>2024-01-15T10:30:00Z</timestamp>
+    </instrument>
+
+    Or multiple instruments:
+    <instruments>
+        <instrument>...</instrument>
+        <instrument>...</instrument>
+    </instruments>
     """
 
     def __init__(self, data_source: str | Path | ET.Element):
@@ -305,29 +300,16 @@ class BloombergXMLAdapter(MarketDataAdapter):
         Raises:
             ValueError: If symbol doesn't match data.
         """
-        # Handle both single instrument and list
-        if self._root.tag == "instruments":
-            # Find matching instrument
-            instrument_elem = None
-            for inst in self._root.findall("instrument"):
-                if inst.find("symbol").text == symbol:
-                    instrument_elem = inst
-                    break
-            if not instrument_elem:
-                raise ValueError(f"Symbol {symbol} not found in Bloomberg data")
-        else:
-            instrument_elem = self._root
-            xml_symbol = instrument_elem.find("symbol").text
-            if xml_symbol != symbol:
-                raise ValueError(f"Symbol mismatch: expected {symbol}, got {xml_symbol}")
-
-        timestamp_str = instrument_elem.find("timestamp").text
-        timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
-
-        return MarketDataPoint(
-            symbol=instrument_elem.find("symbol").text,
-            price=float(instrument_elem.find("price").text),
-            timestamp=timestamp,
-            volume=None,
-            metadata={"source": "bloomberg"}
-        )
+        # TODO: Implement Bloomberg XML data conversion
+        # 1. Handle both single <instrument> and <instruments> (list) root
+        #    - If root is "instruments", find matching <instrument> by <symbol>
+        #    - If root is single instrument, verify symbol matches
+        # 2. Extract data from XML elements using .find() and .text
+        # 3. Convert timestamp string to datetime
+        # 4. Return MarketDataPoint with:
+        #    - symbol from <symbol> element
+        #    - price from <price> element (convert to float)
+        #    - timestamp
+        #    - volume=None
+        #    - metadata with source="bloomberg"
+        raise NotImplementedError("TODO: Implement BloombergXMLAdapter.get_data")

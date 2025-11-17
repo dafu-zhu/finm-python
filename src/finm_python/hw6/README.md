@@ -1,273 +1,203 @@
 # HW6: Design Patterns in Financial Software Architecture
 
-A modular Python system demonstrating key object-oriented design patterns in the context of financial analytics and trading platform simulation.
+A scaffolding project for implementing key object-oriented design patterns in the context of financial analytics and trading platform simulation.
 
 ## Overview
 
-This project implements a financial analytics and trading system using nine design patterns from three categories:
+This project provides the structure and interfaces for nine design patterns. **Your task is to implement the core logic** where you see `TODO` comments and `raise NotImplementedError()`.
 
-- **Creational Patterns**: Factory, Singleton, Builder
-- **Structural Patterns**: Decorator, Adapter, Composite
-- **Behavioral Patterns**: Strategy, Observer, Command
+### Patterns to Implement
+
+**Creational Patterns:**
+- Factory: Create instrument instances from raw data
+- Singleton: Centralized configuration management
+- Builder: Construct complex portfolio structures
+
+**Structural Patterns:**
+- Decorator: Add analytics to instruments without modifying base classes
+- Adapter: Standardize external data formats
+- Composite: Model portfolios as trees (already partially implemented)
+
+**Behavioral Patterns:**
+- Strategy: Interchangeable trading strategies
+- Observer: Event notification system for signals
+- Command: Order execution with undo/redo support
 
 ## Project Structure
 
 ```
 hw6/
-├── __init__.py              # Package initialization
-├── models.py                # Core financial models (Instrument, Portfolio)
-├── data_loader.py           # Adapter-based data ingestion
-├── analytics.py             # Decorator-based instrument analytics
-├── engine.py                # Strategy execution and signal dispatch
-├── reporting.py             # Observer-based logging and reporting
-├── main.py                  # Main orchestration and demos
-├── patterns/                # Design pattern implementations
-│   ├── __init__.py
-│   ├── creational.py        # Factory, Singleton, Builder
-│   ├── structural.py        # Decorator, Adapter
-│   └── behavioral.py        # Strategy, Observer, Command
-├── tests/                   # Unit tests
-│   ├── __init__.py
-│   └── test_patterns.py
-└── output/                  # Generated reports
+├── models.py                # Core models - implement get_type(), get_metrics(), get_value(), etc.
+├── patterns/
+│   ├── creational.py        # Factory, Singleton, Builder - implement core pattern logic
+│   ├── structural.py        # Decorator (analytics), Adapter - implement calculations
+│   └── behavioral.py        # Strategy, Observer, Command - implement signal generation
+├── data_loader.py           # Data loading utilities (uses your pattern implementations)
+├── analytics.py             # Helper functions for analytics
+├── engine.py                # Strategy execution engine
+├── reporting.py             # Observer implementations for reporting
+├── main.py                  # Demo script showing pattern usage
+└── tests/
+    └── test_patterns.py     # Comprehensive tests to validate your implementations
 ```
 
-## Quick Start
+## Getting Started
 
-### Installation
+### 1. Read the Requirements
 
-Ensure you have Python 3.11+ and the project dependencies installed:
+Check `docs/hw6.md` for the full assignment specification.
+
+### 2. Implement Patterns
+
+Start with the simplest patterns and work your way up:
+
+**Recommended Order:**
+
+1. **Composite Pattern** (`models.py`):
+   - `Position.get_value()` - multiply quantity by price
+   - `Position.get_positions()` - return self as dict in list
+   - `PortfolioGroup.get_value()` - sum child values
+   - `PortfolioGroup.get_positions()` - flatten child positions
+
+2. **Factory Pattern** (`patterns/creational.py`):
+   - `InstrumentFactory.create_instrument()` - switch on type
+
+3. **Singleton Pattern** (`patterns/creational.py`):
+   - `Config.__new__()` - ensure single instance
+   - `Config.load()`, `Config.get()`, `Config.set()`
+
+4. **Builder Pattern** (`patterns/creational.py`):
+   - `PortfolioBuilder.set_owner()`, `add_position()`, `add_subportfolio()`, `build()`
+   - `PortfolioBuilder.from_dict()` - recursive construction
+
+5. **Decorator Pattern** (`patterns/structural.py`):
+   - `VolatilityDecorator.calculate_volatility()` - annualized volatility
+   - `BetaDecorator.calculate_beta()` - covariance / market variance
+   - `DrawdownDecorator.calculate_max_drawdown()` - peak-to-trough decline
+
+6. **Adapter Pattern** (`patterns/structural.py`):
+   - `YahooFinanceAdapter.get_data()` - parse JSON format
+   - `BloombergXMLAdapter.get_data()` - parse XML format
+
+7. **Strategy Pattern** (`patterns/behavioral.py`):
+   - `MeanReversionStrategy.generate_signals()` - deviation from MA
+   - `BreakoutStrategy.generate_signals()` - break above/below range
+
+8. **Observer Pattern** (`patterns/behavioral.py`):
+   - `SignalPublisher.attach()`, `detach()`, `notify()`
+   - `LoggerObserver.update()` - log signals
+   - `AlertObserver.update()` - check threshold
+
+9. **Command Pattern** (`patterns/behavioral.py`):
+   - `ExecuteOrderCommand.execute()`, `undo()`
+   - `CancelOrderCommand.execute()`, `undo()`
+   - `CommandInvoker.execute()`, `undo()`, `redo()`
+
+### 3. Run Tests
+
+As you implement each pattern, run the corresponding tests:
 
 ```bash
-cd /path/to/finm-python
-pip install -e .
+# Run all tests (most will fail initially)
+pytest src/finm_python/hw6/tests/ -v
+
+# Run specific pattern tests
+pytest -k TestFactoryPattern -v
+pytest -k TestSingletonPattern -v
+pytest -k TestBuilderPattern -v
+pytest -k TestDecoratorPattern -v
+pytest -k TestAdapterPattern -v
+pytest -k TestCompositePattern -v
+pytest -k TestStrategyPattern -v
+pytest -k TestObserverPattern -v
+pytest -k TestCommandPattern -v
 ```
 
-### Running the Demo
+### 4. Demo Your Implementation
+
+Once you've implemented the patterns, uncomment the demo functions in `main.py`:
 
 ```bash
 python -m finm_python.hw6.main
 ```
 
-This runs demonstrations of all nine design patterns with sample financial data.
+## Implementation Tips
 
-### Running Tests
+### Finding TODOs
+
+Search for `TODO` comments in the code to find what needs to be implemented:
 
 ```bash
-pytest src/finm_python/hw6/tests/ -v
+grep -r "TODO" src/finm_python/hw6/
 ```
 
-## Module Descriptions
+### Example: Factory Pattern
 
-### `models.py`
-Core data structures for the financial system:
-- `Instrument` (abstract base): Base class for financial instruments
-- `Stock`, `Bond`, `ETF`: Concrete instrument implementations
-- `MarketDataPoint`: Standardized market data structure
-- `PortfolioComponent`: Abstract base for Composite pattern
-- `Position`: Leaf node in portfolio tree
-- `PortfolioGroup`: Composite node for grouping positions
-- `Portfolio`: Complete portfolio with metadata
+```python
+# In patterns/creational.py
+@staticmethod
+def create_instrument(data: dict) -> Instrument:
+    # TODO: Implement factory logic
+    # 1. Extract type from data
+    instrument_type = data.get("type", "").lower()
+    symbol = data["symbol"]
+    price = float(data["price"])
 
-### `patterns/creational.py`
-**Factory Pattern** - `InstrumentFactory`
-- Creates Stock, Bond, or ETF instances from raw data dictionaries
-- Centralizes object creation logic
-- Example: `InstrumentFactory.create_instrument({"type": "Stock", ...})`
+    # 2. Create appropriate instance based on type
+    if instrument_type == "stock":
+        return Stock(symbol, price, data.get("sector", ""), data.get("issuer", ""))
+    elif instrument_type == "bond":
+        return Bond(symbol, price, ...)
+    # etc.
+```
 
-**Singleton Pattern** - `Config`
-- Centralized configuration management
-- Ensures single instance across all modules
-- Loads settings from JSON configuration files
-- Example: `Config.get_instance().get("log_level")`
+### Example: Decorator Pattern
 
-**Builder Pattern** - `PortfolioBuilder`
-- Fluent interface for constructing complex portfolios
-- Supports nested sub-portfolios
-- Example:
-  ```python
-  portfolio = (PortfolioBuilder("Main")
-               .set_owner("user")
-               .add_position("AAPL", 100, 172.35)
-               .build())
-  ```
+```python
+# In patterns/structural.py
+def calculate_volatility(self) -> float:
+    if len(self._historical_returns) < 2:
+        return 0.0
 
-### `patterns/structural.py`
-**Decorator Pattern** - Analytics Decorators
-- `VolatilityDecorator`: Adds volatility calculation
-- `BetaDecorator`: Adds beta coefficient calculation
-- `DrawdownDecorator`: Adds maximum drawdown calculation
-- Decorators can be stacked without modifying base classes
-- Example:
-  ```python
-  decorated = DrawdownDecorator(
-      BetaDecorator(
-          VolatilityDecorator(stock)))
-  ```
-
-**Adapter Pattern** - Data Source Adapters
-- `YahooFinanceAdapter`: Converts Yahoo JSON to `MarketDataPoint`
-- `BloombergXMLAdapter`: Converts Bloomberg XML to `MarketDataPoint`
-- Standardizes different external data formats
-
-### `patterns/behavioral.py`
-**Strategy Pattern** - Trading Strategies
-- `Strategy` (abstract): Base interface for all strategies
-- `MeanReversionStrategy`: Generates signals based on price deviation from moving average
-- `BreakoutStrategy`: Generates signals on price breakouts
-- Strategies are interchangeable at runtime
-
-**Observer Pattern** - Signal Notifications
-- `SignalPublisher`: Subject that manages observers
-- `LoggerObserver`: Logs all signals
-- `AlertObserver`: Alerts on high-value trades
-- Dynamic registration and notification
-
-**Command Pattern** - Order Execution
-- `Command` (abstract): Base command interface
-- `ExecuteOrderCommand`: Executes trades
-- `CancelOrderCommand`: Cancels orders
-- `CommandInvoker`: Manages command history with undo/redo
-
-### `data_loader.py`
-Unified data loading using adapters:
-- `load_instruments_from_csv()`: Load instruments using Factory
-- `load_market_data_from_csv()`: Stream market data points
-- `load_yahoo_data()`: Load via Yahoo adapter
-- `load_bloomberg_data()`: Load via Bloomberg adapter
-
-### `analytics.py`
-Convenience functions for decorator-based analytics:
-- `add_volatility_analysis()`: Wrap instrument with volatility metrics
-- `add_beta_analysis()`: Wrap instrument with beta metrics
-- `add_drawdown_analysis()`: Wrap instrument with drawdown metrics
-- `add_full_analytics()`: Stack all analytics decorators
-- `calculate_returns()`: Compute simple returns from prices
-
-### `engine.py`
-Main strategy execution engine:
-- `StrategyEngine`: Coordinates strategy execution, signal generation, and notification
-- Manages strategy registration and switching
-- Integrates with Observer pattern for signal dispatch
-- Supports configuration via JSON files
-
-### `reporting.py`
-Observer-based reporting and analytics:
-- `LoggerObserver`: File and console logging
-- `AlertObserver`: High-value trade alerts
-- `StatisticsObserver`: Signal statistics collection
-- `ReportGenerator`: Markdown report generation
-
-### `main.py`
-Orchestrates the entire system:
-- Demonstrates each pattern in isolation
-- Shows full system integration
-- Loads configuration and data from files
-- Generates reports
+    mean = sum(self._historical_returns) / len(self._historical_returns)
+    variance = sum((r - mean) ** 2 for r in self._historical_returns) / (len(self._historical_returns) - 1)
+    daily_vol = variance ** 0.5
+    annualized_vol = daily_vol * (252 ** 0.5)
+    return annualized_vol
+```
 
 ## Data Files
 
-The system uses data files from `scripts/hw6/`:
+Sample data files are provided in `scripts/hw6/`:
 
-- `config.json`: System configuration (log level, paths, default strategy)
-- `instruments.csv`: Instrument definitions (symbol, type, price, attributes)
-- `portfolio_structure.json`: Portfolio hierarchy definition
-- `strategy_params.json`: Trading strategy parameters
-- `external_data_yahoo.json`: Sample Yahoo Finance format data
-- `external_data_bloomberg.xml`: Sample Bloomberg XML format data
-- `market_data.csv`: Historical OHLCV market data
+- `config.json` - System configuration
+- `instruments.csv` - Instrument definitions
+- `portfolio_structure.json` - Portfolio hierarchy
+- `strategy_params.json` - Trading strategy parameters
+- `external_data_yahoo.json` - Yahoo Finance format
+- `external_data_bloomberg.xml` - Bloomberg XML format
+- `market_data.csv` - Historical OHLCV data
 
-## Example Usage
+## Deliverables
 
-### Creating Instruments with Factory
-```python
-from finm_python.hw6.patterns.creational import InstrumentFactory
+1. **Completed Implementation** - All TODO sections filled in
+2. **Passing Tests** - All unit tests should pass
+3. **Design Report** - Fill in `design_report.md` with your analysis
+4. **Working Demo** - `main.py` should run without errors
 
-factory = InstrumentFactory()
-stock = factory.create_instrument({
-    "symbol": "AAPL",
-    "type": "Stock",
-    "price": 172.35,
-    "sector": "Technology"
-})
-```
+## Testing Your Work
 
-### Building Portfolios
-```python
-from finm_python.hw6.patterns.creational import PortfolioBuilder
+Run the full test suite to validate your implementations:
 
-portfolio = (PortfolioBuilder("My Portfolio")
-             .set_owner("jdoe")
-             .add_position("AAPL", 100, 172.35)
-             .add_position("MSFT", 50, 328.10)
-             .build())
-
-print(f"Total Value: ${portfolio.get_value():,.2f}")
-```
-
-### Adding Analytics with Decorators
-```python
-from finm_python.hw6.models import Stock
-from finm_python.hw6.analytics import add_full_analytics
-
-stock = Stock("AAPL", 172.35, "Technology", "Apple")
-decorated = add_full_analytics(
-    stock,
-    historical_returns=[0.01, -0.02, 0.015],
-    market_returns=[0.005, -0.01, 0.008],
-    price_history=[170.0, 172.0, 168.0]
-)
-metrics = decorated.get_metrics()
-# metrics includes: volatility, beta, max_drawdown
-```
-
-### Running Trading Strategies
-```python
-from finm_python.hw6.engine import StrategyEngine
-from finm_python.hw6.patterns.behavioral import MeanReversionStrategy
-from finm_python.hw6.reporting import LoggerObserver
-
-engine = StrategyEngine()
-engine.register_strategy("MeanReversion", MeanReversionStrategy())
-engine.set_active_strategy("MeanReversion")
-engine.attach_observer(LoggerObserver())
-
-# Process market ticks
-for tick in market_data:
-    signals = engine.process_tick(tick)
-```
-
-### Order Execution with Undo/Redo
-```python
-from finm_python.hw6.patterns.behavioral import (
-    Order, ExecuteOrderCommand, CommandInvoker
-)
-
-invoker = CommandInvoker()
-order = Order("ORD001", "AAPL", "BUY", 100, 172.35)
-
-invoker.execute(ExecuteOrderCommand(order))  # Execute
-invoker.undo()  # Revert execution
-invoker.redo()  # Re-execute
-```
-
-## Testing
-
-Run all tests:
 ```bash
+# All tests
 pytest src/finm_python/hw6/tests/ -v
+
+# With coverage
+pytest src/finm_python/hw6/tests/ --cov=src/finm_python/hw6
 ```
 
-Tests cover:
-- Factory creates correct instrument types
-- Singleton behavior with shared config
-- Builder constructs proper portfolio hierarchies
-- Decorator-enhanced analytics output
-- Adapter data format conversion
-- Composite recursive value calculation
-- Strategy signal generation logic
-- Observer notification dispatch
-- Command execution and undo/redo
+All 45+ tests should pass when your implementation is complete.
 
 ## Dependencies
 
@@ -275,6 +205,20 @@ Tests cover:
 - pytest (for testing)
 - Standard library only (no external packages required)
 
-## Author
+## Common Issues
+
+1. **NotImplementedError** - You haven't completed that TODO section yet
+2. **Import errors** - Make sure you're running from the project root
+3. **Test failures** - Read the test carefully to understand expected behavior
+4. **Type errors** - Check method signatures match expected interfaces
+
+## Need Help?
+
+- Review the pattern docstrings for implementation hints
+- Check the test cases to see expected behavior
+- Look at `main.py` for usage examples
+- Consult the design patterns documentation in your course materials
+
+---
 
 Created for FINM Python Programming Course - Assignment 6

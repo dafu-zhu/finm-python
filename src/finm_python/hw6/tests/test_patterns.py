@@ -1,6 +1,14 @@
 """
 Unit tests for HW6 Design Patterns.
 
+These tests validate your pattern implementations. As you complete each TODO,
+the corresponding tests should pass.
+
+To run specific test classes:
+    pytest -k TestFactoryPattern
+    pytest -k TestSingletonPattern
+    etc.
+
 Tests cover:
 - Factory pattern: Correct instrument type creation
 - Singleton pattern: Shared config instance
@@ -31,10 +39,9 @@ from ..patterns.structural import (
 )
 from ..patterns.behavioral import (
     MeanReversionStrategy, BreakoutStrategy,
-    SignalPublisher,
+    SignalPublisher, LoggerObserver, AlertObserver,
     Order, ExecuteOrderCommand, CancelOrderCommand, CommandInvoker
 )
-from ..reporting import LoggerObserver, AlertObserver
 from ..analytics import calculate_returns
 
 
@@ -146,6 +153,11 @@ class TestSingletonPattern:
 
         Path(f.name).unlink()
 
+    def test_get_default_value(self):
+        """Config.get returns default for missing keys."""
+        config = Config.get_instance()
+        assert config.get("nonexistent", "default") == "default"
+
 
 # =============================================================================
 # Builder Pattern Tests
@@ -179,6 +191,15 @@ class TestBuilderPattern:
 
         assert portfolio.get_value() == 10 * 100.0 + 5 * 200.0
         assert len(portfolio.get_positions()) == 2
+
+    def test_fluent_interface(self):
+        """Builder methods return self for chaining."""
+        builder = PortfolioBuilder("Test")
+        result = builder.set_owner("user")
+        assert result is builder
+
+        result = builder.add_position("A", 1, 100.0)
+        assert result is builder
 
     def test_from_dict(self):
         """Builder creates portfolio from dictionary."""
@@ -216,6 +237,12 @@ class TestDecoratorPattern:
         assert metrics["volatility"] > 0
         assert metrics["symbol"] == "TEST"
 
+    def test_volatility_empty_returns(self):
+        """VolatilityDecorator handles empty returns."""
+        stock = Stock("TEST", 100.0, "Tech", "Test Inc")
+        decorated = VolatilityDecorator(stock, [])
+        assert decorated.calculate_volatility() == 0.0
+
     def test_beta_decorator(self):
         """BetaDecorator adds beta metric."""
         stock = Stock("TEST", 100.0, "Tech", "Test Inc")
@@ -227,10 +254,16 @@ class TestDecoratorPattern:
         assert "beta" in metrics
         assert isinstance(metrics["beta"], float)
 
+    def test_beta_default_value(self):
+        """BetaDecorator returns 1.0 for invalid inputs."""
+        stock = Stock("TEST", 100.0, "Tech", "Test Inc")
+        decorated = BetaDecorator(stock, [], [])
+        assert decorated.calculate_beta() == 1.0
+
     def test_drawdown_decorator(self):
         """DrawdownDecorator adds max_drawdown metric."""
         stock = Stock("TEST", 100.0, "Tech", "Test Inc")
-        prices = [100.0, 110.0, 105.0, 95.0, 100.0]  # Max drawdown = (95-110)/110
+        prices = [100.0, 110.0, 105.0, 95.0, 100.0]
         decorated = DrawdownDecorator(stock, prices)
 
         metrics = decorated.get_metrics()
@@ -265,8 +298,8 @@ class TestDecoratorPattern:
 class TestAdapterPattern:
     """Test data adapters convert formats correctly."""
 
-    def test_yahoo_adapter(self):
-        """YahooFinanceAdapter converts JSON to MarketDataPoint."""
+    def test_yahoo_adapter_single(self):
+        """YahooFinanceAdapter converts single JSON object."""
         data = {
             "ticker": "AAPL",
             "last_price": 172.35,
@@ -280,11 +313,23 @@ class TestAdapterPattern:
         assert point.price == 172.35
         assert point.metadata["source"] == "yahoo_finance"
 
+    def test_yahoo_adapter_list(self):
+        """YahooFinanceAdapter handles list of tickers."""
+        data = [
+            {"ticker": "AAPL", "last_price": 172.35, "timestamp": "2025-10-01T09:30:00Z"},
+            {"ticker": "MSFT", "last_price": 328.10, "timestamp": "2025-10-01T09:30:00Z"}
+        ]
+        adapter = YahooFinanceAdapter(data)
+        point = adapter.get_data("MSFT")
+
+        assert point.symbol == "MSFT"
+        assert point.price == 328.10
+
     def test_yahoo_adapter_symbol_mismatch(self):
         """YahooFinanceAdapter raises error on symbol mismatch."""
         data = {"ticker": "AAPL", "last_price": 172.35, "timestamp": "2025-10-01T09:30:00Z"}
         adapter = YahooFinanceAdapter(data)
-        with pytest.raises(ValueError, match="Symbol mismatch"):
+        with pytest.raises(ValueError):
             adapter.get_data("MSFT")
 
     def test_bloomberg_adapter(self):
@@ -319,14 +364,22 @@ class TestCompositePattern:
         pos = Position("AAPL", 100, 150.0)
         assert pos.get_value() == 15000.0
 
+    def test_position_get_positions(self):
+        """Position returns itself as single-item list."""
+        pos = Position("AAPL", 100, 150.0)
+        positions = pos.get_positions()
+        assert len(positions) == 1
+        assert positions[0]["symbol"] == "AAPL"
+        assert positions[0]["quantity"] == 100
+
     def test_portfolio_group_recursive_value(self):
         """PortfolioGroup calculates value recursively."""
         root = PortfolioGroup("Root")
         root.add(Position("A", 10, 100.0))  # 1000
-        root.add(Position("B", 20, 50.0))  # 1000
+        root.add(Position("B", 20, 50.0))   # 1000
 
         sub = PortfolioGroup("Sub")
-        sub.add(Position("C", 5, 200.0))  # 1000
+        sub.add(Position("C", 5, 200.0))    # 1000
         root.add(sub)
 
         assert root.get_value() == 3000.0
@@ -358,7 +411,6 @@ class TestStrategyPattern:
         """MeanReversionStrategy generates BUY on price below average."""
         strategy = MeanReversionStrategy(lookback_window=3, threshold=0.05)
 
-        # Build up history
         ticks = [
             MarketDataPoint("TEST", 100.0, datetime.now()),
             MarketDataPoint("TEST", 100.0, datetime.now()),
@@ -400,7 +452,7 @@ class TestStrategyPattern:
             MarketDataPoint("TEST", 100.0, datetime.now()),
             MarketDataPoint("TEST", 102.0, datetime.now()),
             MarketDataPoint("TEST", 101.0, datetime.now()),
-            MarketDataPoint("TEST", 110.0, datetime.now()),  # Breakout above 102*(1+0.05)
+            MarketDataPoint("TEST", 110.0, datetime.now()),  # Breakout
         ]
 
         signals = []
@@ -410,20 +462,15 @@ class TestStrategyPattern:
         assert len(signals) >= 1
         assert signals[0]["type"] == "BUY"
 
-    def test_strategy_interchangeability(self):
-        """Strategies are interchangeable."""
-        strategies = [
-            MeanReversionStrategy(lookback_window=3, threshold=0.1),
-            BreakoutStrategy(lookback_window=3, threshold=0.1)
-        ]
+    def test_strategy_reset(self):
+        """Strategy reset clears internal state."""
+        strategy = MeanReversionStrategy()
+        strategy.price_history = [100.0, 102.0]
+        strategy.symbol = "TEST"
+        strategy.reset()
 
-        tick = MarketDataPoint("TEST", 100.0, datetime.now())
-
-        for strategy in strategies:
-            # All strategies have same interface
-            signals = strategy.generate_signals(tick)
-            assert isinstance(signals, list)
-            strategy.reset()
+        assert strategy.price_history == []
+        assert strategy.symbol is None
 
 
 # =============================================================================
@@ -436,10 +483,16 @@ class TestObserverPattern:
     def test_observer_receives_notification(self):
         """Observer receives signal notification."""
         publisher = SignalPublisher()
-        logger = LoggerObserver(verbose=False)
+        logger = LoggerObserver()
         publisher.attach(logger)
 
-        signal = {"type": "BUY", "symbol": "AAPL", "price": 172.35, "timestamp": datetime.now(), "reason": "test"}
+        signal = {
+            "type": "BUY",
+            "symbol": "AAPL",
+            "price": 172.35,
+            "timestamp": datetime.now(),
+            "reason": "test"
+        }
         publisher.notify(signal)
 
         assert len(logger.logs) == 1
@@ -449,12 +502,18 @@ class TestObserverPattern:
     def test_multiple_observers(self):
         """Multiple observers all receive notification."""
         publisher = SignalPublisher()
-        logger1 = LoggerObserver(verbose=False)
-        logger2 = LoggerObserver(verbose=False)
+        logger1 = LoggerObserver()
+        logger2 = LoggerObserver()
         publisher.attach(logger1)
         publisher.attach(logger2)
 
-        signal = {"type": "SELL", "symbol": "MSFT", "price": 328.10, "timestamp": datetime.now(), "reason": "test"}
+        signal = {
+            "type": "SELL",
+            "symbol": "MSFT",
+            "price": 328.10,
+            "timestamp": datetime.now(),
+            "reason": "test"
+        }
         publisher.notify(signal)
 
         assert len(logger1.logs) == 1
@@ -465,23 +524,39 @@ class TestObserverPattern:
         alerter = AlertObserver(price_threshold=300.0)
 
         # Below threshold
-        low_signal = {"type": "BUY", "symbol": "AAPL", "price": 172.35, "timestamp": datetime.now()}
+        low_signal = {
+            "type": "BUY",
+            "symbol": "AAPL",
+            "price": 172.35,
+            "timestamp": datetime.now()
+        }
         alerter.update(low_signal)
         assert len(alerter.alerts) == 0
 
         # Above threshold
-        high_signal = {"type": "BUY", "symbol": "MSFT", "price": 328.10, "timestamp": datetime.now()}
+        high_signal = {
+            "type": "BUY",
+            "symbol": "MSFT",
+            "price": 328.10,
+            "timestamp": datetime.now()
+        }
         alerter.update(high_signal)
         assert len(alerter.alerts) == 1
 
     def test_detach_observer(self):
         """Detached observer stops receiving notifications."""
         publisher = SignalPublisher()
-        logger = LoggerObserver(verbose=False)
+        logger = LoggerObserver()
         publisher.attach(logger)
         publisher.detach(logger)
 
-        signal = {"type": "BUY", "symbol": "AAPL", "price": 172.35, "timestamp": datetime.now(), "reason": "test"}
+        signal = {
+            "type": "BUY",
+            "symbol": "AAPL",
+            "price": 172.35,
+            "timestamp": datetime.now(),
+            "reason": "test"
+        }
         publisher.notify(signal)
 
         assert len(logger.logs) == 0
@@ -550,6 +625,20 @@ class TestCommandPattern:
 
         cmd.undo()
         assert order.status == "EXECUTED"
+
+    def test_invoker_clears_redo_on_new_command(self):
+        """New command clears redo stack."""
+        invoker = CommandInvoker()
+        order1 = Order("ORD001", "AAPL", "BUY", 100, 172.35)
+        order2 = Order("ORD002", "MSFT", "SELL", 50, 328.10)
+
+        invoker.execute(ExecuteOrderCommand(order1))
+        invoker.undo()
+        invoker.execute(ExecuteOrderCommand(order2))
+
+        # Redo should do nothing since stack was cleared
+        result = invoker.redo()
+        assert result is None
 
 
 # =============================================================================

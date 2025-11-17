@@ -49,35 +49,15 @@ class InstrumentFactory:
         Raises:
             ValueError: If instrument type is unknown.
         """
-        instrument_type = data.get("type", "").lower()
-        symbol = data["symbol"]
-        price = float(data["price"])
-
-        if instrument_type == "stock":
-            return Stock(
-                symbol=symbol,
-                price=price,
-                sector=data.get("sector", ""),
-                issuer=data.get("issuer", "")
-            )
-        elif instrument_type == "bond":
-            return Bond(
-                symbol=symbol,
-                price=price,
-                issuer=data.get("issuer", ""),
-                maturity=data.get("maturity"),
-                coupon=float(data.get("coupon", 0.0))
-            )
-        elif instrument_type == "etf":
-            return ETF(
-                symbol=symbol,
-                price=price,
-                sector=data.get("sector", ""),
-                issuer=data.get("issuer", ""),
-                expense_ratio=float(data.get("expense_ratio", 0.0))
-            )
-        else:
-            raise ValueError(f"Unknown instrument type: {instrument_type}")
+        # TODO: Implement factory logic
+        # 1. Extract instrument_type from data (convert to lowercase)
+        # 2. Extract symbol and price from data
+        # 3. Based on instrument_type, create and return appropriate instance:
+        #    - "stock": return Stock with symbol, price, sector, issuer
+        #    - "bond": return Bond with symbol, price, issuer, maturity, coupon
+        #    - "etf": return ETF with symbol, price, sector, issuer, expense_ratio
+        # 4. Raise ValueError for unknown types
+        raise NotImplementedError("TODO: Implement create_instrument")
 
 
 # ============================================================================
@@ -101,12 +81,15 @@ class Config:
 
     def __new__(cls) -> "Config":
         """Ensure only one instance exists."""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+        # TODO: Implement singleton pattern
+        # Check if _instance is None, if so create new instance using super().__new__(cls)
+        # Return the singleton instance
+        raise NotImplementedError("TODO: Implement __new__ for Singleton")
 
     def __init__(self):
         """Initialize configuration data (only once)."""
+        # TODO: Initialize _data dict only if not already initialized
+        # Use Config._initialized flag to track this
         if not Config._initialized:
             self._data: dict = {}
             Config._initialized = True
@@ -123,8 +106,8 @@ class Config:
         Args:
             filepath: Path to JSON configuration file.
         """
-        with open(filepath, "r") as f:
-            self._data = json.load(f)
+        # TODO: Load JSON file and store in self._data
+        raise NotImplementedError("TODO: Implement load")
 
     def get(self, key: str, default: Any = None) -> Any:
         """
@@ -137,7 +120,8 @@ class Config:
         Returns:
             Configuration value or default.
         """
-        return self._data.get(key, default)
+        # TODO: Return value from _data dict, or default if not found
+        raise NotImplementedError("TODO: Implement get")
 
     def set(self, key: str, value: Any) -> None:
         """
@@ -147,7 +131,8 @@ class Config:
             key: Configuration key.
             value: Value to set.
         """
-        self._data[key] = value
+        # TODO: Set key-value in _data dict
+        raise NotImplementedError("TODO: Implement set")
 
     def get_all(self) -> dict:
         """Get all configuration data."""
@@ -202,8 +187,8 @@ class PortfolioBuilder:
         Returns:
             Self for method chaining.
         """
-        self.owner = name
-        return self
+        # TODO: Set owner and return self for chaining
+        raise NotImplementedError("TODO: Implement set_owner")
 
     def add_position(self, symbol: str, quantity: int, price: float) -> "PortfolioBuilder":
         """
@@ -217,9 +202,8 @@ class PortfolioBuilder:
         Returns:
             Self for method chaining.
         """
-        position = Position(symbol, quantity, price)
-        self.root.add(position)
-        return self
+        # TODO: Create Position and add to root, return self
+        raise NotImplementedError("TODO: Implement add_position")
 
     def add_subportfolio(self, name: str, builder: "PortfolioBuilder") -> "PortfolioBuilder":
         """
@@ -232,13 +216,9 @@ class PortfolioBuilder:
         Returns:
             Self for method chaining.
         """
-        # Create a PortfolioGroup from the builder
-        subgroup = PortfolioGroup(name)
-        # Transfer all components from the builder's root
-        for component in builder.root.components:
-            subgroup.add(component)
-        self.root.add(subgroup)
-        return self
+        # TODO: Create PortfolioGroup from builder and add to root
+        # Hint: Create new PortfolioGroup with name, transfer components from builder.root
+        raise NotImplementedError("TODO: Implement add_subportfolio")
 
     def build(self) -> Portfolio:
         """
@@ -247,11 +227,8 @@ class PortfolioBuilder:
         Returns:
             Completed Portfolio instance.
         """
-        return Portfolio(
-            name=self.name,
-            owner=self.owner,
-            root=self.root
-        )
+        # TODO: Return Portfolio with name, owner, and root
+        raise NotImplementedError("TODO: Implement build")
 
     @staticmethod
     def from_dict(data: dict) -> "PortfolioBuilder":
@@ -264,20 +241,9 @@ class PortfolioBuilder:
         Returns:
             Configured PortfolioBuilder.
         """
-        builder = PortfolioBuilder(data.get("name", "Portfolio"))
-        builder.set_owner(data.get("owner", ""))
-
-        # Add positions
-        for pos_data in data.get("positions", []):
-            builder.add_position(
-                pos_data["symbol"],
-                pos_data["quantity"],
-                pos_data["price"]
-            )
-
-        # Add sub-portfolios recursively
-        for sub_data in data.get("sub_portfolios", []):
-            sub_builder = PortfolioBuilder.from_dict(sub_data)
-            builder.add_subportfolio(sub_data["name"], sub_builder)
-
-        return builder
+        # TODO: Recursively build portfolio from dictionary
+        # 1. Create builder with name from data
+        # 2. Set owner from data
+        # 3. Add positions from data["positions"] list
+        # 4. Recursively add sub-portfolios from data["sub_portfolios"]
+        raise NotImplementedError("TODO: Implement from_dict")
