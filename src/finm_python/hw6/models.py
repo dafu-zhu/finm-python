@@ -151,13 +151,17 @@ class Position(PortfolioComponent):
 
     def get_value(self) -> float:
         """Return position value (quantity * price)."""
-        # TODO: Calculate and return the position value
-        raise NotImplementedError("TODO: Implement get_value for Position")
+        return self.quantity * self.price
 
     def get_positions(self) -> list[dict]:
         """Return this position as a single-item list."""
-        # TODO: Return a list with one dict containing symbol, quantity, price, and value
-        raise NotImplementedError("TODO: Implement get_positions for Position")
+        return [
+            {
+                "symbol": self.symbol,
+                "quantity": self.quantity,
+                "price": self.price
+            }
+        ]
 
     def __repr__(self) -> str:
         return f"Position({self.symbol}, qty={self.quantity}, price={self.price})"
@@ -180,13 +184,14 @@ class PortfolioGroup(PortfolioComponent):
 
     def get_value(self) -> float:
         """Recursively calculate total value of all components."""
-        # TODO: Sum the values of all child components
-        raise NotImplementedError("TODO: Implement get_value for PortfolioGroup")
+        return sum(c.get_value() for c in self.components)
 
     def get_positions(self) -> list[dict]:
         """Recursively collect all positions from child components."""
-        # TODO: Collect and return all positions from child components
-        raise NotImplementedError("TODO: Implement get_positions for PortfolioGroup")
+        positions = []
+        for component in self.components:
+            positions.extend(component.get_positions())
+        return positions
 
     def __repr__(self) -> str:
         return f"PortfolioGroup({self.name}, components={len(self.components)})"
