@@ -29,7 +29,7 @@ class InstrumentDecorator(Instrument):
 
     def __init__(self, instrument: Instrument):
         """
-        Initialize decorator with wrapped instrument.
+        Initialize the decorator with a wrapped instrument.
 
         Args:
             instrument: The instrument to decorate.
@@ -39,11 +39,11 @@ class InstrumentDecorator(Instrument):
         super().__init__(instrument.symbol, instrument.price)
 
     def get_type(self) -> str:
-        """Delegate to wrapped instrument."""
+        """Delegate to a wrapped instrument."""
         return self._instrument.get_type()
 
     def get_metrics(self) -> dict:
-        """Get metrics from wrapped instrument (to be extended by subclasses)."""
+        """Get metrics from a wrapped instrument (to be extended by subclasses)."""
         return self._instrument.get_metrics()
 
 
@@ -72,13 +72,15 @@ class VolatilityDecorator(InstrumentDecorator):
         Returns:
             Annualized volatility (assuming 252 trading days).
         """
-        # TODO: Implement volatility calculation
-        # 1. Return 0.0 if less than 2 returns
-        # 2. Calculate mean of returns
-        # 3. Calculate sample variance: sum((r - mean)^2) / (n - 1)
-        # 4. Calculate daily volatility as sqrt(variance)
-        # 5. Annualize by multiplying by sqrt(252)
-        raise NotImplementedError("TODO: Implement calculate_volatility")
+        rets = self._historical_returns
+        n = len(rets)
+        if n < 2:
+            return 0.0
+        mean_ret = sum(rets) / n
+        sample_var = sum([(ret - mean_ret) ** 2 for ret in rets]) / (n - 1)
+        daily_vol = sample_var ** 0.5
+        annualized_vol = daily_vol * 252 ** 0.5
+        return annualized_vol
 
     def get_metrics(self) -> dict:
         """Add volatility metric to base metrics."""
@@ -116,16 +118,28 @@ class BetaDecorator(InstrumentDecorator):
         Returns:
             Beta value (covariance / market variance).
         """
-        # TODO: Implement beta calculation
-        # 1. Return 1.0 (default beta) if:
-        #    - Either list is empty
-        #    - Lists have different lengths
-        #    - Less than 2 data points
-        # 2. Calculate mean of instrument returns and market returns
-        # 3. Calculate covariance: sum((inst_r - mean_inst) * (mkt_r - mean_mkt)) / (n - 1)
-        # 4. Calculate market variance: sum((mkt_r - mean_mkt)^2) / (n - 1)
-        # 5. Return covariance / market_variance (return 1.0 if variance is 0)
-        raise NotImplementedError("TODO: Implement calculate_beta")
+        if (not self._instrument_returns or not self._market_returns
+                or len(self._instrument_returns) != len(self._market_returns)
+                or len(self._instrument_returns) < 2):
+            return 1.0
+
+        n = len(self._instrument_returns)
+        mean_ins = sum(self._instrument_returns) / n
+        mean_mkt = sum(self._market_returns) / n
+
+        cov = sum(
+            (self._instrument_returns[i] - mean_ins) * (self._market_returns[i] - mean_mkt)
+            for i in range(n)
+        ) / (n - 1)
+
+        var = sum(
+            (self._market_returns[i] - mean_mkt) ** 2 for i in range(n)
+        ) / (n - 1)
+
+        if var == 0:
+            return 1.0
+
+        return cov / var
 
     def get_metrics(self) -> dict:
         """Add beta metric to base metrics."""
@@ -159,15 +173,21 @@ class DrawdownDecorator(InstrumentDecorator):
         Returns:
             Maximum drawdown as a negative percentage.
         """
-        # TODO: Implement maximum drawdown calculation
-        # 1. Return 0.0 if less than 2 prices
-        # 2. Track the peak price (start with first price)
-        # 3. For each price:
-        #    - Update peak if current price is higher
-        #    - Calculate drawdown: (current_price - peak) / peak
-        #    - Track the minimum (most negative) drawdown
-        # 4. Return the maximum drawdown (will be negative or zero)
-        raise NotImplementedError("TODO: Implement calculate_max_drawdown")
+        n = len(self._price_history)
+        if n < 2:
+            return 0.0
+
+        peak = self._price_history[0]
+        max_dd = 0
+        for i, price in enumerate(self._price_history):
+            if price > peak:
+                peak = price
+
+            drawdown = (price - peak) / peak
+            if drawdown < max_dd:
+                max_dd = drawdown
+
+        return max_dd
 
     def get_metrics(self) -> dict:
         """Add maximum drawdown metric to base metrics."""

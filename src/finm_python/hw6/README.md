@@ -187,7 +187,7 @@ Complete these tasks in order:
 - [x] **3. Factory Pattern** - Implement `InstrumentFactory.create_instrument()` in `patterns/creational.py`
 - [x] **4. Singleton Pattern** - Implement `Config.__new__()`, `Config.load()`, `Config.get()`, `Config.set()` in `patterns/creational.py`
 - [x] **5. Builder Pattern** - Implement `PortfolioBuilder` methods and `from_dict()` in `patterns/creational.py`
-- [ ] **6. Decorator Pattern** - Implement volatility, beta, and max drawdown calculations in `patterns/structural.py`
+- [x] **6. Decorator Pattern** - Implement volatility, beta, and max drawdown calculations in `patterns/structural.py`
 - [ ] **7. Adapter Pattern** - Implement `YahooFinanceAdapter.get_data()` and `BloombergXMLAdapter.get_data()` in `patterns/structural.py`
 - [ ] **8. Strategy Pattern** - Implement `MeanReversionStrategy.generate_signals()` and `BreakoutStrategy.generate_signals()` in `patterns/behavioral.py`
 - [ ] **9. Observer Pattern** - Implement `SignalPublisher.attach()`, `detach()`, `notify()` and observer `update()` methods in `patterns/behavioral.py`
