@@ -23,7 +23,6 @@ class MarketDataPoint:
     symbol: str
     price: float
     timestamp: datetime
-    volume: Optional[int] = None
     metadata: dict = field(default_factory=dict)
 
 

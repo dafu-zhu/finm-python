@@ -8,8 +8,10 @@ Structural Design Patterns
 
 import json
 import xml.etree.ElementTree as ET
+from abc import abstractmethod, ABC
 from datetime import datetime
 from pathlib import Path
+from sys import flags
 from typing import Any, Optional
 
 from ..models import Instrument, MarketDataPoint
@@ -200,11 +202,12 @@ class DrawdownDecorator(InstrumentDecorator):
 # Adapter Pattern
 # ============================================================================
 
-class MarketDataAdapter:
+class MarketDataAdapter(ABC):
     """
     Abstract adapter for converting external data to MarketDataPoint.
     """
 
+    @abstractmethod
     def get_data(self, symbol: str) -> MarketDataPoint:
         """
         Get standardized market data for a symbol.
@@ -215,7 +218,7 @@ class MarketDataAdapter:
         Returns:
             MarketDataPoint instance.
         """
-        raise NotImplementedError("Subclasses must implement get_data")
+        pass
 
 
 class YahooFinanceAdapter(MarketDataAdapter):
@@ -233,14 +236,14 @@ class YahooFinanceAdapter(MarketDataAdapter):
     }
     """
 
-    def __init__(self, data_source: str | Path | dict):
+    def __init__(self, data_source: str | Path | dict | list):
         """
         Initialize adapter with data source.
 
         Args:
             data_source: Path to JSON file or dictionary with data.
         """
-        if isinstance(data_source, dict):
+        if isinstance(data_source, (dict, list)):
             self._data = data_source
         else:
             with open(data_source, "r") as f:
@@ -259,19 +262,29 @@ class YahooFinanceAdapter(MarketDataAdapter):
         Raises:
             ValueError: If symbol doesn't match data.
         """
-        # TODO: Implement Yahoo Finance data conversion
-        # 1. Handle both single ticker dict and list of tickers
-        #    - If list, find matching ticker
-        #    - If dict, verify ticker matches symbol
-        # 2. Extract timestamp and convert to datetime
-        #    (use datetime.fromisoformat, replace "Z" with "+00:00")
-        # 3. Return MarketDataPoint with:
-        #    - symbol from "ticker" field
-        #    - price from "last_price" field
-        #    - timestamp
-        #    - volume from "volume" field (optional)
-        #    - metadata with source="yahoo_finance"
-        raise NotImplementedError("TODO: Implement YahooFinanceAdapter.get_data")
+        if isinstance(self._data, list):
+            data_item = None
+            for item in self._data:
+                if item.get("ticker") == symbol:
+                    data_item = item
+                    break
+
+            if data_item is None:
+                raise ValueError(f"Symbol {symbol} not found in Yahoo data")
+        else:
+            data_item = self._data
+            if data_item.get("ticker") != symbol:
+                raise ValueError(f"Symbol mismatch: Expected {symbol}, got {data_item.get('ticker')}")
+
+        timestamp_str = data_item["timestamp"]
+        timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+
+        return MarketDataPoint(
+            symbol = data_item["ticker"],
+            price = float(data_item["last_price"]),
+            timestamp = timestamp,
+            metadata = {"source": "yahoo_finance"}
+        )
 
 
 class BloombergXMLAdapter(MarketDataAdapter):
@@ -320,16 +333,26 @@ class BloombergXMLAdapter(MarketDataAdapter):
         Raises:
             ValueError: If symbol doesn't match data.
         """
-        # TODO: Implement Bloomberg XML data conversion
-        # 1. Handle both single <instrument> and <instruments> (list) root
-        #    - If root is "instruments", find matching <instrument> by <symbol>
-        #    - If root is single instrument, verify symbol matches
-        # 2. Extract data from XML elements using .find() and .text
-        # 3. Convert timestamp string to datetime
-        # 4. Return MarketDataPoint with:
-        #    - symbol from <symbol> element
-        #    - price from <price> element (convert to float)
-        #    - timestamp
-        #    - volume=None
-        #    - metadata with source="bloomberg"
-        raise NotImplementedError("TODO: Implement BloombergXMLAdapter.get_data")
+        if self._root.tag == "instruments":
+            data_item = None
+            for inst in self._root.findall("symbol"):
+                if inst.text == symbol:
+                    data_item = inst
+                    break
+            if data_item is None:
+                raise ValueError(f"Symbol {symbol} not found in Bloomberg")
+        else:
+            data_item = self._root
+            data_symbol = data_item.find("symbol").text
+            if data_symbol != symbol:
+                raise ValueError(f"Symbol mismatch: Expected {symbol}, got {data_symbol} instead")
+
+        timestamp_str = data_item.find("timestamp").text
+        timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+
+        return MarketDataPoint(
+            symbol = data_item.find("symbol").text,
+            price = float(data_item.find("price").text),
+            timestamp = timestamp,
+            metadata = {"source": "bloomberg"}
+        )
