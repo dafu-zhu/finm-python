@@ -214,13 +214,25 @@ class AlertObserver(Observer):
         Args:
             signal: Signal dictionary.
         """
-        # TODO: Implement alert generation
-        # 1. Extract price from signal
-        # 2. If price >= price_threshold:
-        #    a. Create alert dict with timestamp, type, signal, message
-        #    b. Append to self.alerts
-        #    c. Print alert message
-        raise NotImplementedError("TODO: Implement AlertObserver.update")
+        # Extract price from signal
+        price = signal.get('price', 0.0)
+
+        # Check if price meets threshold
+        if price >= self.price_threshold:
+            # Create alert dict
+            alert = {
+                'timestamp': signal.get('timestamp', datetime.now()),
+                'type': 'ALERT',
+                'signal': signal,
+                'message': f"High-value trade alert: {signal.get('type', 'TRADE')} "
+                          f"{signal.get('symbol', 'N/A')} @ ${price:.2f}"
+            }
+
+            # Append to alerts list
+            self.alerts.append(alert)
+
+            # Print alert message
+            print(alert['message'])
 
 
 class SignalPublisher:
@@ -241,8 +253,9 @@ class SignalPublisher:
         Args:
             observer: Observer to add.
         """
-        # TODO: Add observer to list if not already present
-        raise NotImplementedError("TODO: Implement attach")
+        # Add observer to list if not already present
+        if observer not in self._observers:
+            self._observers.append(observer)
 
     def detach(self, observer: Observer) -> None:
         """
@@ -251,8 +264,9 @@ class SignalPublisher:
         Args:
             observer: Observer to remove.
         """
-        # TODO: Remove observer from list if present
-        raise NotImplementedError("TODO: Implement detach")
+        # Remove observer from list if present
+        if observer in self._observers:
+            self._observers.remove(observer)
 
     def notify(self, signal: dict) -> None:
         """
@@ -261,8 +275,9 @@ class SignalPublisher:
         Args:
             signal: Signal dictionary to broadcast.
         """
-        # TODO: Call update() on each observer
-        raise NotImplementedError("TODO: Implement notify")
+        # Call update() on each observer
+        for observer in self._observers:
+            observer.update(signal)
 
 
 # ============================================================================
