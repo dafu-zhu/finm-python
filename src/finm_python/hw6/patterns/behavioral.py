@@ -263,12 +263,26 @@ class LoggerObserver(Observer):
         Args:
             signal: Signal dictionary.
         """
-        # TODO: Implement signal logging
         # 1. Extract timestamp from signal (default to datetime.now())
         # 2. Format log entry string with timestamp, signal type, symbol, price, reason
         # 3. Append to self.logs
         # 4. If log_file is set, write to file; otherwise print to stdout
-        raise NotImplementedError("TODO: Implement LoggerObserver.update")
+        timestamp = signal.get("timestamp", datetime.now())
+        signal_type = signal.get('type', 'UNKNOWN')
+        symbol = signal.get('symbol', 'N/A')
+        price = signal.get('price', 0.0)
+        reason = signal.get('reason', '')
+
+        log_entry = f"[{timestamp}] {signal_type} {symbol} @ ${price:.2f} - {reason}"
+        self.logs.append(log_entry)
+
+        if self.log_file:
+            # Append to file
+            with open(self.log_file, 'a') as f:
+                f.write(log_entry + '\n')
+        else:
+            # Print to console
+            print(log_entry)
 
 
 class AlertObserver(Observer):
@@ -293,13 +307,29 @@ class AlertObserver(Observer):
         Args:
             signal: Signal dictionary.
         """
-        # TODO: Implement alert generation
         # 1. Extract price from signal
         # 2. If price >= price_threshold:
         #    a. Create alert dict with timestamp, type, signal, message
         #    b. Append to self.alerts
         #    c. Print alert message
-        raise NotImplementedError("TODO: Implement AlertObserver.update")
+        price = signal.get("price", 0.0)
+
+        # Check if price meets threshold
+        if price >= self.price_threshold:
+            # Create alert dict
+            alert = {
+                'timestamp': signal.get('timestamp', datetime.now()),
+                'type': 'ALERT',
+                'signal': signal,
+                'message': f"High-value trade alert: {signal.get('type', 'TRADE')} "
+                           f"{signal.get('symbol', 'N/A')} @ ${price:.2f}"
+            }
+
+            # Append to alerts list
+            self.alerts.append(alert)
+
+            # Print alert message
+            print(alert['message'])
 
 
 class SignalPublisher:
@@ -320,8 +350,8 @@ class SignalPublisher:
         Args:
             observer: Observer to add.
         """
-        # TODO: Add observer to list if not already present
-        raise NotImplementedError("TODO: Implement attach")
+        if observer not in self._observers:
+            self._observers.append(observer)
 
     def detach(self, observer: Observer) -> None:
         """
@@ -330,8 +360,8 @@ class SignalPublisher:
         Args:
             observer: Observer to remove.
         """
-        # TODO: Remove observer from list if present
-        raise NotImplementedError("TODO: Implement detach")
+        if observer in self._observers:
+            self._observers.remove(observer)
 
     def notify(self, signal: dict) -> None:
         """
@@ -340,8 +370,9 @@ class SignalPublisher:
         Args:
             signal: Signal dictionary to broadcast.
         """
-        # TODO: Call update() on each observer
-        raise NotImplementedError("TODO: Implement notify")
+        # Call update() on each observer
+        for observer in self._observers:
+            observer.update(signal)
 
 
 # ============================================================================
