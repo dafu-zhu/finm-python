@@ -399,16 +399,16 @@ def main():
     print("Each demo will fail with NotImplementedError until implemented.\n")
 
     try:
-        # Uncomment demos as you implement them
+        # All patterns are now implemented
         demo_factory_pattern()
-        # demo_singleton_pattern()
-        # demo_builder_pattern()
-        # demo_decorator_pattern()
-        # demo_adapter_pattern()
-        # demo_composite_pattern()
-        # demo_strategy_pattern()
-        # demo_observer_pattern()
-        # demo_command_pattern()
+        demo_singleton_pattern()
+        demo_builder_pattern()
+        demo_decorator_pattern()
+        demo_adapter_pattern()
+        demo_composite_pattern()
+        demo_strategy_pattern()
+        demo_observer_pattern()
+        demo_command_pattern()
 
     except NotImplementedError as e:
         print(f"\n*** Implementation needed: {e} ***")
