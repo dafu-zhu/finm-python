@@ -449,13 +449,20 @@ class ExecuteOrderCommand(Command):
         Returns:
             The executed order.
         """
-        # TODO: Implement order execution
-        # 1. Save current status to _previous_status
-        # 2. Set order.status to "EXECUTED"
-        # 3. Set order.executed_at to current datetime
-        # 4. Print execution message
-        # 5. Return the order
-        raise NotImplementedError("TODO: Implement ExecuteOrderCommand.execute")
+        # Save current status to _previous_status
+        self._previous_status = self.order.status
+
+        # Set order.status to "EXECUTED"
+        self.order.status = "EXECUTED"
+
+        # Set order.executed_at to current datetime
+        self.order.executed_at = datetime.now()
+
+        # Print execution message
+        print(f"Executing: {self.order}")
+
+        # Return the order
+        return self.order
 
     def undo(self) -> Order:
         """
@@ -464,12 +471,18 @@ class ExecuteOrderCommand(Command):
         Returns:
             The reverted order.
         """
-        # TODO: Implement undo
-        # 1. If _previous_status exists, restore it
-        # 2. Clear executed_at
-        # 3. Print undo message
-        # 4. Return the order
-        raise NotImplementedError("TODO: Implement ExecuteOrderCommand.undo")
+        # If _previous_status exists, restore it
+        if self._previous_status is not None:
+            self.order.status = self._previous_status
+
+        # Clear executed_at
+        self.order.executed_at = None
+
+        # Print undo message
+        print(f"Undoing execution: {self.order}")
+
+        # Return the order
+        return self.order
 
 
 class CancelOrderCommand(Command):
@@ -494,12 +507,17 @@ class CancelOrderCommand(Command):
         Returns:
             The cancelled order.
         """
-        # TODO: Implement order cancellation
-        # 1. Save current status
-        # 2. Set status to "CANCELLED"
-        # 3. Print cancellation message
-        # 4. Return the order
-        raise NotImplementedError("TODO: Implement CancelOrderCommand.execute")
+        # Save current status
+        self._previous_status = self.order.status
+
+        # Set status to "CANCELLED"
+        self.order.status = "CANCELLED"
+
+        # Print cancellation message
+        print(f"Cancelling: {self.order}")
+
+        # Return the order
+        return self.order
 
     def undo(self) -> Order:
         """
@@ -508,11 +526,15 @@ class CancelOrderCommand(Command):
         Returns:
             The restored order.
         """
-        # TODO: Implement undo of cancellation
-        # 1. Restore previous status if available
-        # 2. Print restoration message
-        # 3. Return the order
-        raise NotImplementedError("TODO: Implement CancelOrderCommand.undo")
+        # Restore previous status if available
+        if self._previous_status is not None:
+            self.order.status = self._previous_status
+
+        # Print restoration message
+        print(f"Undoing cancellation: {self.order}")
+
+        # Return the order
+        return self.order
 
 
 class CommandInvoker:
@@ -537,12 +559,17 @@ class CommandInvoker:
         Returns:
             Result of command execution.
         """
-        # TODO: Implement execute with history tracking
-        # 1. Call command.execute()
-        # 2. Append command to history
-        # 3. Clear redo stack (new command invalidates redo)
-        # 4. Return result
-        raise NotImplementedError("TODO: Implement CommandInvoker.execute")
+        # Call command.execute()
+        result = command.execute()
+
+        # Append command to history
+        self._history.append(command)
+
+        # Clear redo stack (new command invalidates redo)
+        self._redo_stack.clear()
+
+        # Return result
+        return result
 
     def undo(self) -> Optional[Any]:
         """
@@ -551,13 +578,22 @@ class CommandInvoker:
         Returns:
             Result of undo operation, or None if no history.
         """
-        # TODO: Implement undo
-        # 1. If history is empty, print message and return None
-        # 2. Pop command from history
-        # 3. Call command.undo()
-        # 4. Push command to redo stack
-        # 5. Return result
-        raise NotImplementedError("TODO: Implement CommandInvoker.undo")
+        # If history is empty, print message and return None
+        if not self._history:
+            print("No commands to undo")
+            return None
+
+        # Pop command from history
+        command = self._history.pop()
+
+        # Call command.undo()
+        result = command.undo()
+
+        # Push command to redo stack
+        self._redo_stack.append(command)
+
+        # Return result
+        return result
 
     def redo(self) -> Optional[Any]:
         """
@@ -566,13 +602,22 @@ class CommandInvoker:
         Returns:
             Result of redo operation, or None if no redo available.
         """
-        # TODO: Implement redo
-        # 1. If redo stack is empty, print message and return None
-        # 2. Pop command from redo stack
-        # 3. Call command.execute()
-        # 4. Append command to history
-        # 5. Return result
-        raise NotImplementedError("TODO: Implement CommandInvoker.redo")
+        # If redo stack is empty, print message and return None
+        if not self._redo_stack:
+            print("No commands to redo")
+            return None
+
+        # Pop command from redo stack
+        command = self._redo_stack.pop()
+
+        # Call command.execute()
+        result = command.execute()
+
+        # Append command to history
+        self._history.append(command)
+
+        # Return result
+        return result
 
     def get_history(self) -> list[Command]:
         """Get command history."""
