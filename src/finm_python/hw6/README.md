@@ -194,7 +194,7 @@ Complete these tasks in order:
 - [x] **10. Command Pattern** - Implement `ExecuteOrderCommand`, `CancelOrderCommand`, and `CommandInvoker` methods in `patterns/behavioral.py`
 - [x] **11. Run all tests** - Execute `pytest src/finm_python/hw6/tests/ -v` and ensure all 45+ tests pass
 - [ ] **12. Complete design report** - Fill in `design_report.md` with pattern analysis
-- [ ] **13. Run demo** - Execute `python -m finm_python.hw6.main` to verify everything works
+- [x] **13. Run demo** - Execute `python -m finm_python.hw6.main` to verify everything works
 
 ## Deliverables
 

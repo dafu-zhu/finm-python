@@ -174,7 +174,7 @@ Step 1: Create Builder         Step 2: Configure           Step 3: Build
     │                              │                           │
 PortfolioBuilder("Main")       set_owner("jdoe")            build()
     │                              │                           │
-    └─> root = PortfolioGroup  add_position(...)             └─> Portfolio
+    └─> root = PortfolioGroup  add_position(...)               └─> Portfolio
                                    │                               - name
                                    └─> Position added              - owner
                                    add_subportfolio(...)           - root
@@ -284,8 +284,8 @@ External Data Sources                    Adapters                      Internal 
 │ └────────────────┘ │         ┌───────────┴───────────┐                 △
 └────────────────────┘         │                       │                 │
          │                     │                       │                 │
-         │              ┌──────▼──────────┐   ┌────────▼────────┐       │
-         └─────────────>│ YahooFinance    │   │  BloombergXML   │───────┘
+         │              ┌──────▼──────────┐   ┌────────▼────────┐        │
+         └─────────────>│ YahooFinance    │   │  BloombergXML   │────────┘
                         │    Adapter      │   │    Adapter      │
 ┌────────────────────┐  ├─────────────────┤   ├─────────────────┤
 │   Bloomberg        │  │ - _data (JSON)  │   │ - _root (XML)   │
@@ -305,7 +305,7 @@ Yahoo JSON                           Adapter Processing                    Resul
 │ {                  │              │ 1. Parse JSON     │          │ MarketDataPoint │
 │   "ticker": "AAPL",│  ──────────> │ 2. Extract fields │ ───────> │   symbol="AAPL" │
 │   "last_price": 172.35,│          │ 3. Convert types  │          │   price=172.35  │
-│   "timestamp": "..." │             │ 4. Create object  │          │   timestamp=... │
+│   "timestamp": "..." │            │ 4. Create object  │          │   timestamp=... │
 │ }                  │              └───────────────────┘          └─────────────────┘
 └────────────────────┘
 

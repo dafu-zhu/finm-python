@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/PATTERN_DIAGRAMS.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/PATTERN_DIAGRAMS.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +111,7 @@
       <workItem from="1763409970735" duration="60000" />
       <workItem from="1763410040213" duration="166000" />
       <workItem from="1763412164487" duration="7237000" />
-      <workItem from="1763420660285" duration="15864000" />
+      <workItem from="1763420660285" duration="16843000" />
     </task>
     <servers />
   </component>
