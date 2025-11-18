@@ -74,7 +74,44 @@ class MeanReversionStrategy(Strategy):
         Returns:
             List of signals (empty if no action needed).
         """
-        # TODO: Implement mean reversion signal generation
+        if self.symbol is None:
+            self.symbol = tick.symbol
+        elif self.symbol != tick.symbol:
+            self.reset()
+            self.symbol = tick.symbol
+
+        self.price_history.append(tick.price)
+        if len(self.price_history) < self.lookback_window:
+            return []
+
+        recent_prices = self.price_history[-self.lookback_window:]
+        moving_average = sum(recent_prices) / len(recent_prices)
+        deviation = (tick.price - moving_average) / moving_average
+
+        signals = []
+        if deviation < -self.threshold:  # Price significantly below MA
+            signals.append({
+                'type': 'BUY',
+                'symbol': tick.symbol,
+                'price': tick.price,
+                'timestamp': tick.timestamp,
+                'reason': f'Price {deviation:.2%} below MA',
+                'strategy': 'MeanReversion'
+            })
+        elif deviation > self.threshold:  # Price significantly above MA
+            signals.append({
+                'type': 'SELL',
+                'symbol': tick.symbol,
+                'price': tick.price,
+                'timestamp': tick.timestamp,
+                'reason': f'Price {deviation:.2%} above MA',
+                'strategy': 'MeanReversion'
+            })
+
+        if len(self.price_history) > 2 * self.lookback_window:
+            self.price_history = self.price_history[-self.lookback_window:]
+
+        return signals
         # 1. Track symbol - if new symbol, reset state
         # 2. Add current price to price_history
         # 3. Return empty list if not enough history (< lookback_window)
@@ -86,7 +123,6 @@ class MeanReversionStrategy(Strategy):
         # 7. Keep history bounded (max 2 * lookback_window)
         # 8. Return list of signal dicts with keys:
         #    type, symbol, price, timestamp, reason, strategy
-        raise NotImplementedError("TODO: Implement generate_signals for MeanReversionStrategy")
 
     def reset(self) -> None:
         """Reset strategy state."""
@@ -124,7 +160,42 @@ class BreakoutStrategy(Strategy):
         Returns:
             List of signals (empty if no breakout detected).
         """
-        # TODO: Implement breakout signal generation
+        if self.symbol is None:
+            self.symbol = tick.symbol
+        elif self.symbol != tick.symbol:
+            self.reset()
+            self.symbol = tick.symbol
+
+        signals = []
+        if len(self.price_history) >= self.lookback_window:
+            last_window = self.price_history[-self.lookback_window:]
+            high, low = max(last_window), min(last_window)
+
+            if tick.price > high * (1 + self.threshold):
+                signals.append({
+                    'type': 'BUY',
+                    'symbol': tick.symbol,
+                    'price': tick.price,
+                    'timestamp': tick.timestamp,
+                    'reason': f'Price {self.threshold:.2%} above previous high prices',
+                    'strategy': 'Breakout'
+                })
+            elif tick.price < low * (1 - self.threshold):
+                signals.append({
+                    'type': 'SELL',
+                    'symbol': tick.symbol,
+                    'price': tick.price,
+                    'timestamp': tick.timestamp,
+                    'reason': f'Price {self.threshold:.2%} below previous low prices',
+                    'strategy': 'Breakout'
+                })
+
+        self.price_history.append(tick.price)
+
+        if len(self.price_history) > 2 * self.lookback_window:
+            self.price_history = self.price_history[-self.lookback_window:]
+
+        return signals
         # 1. Track symbol - if new symbol, reset state
         # 2. If enough history (>= lookback_window):
         #    a. Find high and low of last lookback_window prices
@@ -134,12 +205,20 @@ class BreakoutStrategy(Strategy):
         # 3. Add current price to history AFTER checking for breakout
         # 4. Keep history bounded
         # 5. Return list of signal dicts
-        raise NotImplementedError("TODO: Implement generate_signals for BreakoutStrategy")
 
     def reset(self) -> None:
         """Reset strategy state."""
         self.price_history = []
         self.symbol = None
+
+"""
+Note: The location of appending new price. Why in MeanReversionStrategy, it happens before generating signal, 
+while in BreakoutStrategy, it happens after?
+
+Usually price updates should happens first. But breakout is a bit special. It buy or sell when current price is 
+suddenly high or low. If update price first, the signal generation will use updated price history, which would always
+generate no signal since the price jump is absorbed
+"""
 
 
 # ============================================================================

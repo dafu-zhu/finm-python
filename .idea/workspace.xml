@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/finm_python/scripts/hw6/tmp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/patterns/structural.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/patterns/structural.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/tmp.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/tmp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/patterns/behavioral.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/patterns/behavioral.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,33 +37,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.__init__.executor&quot;: &quot;Run&quot;,
-    &quot;Python.conftest.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.strategy.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.tmp.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dafuz/Documents/GitHub/finm-python&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python tests.pytest for src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal.executor": "Debug",
+    "Python.__init__.executor": "Run",
+    "Python.conftest.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.strategy.executor": "Debug",
+    "Python.tmp.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/Users/dafuz/Documents/GitHub/finm-python",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/finm_python/hw5/img" />
@@ -75,6 +74,31 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/finm_python" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="pytest for src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="finm-python" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest for src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -113,7 +137,7 @@
       <workItem from="1763409970735" duration="60000" />
       <workItem from="1763410040213" duration="166000" />
       <workItem from="1763412164487" duration="7237000" />
-      <workItem from="1763420660285" duration="7095000" />
+      <workItem from="1763420660285" duration="12348000" />
     </task>
     <servers />
   </component>
@@ -137,5 +161,6 @@
     <SUITE FILE_PATH="coverage/finm_python$strategy.coverage" NAME="strategy Coverage Results" MODIFIED="1763075555500" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python/hw5/backtester" />
     <SUITE FILE_PATH="coverage/finm_python$__init__.coverage" NAME="__init__ Coverage Results" MODIFIED="1763057767519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python" />
     <SUITE FILE_PATH="coverage/finm_python$tmp.coverage" NAME="tmp Coverage Results" MODIFIED="1763427690840" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/finm_python/scripts/hw6" />
+    <SUITE FILE_PATH="coverage/finm_python$pytest_for_src_finm_python_hw6_tests_test_patterns_TestStrategyPattern_test_mean_reversion_buy_signal.coverage" NAME="pytest for src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal Coverage Results" MODIFIED="1763433318210" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
