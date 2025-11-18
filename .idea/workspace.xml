@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/finm_python/hw6/patterns/behavioral.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/finm_python/hw6/patterns/behavioral.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,31 +73,6 @@
       <recent name="$PROJECT_DIR$/src/finm_python" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="pytest for src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="finm-python" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python tests.pytest for src.finm_python.hw6.tests.test_patterns.TestStrategyPattern.test_mean_reversion_buy_signal" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -136,7 +110,7 @@
       <workItem from="1763409970735" duration="60000" />
       <workItem from="1763410040213" duration="166000" />
       <workItem from="1763412164487" duration="7237000" />
-      <workItem from="1763420660285" duration="13965000" />
+      <workItem from="1763420660285" duration="15864000" />
     </task>
     <servers />
   </component>

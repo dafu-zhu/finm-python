@@ -189,10 +189,10 @@ Complete these tasks in order:
 - [x] **5. Builder Pattern** - Implement `PortfolioBuilder` methods and `from_dict()` in `patterns/creational.py`
 - [x] **6. Decorator Pattern** - Implement volatility, beta, and max drawdown calculations in `patterns/structural.py`
 - [x] **7. Adapter Pattern** - Implement `YahooFinanceAdapter.get_data()` and `BloombergXMLAdapter.get_data()` in `patterns/structural.py`
-- [ ] **8. Strategy Pattern** - Implement `MeanReversionStrategy.generate_signals()` and `BreakoutStrategy.generate_signals()` in `patterns/behavioral.py`
-- [ ] **9. Observer Pattern** - Implement `SignalPublisher.attach()`, `detach()`, `notify()` and observer `update()` methods in `patterns/behavioral.py`
-- [ ] **10. Command Pattern** - Implement `ExecuteOrderCommand`, `CancelOrderCommand`, and `CommandInvoker` methods in `patterns/behavioral.py`
-- [ ] **11. Run all tests** - Execute `pytest src/finm_python/hw6/tests/ -v` and ensure all 45+ tests pass
+- [x] **8. Strategy Pattern** - Implement `MeanReversionStrategy.generate_signals()` and `BreakoutStrategy.generate_signals()` in `patterns/behavioral.py`
+- [x] **9. Observer Pattern** - Implement `SignalPublisher.attach()`, `detach()`, `notify()` and observer `update()` methods in `patterns/behavioral.py`
+- [x] **10. Command Pattern** - Implement `ExecuteOrderCommand`, `CancelOrderCommand`, and `CommandInvoker` methods in `patterns/behavioral.py`
+- [x] **11. Run all tests** - Execute `pytest src/finm_python/hw6/tests/ -v` and ensure all 45+ tests pass
 - [ ] **12. Complete design report** - Fill in `design_report.md` with pattern analysis
 - [ ] **13. Run demo** - Execute `python -m finm_python.hw6.main` to verify everything works
 
