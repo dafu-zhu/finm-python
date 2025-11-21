@@ -7,10 +7,12 @@ wheels/
 *.egg-info
 
 # mac trash
-.DS_Store/
+.DS_Store
+**/.DS_Store
 
 # windows trash
 .idea/
+**/.idea/
 
 # Virtual environments
 .venv
