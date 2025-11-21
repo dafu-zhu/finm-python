@@ -5,7 +5,12 @@ build/
 dist/
 wheels/
 *.egg-info
-.DS_Store
+
+# mac trash
+.DS_Store/
+
+# windows trash
+.idea/
 
 # Virtual environments
 .venv

@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="124dcdb7-19d4-42ec-a998-57bac0493acc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +53,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dafuz/Documents/GitHub/finm-python&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dafuz/Documents/GitHub/finm-python/src/finm_python/hw6&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -72,12 +73,16 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/finm_python" />
     </key>
+    <key name="ImportExportFile.TargetDir.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/finm_python/hw6" />
+      <recent name="C:\Users\dafuz\Downloads" />
+    </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.26830.99" />
-        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
       </set>
     </attachedChunks>
   </component>
@@ -110,8 +115,18 @@
       <workItem from="1763409970735" duration="60000" />
       <workItem from="1763410040213" duration="166000" />
       <workItem from="1763412164487" duration="7237000" />
-      <workItem from="1763420660285" duration="16843000" />
-      <workItem from="1763743283750" duration="41000" />
+      <workItem from="1763420660285" duration="16915000" />
+      <workItem from="1763440027628" duration="666000" />
+      <workItem from="1763441938532" duration="286000" />
+      <workItem from="1763476203550" duration="1762000" />
+      <workItem from="1763480819452" duration="1234000" />
+      <workItem from="1763486294120" duration="35000" />
+      <workItem from="1763528504353" duration="593000" />
+      <workItem from="1763612234618" duration="610000" />
+<<<<<<< Updated upstream
+      <workItem from="1763743805861" duration="697000" />
+=======
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
