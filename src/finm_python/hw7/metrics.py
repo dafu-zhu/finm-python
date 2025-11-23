@@ -80,6 +80,19 @@ def compute_rolling_metrics_polars(df: Any, window: int = 20) -> Any:
     return df
 
 
+def compute_rolling_symbol(df: Any, symbol: str, window: int = 20) -> Any:
+    if isinstance(df, pd.DataFrame):
+        symbol_df = df[df["symbol"] == symbol]
+        metrics = compute_rolling_metrics_pandas(symbol_df, window=window)
+    elif isinstance(df, pl.DataFrame):
+        symbol_df = df.filter(pl.col("symbol").eq(symbol))
+        metrics = compute_rolling_metrics_polars(symbol_df, window=window)
+    else:
+        raise TypeError(f"Expected Pandas or Polars dataframe, got {type(df)}")
+
+    return metrics
+
+
 def benchmark_rolling_metrics(
     pandas_df: Any,
     polars_df: Any,
@@ -124,4 +137,6 @@ if __name__ == '__main__':
     path = "data/market_data-1.csv"
     pd_df = load_with_pandas(path)
     pl_df = load_with_polars(path)
-    benchmark_rolling_metrics(pd_df, pl_df)
+    symbol = "AAPL"
+    res = compute_rolling_symbol(pl_df, symbol)
+    print(res)
