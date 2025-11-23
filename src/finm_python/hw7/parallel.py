@@ -19,6 +19,9 @@ Key Concepts:
 import time
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from typing import Any, Callable, Dict, List, Tuple
+import pandas as pd
+import polars as pl
+
 from src.finm_python.hw7 import (
 load_with_pandas,
 load_with_polars,
@@ -81,6 +84,22 @@ def process_symbols_threading(
 
     return res_list, end - start
 
+def _process_single_symbol_data(args_tuple):
+    """
+    Helper function for multiprocessing: unpack arguments and process symbol data.
+
+    This function takes pre-filtered data to minimize serialization overhead.
+
+    Args:
+        args_tuple: Tuple of (symbol_data, symbol, processing_func, kwargs_dict)
+
+    Returns:
+        Result from processing_func
+    """
+    symbol_data, symbol, processing_func, kwargs = args_tuple
+    return processing_func(symbol_data, symbol, **kwargs)
+
+
 def process_symbols_multiprocessing(
     df: Any,
     symbol_list: List[str],
@@ -92,9 +111,22 @@ def process_symbols_multiprocessing(
     start = time.perf_counter()
     res_list = []
 
+    # Pre-filter data by symbol to minimize serialization overhead
+    # Only send each worker the data it needs, not the entire dataframe
+    symbol_data_map = {}
+    if isinstance(df, pd.DataFrame):
+        for symbol in symbol_list:
+            symbol_data_map[symbol] = df[df["symbol"] == symbol].copy()
+    elif isinstance(df, pl.DataFrame):
+        for symbol in symbol_list:
+            symbol_data_map[symbol] = df.filter(pl.col("symbol") == symbol)
+    else:
+        # Fallback: use original behavior if unknown dataframe type
+        symbol_data_map = {symbol: df for symbol in symbol_list}
+
     with ProcessPoolExecutor(max_workers=max_workers) as executor:
         futures = [
-            executor.submit(processing_func, df, symbol, **kwargs)
+            executor.submit(_process_single_symbol_data, (symbol_data_map[symbol], symbol, processing_func, kwargs))
             for symbol in symbol_list
         ]
 
