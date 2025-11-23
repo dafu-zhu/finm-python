@@ -14,25 +14,32 @@ Learning Objectives:
 Key Concepts:
 - Threading: Concurrent execution, shared memory, limited by GIL for CPU-bound tasks
 - Multiprocessing: True parallelism, separate memory spaces, overhead for data transfer
-
-TODO: Implement the functions below to complete the parallel processing functionality.
 """
 
 import time
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 from typing import Any, Callable, Dict, List, Tuple
+from src.finm_python.hw7 import (
+load_with_pandas,
+load_with_polars,
+compute_rolling_metrics_pandas,
+compute_rolling_metrics_polars,
+compute_rolling_symbol
+)
 
 
 def process_symbols_sequential(
-    symbol_data_list: List[Any],
+    df: Any,
+    symbol_list: List[str],
     processing_func: Callable,
     **kwargs
-) -> Tuple[List[Dict], float]:
+) -> Tuple[List[Any], float]:
     """
     Process symbols sequentially (baseline for comparison).
 
     Args:
-        symbol_data_list: List of DataFrames, one per symbol
+        df: Dataframe loaded from data source
+        symbol_list: List of strings, one per symbol
         processing_func: Function to apply to each symbol's data
         **kwargs: Additional arguments for processing_func
 
@@ -40,137 +47,73 @@ def process_symbols_sequential(
         Tuple of:
             - List of results from processing each symbol
             - Total execution time (seconds)
-
-    Expected Implementation:
-        1. Start timer
-        2. Loop through each symbol's data
-        3. Apply processing_func to each
-        4. Collect results
-        5. Stop timer and return results with time
-
-    Example:
-        >>> results, time_taken = process_symbols_sequential(
-        ...     [aapl_df, msft_df, spy_df],
-        ...     compute_metrics_for_symbol,
-        ...     window=20
-        ... )
     """
-    # TODO: Implement sequential processing as baseline
-    raise NotImplementedError("Implement sequential processing")
+    res_list = []
+    start = time.perf_counter()
+    for symbol in symbol_list:
+        res = processing_func(df, symbol)
+        res_list.append(res)
+    end = time.perf_counter()
+
+    return res_list, end - start
 
 
 def process_symbols_threading(
-    symbol_data_list: List[Any],
+    df: Any,
+    symbol_list: List[str],
     processing_func: Callable,
-    max_workers: int = None,
+    max_workers: int = 1,
     **kwargs
 ) -> Tuple[List[Dict], float]:
-    """
-    Process symbols using threading (concurrent execution).
 
-    Uses ThreadPoolExecutor for concurrent I/O-bound operations.
+    start = time.perf_counter()
+    res_list = []
 
-    Args:
-        symbol_data_list: List of DataFrames, one per symbol
-        processing_func: Function to apply to each symbol's data
-        max_workers: Maximum number of threads (None = default)
-        **kwargs: Additional arguments for processing_func
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [
+            executor.submit(processing_func, df, symbol, **kwargs)
+            for symbol in symbol_list
+        ]
 
-    Returns:
-        Tuple of:
-            - List of results from processing each symbol
-            - Total execution time (seconds)
+        for f in as_completed(futures):
+            res_list.append(f.result())
+    end = time.perf_counter()
 
-    Expected Implementation:
-        1. Create ThreadPoolExecutor with max_workers
-        2. Submit all tasks to the executor
-        3. Collect results as they complete
-        4. Track total execution time
-        5. Return results and time
-
-    Threading Considerations:
-        - Good for I/O-bound tasks (file reading, network requests)
-        - Limited for CPU-bound tasks due to GIL
-        - Lower overhead than multiprocessing
-        - Shared memory space
-
-    Example:
-        >>> results, time_taken = process_symbols_threading(
-        ...     [aapl_df, msft_df, spy_df],
-        ...     compute_metrics_for_symbol,
-        ...     max_workers=4
-        ... )
-    """
-    # TODO: Implement threading-based parallel processing
-    # Hint: Use concurrent.futures.ThreadPoolExecutor
-    raise NotImplementedError("Implement threading-based processing")
-
+    return res_list, end - start
 
 def process_symbols_multiprocessing(
-    symbol_data_list: List[Any],
+    df: Any,
+    symbol_list: List[str],
     processing_func: Callable,
-    max_workers: int = None,
+    max_workers: int = 1,
     **kwargs
 ) -> Tuple[List[Dict], float]:
-    """
-    Process symbols using multiprocessing (true parallelism).
 
-    Uses ProcessPoolExecutor for CPU-bound parallel operations.
+    start = time.perf_counter()
+    res_list = []
 
-    Args:
-        symbol_data_list: List of DataFrames, one per symbol
-        processing_func: Function to apply to each symbol's data
-        max_workers: Maximum number of processes (None = CPU count)
-        **kwargs: Additional arguments for processing_func
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = [
+            executor.submit(processing_func, df, symbol, **kwargs)
+            for symbol in symbol_list
+        ]
 
-    Returns:
-        Tuple of:
-            - List of results from processing each symbol
-            - Total execution time (seconds)
+        for f in as_completed(futures):
+            res_list.append(f.result())
+    end = time.perf_counter()
 
-    Expected Implementation:
-        1. Create ProcessPoolExecutor with max_workers
-        2. Submit all tasks to the executor
-        3. Collect results as they complete
-        4. Track total execution time
-        5. Return results and time
-
-    Multiprocessing Considerations:
-        - True parallelism (bypasses GIL)
-        - Higher overhead (process creation, data serialization)
-        - Separate memory spaces (data must be pickled)
-        - Best for CPU-intensive computations
-
-    Important:
-        - Functions must be picklable (defined at module level)
-        - Large DataFrames may have serialization overhead
-
-    Example:
-        >>> results, time_taken = process_symbols_multiprocessing(
-        ...     [aapl_df, msft_df, spy_df],
-        ...     compute_metrics_for_symbol,
-        ...     max_workers=4
-        ... )
-    """
-    # TODO: Implement multiprocessing-based parallel processing
-    # Hint: Use concurrent.futures.ProcessPoolExecutor
-    raise NotImplementedError("Implement multiprocessing-based processing")
+    return res_list, end - start
 
 
 def compare_parallel_approaches(
-    symbol_data_list: List[Any],
+    df: Any,
+    symbol_list: List[str],
     processing_func: Callable,
-    max_workers: int = None,
+    max_workers: int = 1,
     **kwargs
 ) -> Dict[str, Dict[str, Any]]:
     """
     Compare sequential, threading, and multiprocessing performance.
-
-    Args:
-        symbol_data_list: List of DataFrames, one per symbol
-        processing_func: Function to apply to each symbol's data
-        max_workers: Maximum number of workers for parallel execution
-        **kwargs: Additional arguments for processing_func
 
     Returns:
         Dictionary with performance comparison:
@@ -199,8 +142,25 @@ def compare_parallel_approaches(
         5. Verify results consistency across approaches
         6. Return comparison dictionary
     """
-    # TODO: Implement comprehensive comparison
-    raise NotImplementedError("Implement parallel approach comparison")
+    seq_res, seq_time = process_symbols_sequential(df, symbol_list, processing_func)
+    thr_res, thr_time = process_symbols_threading(df, symbol_list, processing_func, max_workers)
+    mpr_res, mpr_time = process_symbols_multiprocessing(df, symbol_list, processing_func, max_workers)
+    return {
+        "sequential": {
+            "time": seq_time,
+            "results": seq_res
+        },
+        "threading": {
+            "time": thr_time,
+            "results": thr_res,
+            "speedup": seq_time / thr_time  # relative to sequential
+        },
+        "multiprocessing": {
+            "time": mpr_time,
+            "results": mpr_res,
+            "speedup": seq_time / mpr_time  # relative to sequential
+        }
+    }
 
 
 def measure_resource_usage(func: Callable, *args, **kwargs) -> Dict[str, float]:
@@ -254,3 +214,12 @@ def get_optimal_worker_count() -> int:
     """
     # TODO: Implement optimal worker count determination
     raise NotImplementedError("Implement optimal worker count determination")
+
+
+if __name__ == '__main__':
+    path = "data/market_data-1.csv"
+    pd_df = load_with_pandas(path)
+    pl_df = load_with_polars(path)
+    symbols = ["AAPL", "MSFT", "SPY"]
+    res = compare_parallel_approaches(pd_df, symbols, compute_rolling_symbol)
+    print(res)

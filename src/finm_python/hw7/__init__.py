@@ -12,9 +12,13 @@ This module provides implementations for:
 __version__ = "0.1.0"
 
 from .data_loader import load_with_pandas, load_with_polars
+from .metrics import compute_rolling_metrics_pandas, compute_rolling_metrics_polars, compute_rolling_symbol
 
 
 __all__ = [
     "load_with_pandas",
     "load_with_polars",
+    "compute_rolling_metrics_pandas",
+    "compute_rolling_metrics_polars",
+    "compute_rolling_symbol"
 ]
