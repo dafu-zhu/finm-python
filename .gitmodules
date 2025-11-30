@@ -1,3 +1,6 @@
 [submodule "src/finm_python/hw5"]
 	path = src/finm_python/hw5
 	url = git@github.com:dafu-zhu/trading-ci.git
+[submodule "src/finm_python/hw10"]
+	path = src/finm_python/hw10
+	url = git@github.com:dafu-zhu/finm325-hw10.git
